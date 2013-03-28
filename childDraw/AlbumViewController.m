@@ -39,7 +39,7 @@
     self.targetArray = [[NSMutableArray alloc]init];
     
     self.targetView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 432)];
-    self.scrollView.backgroundColor = [UIColor whiteColor];
+    self.scrollView.backgroundColor = BGCOLOR;
     
     self.moreButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 29)];
     [self.moreButton setBackgroundImage:[UIImage imageNamed: @"barbutton_more.png"] forState:UIControlStateNormal];
@@ -109,7 +109,7 @@
     UIView* view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 20,
                                                             self.view.frame.size.height - 50)];
     
-    view.backgroundColor = [UIColor whiteColor];
+    view.backgroundColor = BGCOLOR;
     UIImageView* imageView = [[UIImageView alloc]initWithFrame:view.bounds];
     imageView.tag = 1001;
     if ([obj isKindOfClass:[UIImage class]]) {
@@ -130,6 +130,7 @@
     UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(60, self.view.frame.size.height - 100, 200, 30)];
     label.textAlignment = NSTextAlignmentCenter;
     label.text = [self.titleArray objectAtIndex:index];
+    label.backgroundColor = [UIColor clearColor];
     
     [view addSubview:label];
     [view addSubview:imageView];

@@ -10,12 +10,76 @@
 #define childDraw_AppDefs_h
 
 
+#define M_APPLEID 626129422
+
+#define CUSTOM_NAV_HEIGHT 40.0f
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+#define RGBCOLOR(r,g,b) [UIColor colorWithRed:(r)/255.0f green:(g)/255.0f blue:(b)/255.0f alpha:1]
+#define RGBACOLOR(r,g,b,a) [UIColor colorWithRed:(r)/255.0f green:(g)/255.0f blue:(b)/255.0f \
+alpha:(a)]
+
+#define HSVCOLOR(h,s,v) [UIColor colorWithHue:(h) saturation:(s) value:(v) alpha:1]
+#define HSVACOLOR(h,s,v,a) [UIColor colorWithHue:(h) saturation:(s) value:(v) alpha:(a)]
+
+#define RGBA(r,g,b,a) (r)/255.0f, (g)/255.0f, (b)/255.0f, (a)
+
+
+#define BGCOLOR [UIColor colorWithRed:236.0/255.0 green:236.0/255.0 blue:236.0/255.0 alpha:1.0]
+#define BLUECOLOR [UIColor colorWithRed:70.0f/255.0f green:93.0f/255.0f blue:121.0f/255.0f alpha:1]
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// add by mactive
 #define T(a)    NSLocalizedString((a), nil)
+
+#define INT(a)  [NSNumber numberWithInt:(a)]
+#define STR(a)  [NSString stringWithFormat:@"%@", (a)]
+#define STR_INT(a)  [NSString stringWithFormat:@"%d", (a)]
+
+#define NUMBER_OR_NIL(a)	\
+(((a) && [(a) isKindOfClass:[NSNumber class]]) ? (a) : nil)
+
+#define STRING_OR_NIL(a)	\
+(((a) && [(a) isKindOfClass:[NSString class]]) ? (a) : nil)
+
+#define STRING_OR_EMPTY(a)	\
+(((a) && [(a) isKindOfClass:[NSString class]]) ? (a) : @"")
+
+#define kDateFormat  @"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z"
+
+
+#define UIKeyboardNotificationsObserve() \
+NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter]; \
+[notificationCenter addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];\
+[notificationCenter addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+
+#define NotificationsUnobserve() \
+[[NSNotificationCenter defaultCenter] removeObserver:self];
+
+#pragma mark - Core Data
+
+#define MOCSave(managedObjectContext) { \
+NSError __autoreleasing *error = nil; \
+NSAssert([managedObjectContext save:&error], @"-[NSManagedObjectContext save] error:\n\n%@", error); }
+
+#define MOCCountAll(managedObjectContext, entityName) \
+MOCCount(_managedObjectContext, [NSFetchRequest fetchRequestWithEntityName:entityName])
+
+//#define MOCCount(managedObjectContext, fetchRequest) \
+//NSManagedObjectContextCount(self, _cmd, managedObjectContext, fetchRequest)
+//
+//NS_INLINE NSUInteger NSManagedObjectContextCount(id self, SEL _cmd, NSManagedObjectContext *managedObjectContext, NSFetchRequest *fetchRequest) {
+//    NSError __autoreleasing *error = nil;
+//    NSUInteger objectsCount = [managedObjectContext countForFetchRequest:fetchRequest error:&error];
+//    NSAssert(objectsCount != NSNotFound, @"-[NSManagedObjectContext countForFetchRequest:error:] error:\n\n%@", error);
+//    return objectsCount;
+//}
 
 NS_INLINE BOOL StringHasValue(NSString * str) {
     return (str != nil) && (![str isEqualToString:@""]);
 }
-
 
 
 

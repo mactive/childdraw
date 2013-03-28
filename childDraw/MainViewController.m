@@ -33,7 +33,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        self.title = @"Intro";
+        self.title = T(@"小羊咩咩叫");
         
     }
     return self;

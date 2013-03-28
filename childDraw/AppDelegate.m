@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "MainViewController.h"
+#import "UINavigationBar+customNavigation.h"
 
 @implementation AppDelegate
 @synthesize mainViewController;
@@ -16,9 +17,6 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    self.window.backgroundColor = [UIColor whiteColor];
-    
-    self.window.backgroundColor = [UIColor whiteColor];
     
     // mainMenuViewController
     
@@ -26,9 +24,17 @@
     UINavigationController *mainController = [[UINavigationController alloc] initWithRootViewController:self.mainViewController];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.backgroundColor = [UIColor whiteColor];
+    self.window.backgroundColor = BGCOLOR;
     [self.window addSubview:self.mainViewController.view];
     [self.window setRootViewController:mainController];
+    
+    // Global UINavigationBar style
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
+    
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"navigationBar_bg.png"] forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:121/255 green:123/255 blue:126/255 alpha:1.0] ];
+    [[UIBarButtonItem appearance] setTintColor:RGBACOLOR(55, 61, 70, 1)];
+    [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
     
     [self.window makeKeyAndVisible];
     return YES;

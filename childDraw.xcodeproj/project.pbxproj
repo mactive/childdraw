@@ -11,6 +11,10 @@
 		26E5A8781704289D00BEBE65 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26E5A8751704289D00BEBE65 /* Default-568h@2x.png */; };
 		26E5A8791704289D00BEBE65 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 26E5A8761704289D00BEBE65 /* Default.png */; };
 		26E5A87A1704289D00BEBE65 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26E5A8771704289D00BEBE65 /* Default@2x.png */; };
+		26E5A87D1704291A00BEBE65 /* BBCustomBackButtonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26E5A87C1704291A00BEBE65 /* BBCustomBackButtonViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		26E5A88217042B2A00BEBE65 /* navigationBar_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26E5A88117042B2A00BEBE65 /* navigationBar_bg@2x.png */; };
+		26E5A88517042D4300BEBE65 /* UINavigationBar+customNavigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 26E5A88417042D4300BEBE65 /* UINavigationBar+customNavigation.m */; };
+		26E5A888170431E000BEBE65 /* back_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26E5A887170431E000BEBE65 /* back_button@2x.png */; };
 		26F39F4416FC3DEF001A6EF9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26F39F4316FC3DEF001A6EF9 /* UIKit.framework */; };
 		26F39F4616FC3DEF001A6EF9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26F39F4516FC3DEF001A6EF9 /* Foundation.framework */; };
 		26F39F4816FC3DEF001A6EF9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26F39F4716FC3DEF001A6EF9 /* CoreGraphics.framework */; };
@@ -48,6 +52,12 @@
 		26E5A8751704289D00BEBE65 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		26E5A8761704289D00BEBE65 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		26E5A8771704289D00BEBE65 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		26E5A87B1704291A00BEBE65 /* BBCustomBackButtonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBCustomBackButtonViewController.h; sourceTree = "<group>"; };
+		26E5A87C1704291A00BEBE65 /* BBCustomBackButtonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBCustomBackButtonViewController.m; sourceTree = "<group>"; };
+		26E5A88117042B2A00BEBE65 /* navigationBar_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigationBar_bg@2x.png"; sourceTree = "<group>"; };
+		26E5A88317042D4300BEBE65 /* UINavigationBar+customNavigation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+customNavigation.h"; sourceTree = "<group>"; };
+		26E5A88417042D4300BEBE65 /* UINavigationBar+customNavigation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationBar+customNavigation.m"; sourceTree = "<group>"; };
+		26E5A887170431E000BEBE65 /* back_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_button@2x.png"; sourceTree = "<group>"; };
 		26F39F4016FC3DEF001A6EF9 /* childDraw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = childDraw.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		26F39F4316FC3DEF001A6EF9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		26F39F4516FC3DEF001A6EF9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -115,6 +125,15 @@
 			path = GCPagedScrollView;
 			sourceTree = "<group>";
 		};
+		26E5A88617042D6700BEBE65 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				26E5A88317042D4300BEBE65 /* UINavigationBar+customNavigation.h */,
+				26E5A88417042D4300BEBE65 /* UINavigationBar+customNavigation.m */,
+			);
+			name = Category;
+			sourceTree = "<group>";
+		};
 		26F39F3716FC3DEF001A6EF9 = {
 			isa = PBXGroup;
 			children = (
@@ -151,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				26F39F9C16FC46BB001A6EF9 /* AppDefs.h */,
+				26E5A88617042D6700BEBE65 /* Category */,
 				26F39F5216FC3DEF001A6EF9 /* AppDelegate.h */,
 				26F39F5316FC3DEF001A6EF9 /* AppDelegate.m */,
 				26F39F6016FC3E1C001A6EF9 /* MainViewController.h */,
@@ -178,7 +198,9 @@
 		26F39F6616FC4083001A6EF9 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				26E5A887170431E000BEBE65 /* back_button@2x.png */,
 				26F39FBC16FC570A001A6EF9 /* icon.png */,
+				26E5A88117042B2A00BEBE65 /* navigationBar_bg@2x.png */,
 				26E5A8751704289D00BEBE65 /* Default-568h@2x.png */,
 				26E5A8761704289D00BEBE65 /* Default.png */,
 				26E5A8771704289D00BEBE65 /* Default@2x.png */,
@@ -204,6 +226,8 @@
 		26F39F7416FC45CB001A6EF9 /* thrid */ = {
 			isa = PBXGroup;
 			children = (
+				26E5A87B1704291A00BEBE65 /* BBCustomBackButtonViewController.h */,
+				26E5A87C1704291A00BEBE65 /* BBCustomBackButtonViewController.m */,
 				26F39F7616FC45CB001A6EF9 /* UIImage+ProportionalFill.h */,
 				26F39F7716FC45CB001A6EF9 /* UIImage+ProportionalFill.m */,
 				266921A71704246400E6D771 /* GCPagedScrollView */,
@@ -283,6 +307,8 @@
 				26E5A8781704289D00BEBE65 /* Default-568h@2x.png in Resources */,
 				26E5A8791704289D00BEBE65 /* Default.png in Resources */,
 				26E5A87A1704289D00BEBE65 /* Default@2x.png in Resources */,
+				26E5A88217042B2A00BEBE65 /* navigationBar_bg@2x.png in Resources */,
+				26E5A888170431E000BEBE65 /* back_button@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,6 +342,8 @@
 				26F39F7216FC4433001A6EF9 /* AlbumViewController.m in Sources */,
 				26F39F7A16FC45CB001A6EF9 /* UIImage+ProportionalFill.m in Sources */,
 				266921AA1704246400E6D771 /* GCPagedScrollView.m in Sources */,
+				26E5A87D1704291A00BEBE65 /* BBCustomBackButtonViewController.m in Sources */,
+				26E5A88517042D4300BEBE65 /* UINavigationBar+customNavigation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
