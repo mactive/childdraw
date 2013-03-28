@@ -1,14 +1,20 @@
 
 PODS: 
 - AFNetworking (1.2.0)
-- JSONKit (1.5pre)
+- JSONKit (1.4)
+- MTStatusBarOverlay (0.9.1)
+- RegexKitLite (4.0)
 
-DEPENDENCIES: 
-- AFNetworking (~> 1.2)
-- JSONKit (~> 1.4)
+SPEC CHECKSUMS: 
+  RegexKitLite: 293ff6f3cf8f34277989a37802162c6961a2b35a
+  AFNetworking: 3cbae45f61a9f995cdbd56bd571223910d7f4e44
+  JSONKit: 0e3367114e2799047082628156e09893d8268f91
+  MTStatusBarOverlay: 2cee705996e4e307191d423bf49e583b9b2c14ac
 
 COCOAPODS: 0.16.4
 
-SPEC CHECKSUMS: 
-  JSONKit: 409734ab3407fce90ef7eaa95d7168f38d9a6601
-  AFNetworking: 3cbae45f61a9f995cdbd56bd571223910d7f4e44
+DEPENDENCIES: 
+- AFNetworking (~> 1.2)
+- JSONKit (~> 1.4.0)
+- MTStatusBarOverlay (~> 0.9.1)
+- RegexKitLite (~> 4.0)

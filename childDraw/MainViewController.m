@@ -34,7 +34,6 @@
     if (self) {
         // Custom initialization
         self.title = @"Intro";
-        [JSONDecoder decoderWithParseOptions:JKParseOptionComments];
         
     }
     return self;
@@ -64,6 +63,8 @@
                        nil];
     
     
+    id json = [self.albumArray JSONString];
+    NSLog(@"%@",json);
     
     //button1
     self.button1 = [UIButton buttonWithType:UIButtonTypeCustom];
