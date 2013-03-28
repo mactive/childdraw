@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		266921A41704244400E6D771 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 266921A11704244400E6D771 /* Default-568h@2x.png */; };
+		266921A51704244400E6D771 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 266921A21704244400E6D771 /* Default.png */; };
+		266921A61704244400E6D771 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 266921A31704244400E6D771 /* Default@2x.png */; };
+		266921AA1704246400E6D771 /* GCPagedScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 266921A91704246400E6D771 /* GCPagedScrollView.m */; };
 		26F39F4416FC3DEF001A6EF9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26F39F4316FC3DEF001A6EF9 /* UIKit.framework */; };
 		26F39F4616FC3DEF001A6EF9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26F39F4516FC3DEF001A6EF9 /* Foundation.framework */; };
 		26F39F4816FC3DEF001A6EF9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26F39F4716FC3DEF001A6EF9 /* CoreGraphics.framework */; };
@@ -21,7 +25,6 @@
 		26F39F6B16FC4083001A6EF9 /* 2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26F39F6816FC4083001A6EF9 /* 2@2x.png */; };
 		26F39F6C16FC4083001A6EF9 /* 3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26F39F6916FC4083001A6EF9 /* 3@2x.png */; };
 		26F39F7216FC4433001A6EF9 /* AlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26F39F6E16FC4433001A6EF9 /* AlbumViewController.m */; };
-		26F39F7316FC4433001A6EF9 /* GCPagedScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 26F39F7116FC4433001A6EF9 /* GCPagedScrollView.m */; };
 		26F39F7A16FC45CB001A6EF9 /* UIImage+ProportionalFill.m in Sources */ = {isa = PBXBuildFile; fileRef = 26F39F7716FC45CB001A6EF9 /* UIImage+ProportionalFill.m */; };
 		26F39F9F16FC4802001A6EF9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26F39F9E16FC4802001A6EF9 /* QuartzCore.framework */; };
 		26F39FA116FC4813001A6EF9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26F39FA016FC4813001A6EF9 /* AudioToolbox.framework */; };
@@ -39,12 +42,15 @@
 		26F39FBB16FC52CE001A6EF9 /* sheep.wav in Resources */ = {isa = PBXBuildFile; fileRef = 26F39FBA16FC52CE001A6EF9 /* sheep.wav */; };
 		26F39FBE16FC570B001A6EF9 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 26F39FBC16FC570A001A6EF9 /* icon.png */; };
 		26F39FBF16FC570B001A6EF9 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26F39FBD16FC570B001A6EF9 /* icon@2x.png */; };
-		26F39FC116FC5717001A6EF9 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26F39FC016FC5716001A6EF9 /* icon@2x.png */; };
-		26F39FC316FC571A001A6EF9 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 26F39FC216FC571A001A6EF9 /* icon.png */; };
 		F82112A21C9D4F5AB8770651 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A6D6D2F1FF942CA865EA09B /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		266921A11704244400E6D771 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		266921A21704244400E6D771 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		266921A31704244400E6D771 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		266921A81704246400E6D771 /* GCPagedScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCPagedScrollView.h; sourceTree = "<group>"; };
+		266921A91704246400E6D771 /* GCPagedScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPagedScrollView.m; sourceTree = "<group>"; };
 		26F39F4016FC3DEF001A6EF9 /* childDraw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = childDraw.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		26F39F4316FC3DEF001A6EF9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		26F39F4516FC3DEF001A6EF9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -65,8 +71,6 @@
 		26F39F6916FC4083001A6EF9 /* 3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "3@2x.png"; sourceTree = "<group>"; };
 		26F39F6D16FC4433001A6EF9 /* AlbumViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumViewController.h; sourceTree = "<group>"; };
 		26F39F6E16FC4433001A6EF9 /* AlbumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumViewController.m; sourceTree = "<group>"; };
-		26F39F7016FC4433001A6EF9 /* GCPagedScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCPagedScrollView.h; sourceTree = "<group>"; };
-		26F39F7116FC4433001A6EF9 /* GCPagedScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPagedScrollView.m; sourceTree = "<group>"; };
 		26F39F7616FC45CB001A6EF9 /* UIImage+ProportionalFill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ProportionalFill.h"; sourceTree = "<group>"; };
 		26F39F7716FC45CB001A6EF9 /* UIImage+ProportionalFill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ProportionalFill.m"; sourceTree = "<group>"; };
 		26F39F9C16FC46BB001A6EF9 /* AppDefs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDefs.h; sourceTree = "<group>"; };
@@ -86,8 +90,6 @@
 		26F39FBA16FC52CE001A6EF9 /* sheep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sheep.wav; sourceTree = "<group>"; };
 		26F39FBC16FC570A001A6EF9 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = childDraw/icon.png; sourceTree = SOURCE_ROOT; };
 		26F39FBD16FC570B001A6EF9 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "childDraw/icon@2x.png"; sourceTree = SOURCE_ROOT; };
-		26F39FC016FC5716001A6EF9 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
-		26F39FC216FC571A001A6EF9 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		5A6D6D2F1FF942CA865EA09B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD6CAA110687453684D7D705 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -110,11 +112,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		266921A71704246400E6D771 /* GCPagedScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				266921A81704246400E6D771 /* GCPagedScrollView.h */,
+				266921A91704246400E6D771 /* GCPagedScrollView.m */,
+			);
+			path = GCPagedScrollView;
+			sourceTree = "<group>";
+		};
 		26F39F3716FC3DEF001A6EF9 = {
 			isa = PBXGroup;
 			children = (
-				26F39FC216FC571A001A6EF9 /* icon.png */,
-				26F39FC016FC5716001A6EF9 /* icon@2x.png */,
 				26F39F4916FC3DEF001A6EF9 /* childDraw */,
 				26F39F4216FC3DEF001A6EF9 /* Frameworks */,
 				26F39F4116FC3DEF001A6EF9 /* Products */,
@@ -155,7 +164,6 @@
 				26F39F6D16FC4433001A6EF9 /* AlbumViewController.h */,
 				26F39F6E16FC4433001A6EF9 /* AlbumViewController.m */,
 				26F39F7416FC45CB001A6EF9 /* thrid */,
-				26F39F6F16FC4433001A6EF9 /* GCPagedScrollView */,
 				26F39F6616FC4083001A6EF9 /* Resources */,
 				26F39F4A16FC3DEF001A6EF9 /* Supporting Files */,
 			);
@@ -179,6 +187,9 @@
 		26F39F6616FC4083001A6EF9 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				266921A11704244400E6D771 /* Default-568h@2x.png */,
+				266921A21704244400E6D771 /* Default.png */,
+				266921A31704244400E6D771 /* Default@2x.png */,
 				26F39FBC16FC570A001A6EF9 /* icon.png */,
 				26F39FBD16FC570B001A6EF9 /* icon@2x.png */,
 				26F39F6716FC4083001A6EF9 /* 1@2x.png */,
@@ -199,20 +210,12 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		26F39F6F16FC4433001A6EF9 /* GCPagedScrollView */ = {
-			isa = PBXGroup;
-			children = (
-				26F39F7016FC4433001A6EF9 /* GCPagedScrollView.h */,
-				26F39F7116FC4433001A6EF9 /* GCPagedScrollView.m */,
-			);
-			path = GCPagedScrollView;
-			sourceTree = "<group>";
-		};
 		26F39F7416FC45CB001A6EF9 /* thrid */ = {
 			isa = PBXGroup;
 			children = (
 				26F39F7616FC45CB001A6EF9 /* UIImage+ProportionalFill.h */,
 				26F39F7716FC45CB001A6EF9 /* UIImage+ProportionalFill.m */,
+				266921A71704246400E6D771 /* GCPagedScrollView */,
 			);
 			path = thrid;
 			sourceTree = "<group>";
@@ -289,8 +292,9 @@
 				26F39FBB16FC52CE001A6EF9 /* sheep.wav in Resources */,
 				26F39FBE16FC570B001A6EF9 /* icon.png in Resources */,
 				26F39FBF16FC570B001A6EF9 /* icon@2x.png in Resources */,
-				26F39FC116FC5717001A6EF9 /* icon@2x.png in Resources */,
-				26F39FC316FC571A001A6EF9 /* icon.png in Resources */,
+				266921A41704244400E6D771 /* Default-568h@2x.png in Resources */,
+				266921A51704244400E6D771 /* Default.png in Resources */,
+				266921A61704244400E6D771 /* Default@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,8 +326,8 @@
 				26F39F5416FC3DEF001A6EF9 /* AppDelegate.m in Sources */,
 				26F39F6216FC3E1C001A6EF9 /* MainViewController.m in Sources */,
 				26F39F7216FC4433001A6EF9 /* AlbumViewController.m in Sources */,
-				26F39F7316FC4433001A6EF9 /* GCPagedScrollView.m in Sources */,
 				26F39F7A16FC45CB001A6EF9 /* UIImage+ProportionalFill.m in Sources */,
+				266921AA1704246400E6D771 /* GCPagedScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -367,7 +371,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "66A67D19-2880-46D4-A89A-3A21599DA1E0";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "66A67D19-2880-46D4-A89A-3A21599DA1E0";
@@ -394,7 +398,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "66A67D19-2880-46D4-A89A-3A21599DA1E0";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "66A67D19-2880-46D4-A89A-3A21599DA1E0";
