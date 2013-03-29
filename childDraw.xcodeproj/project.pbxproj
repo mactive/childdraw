@@ -13,8 +13,10 @@
 		26E5A87A1704289D00BEBE65 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26E5A8771704289D00BEBE65 /* Default@2x.png */; };
 		26E5A87D1704291A00BEBE65 /* BBCustomBackButtonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26E5A87C1704291A00BEBE65 /* BBCustomBackButtonViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		26E5A88217042B2A00BEBE65 /* navigationBar_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26E5A88117042B2A00BEBE65 /* navigationBar_bg@2x.png */; };
-		26E5A88517042D4300BEBE65 /* UINavigationBar+customNavigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 26E5A88417042D4300BEBE65 /* UINavigationBar+customNavigation.m */; };
 		26E5A888170431E000BEBE65 /* back_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26E5A887170431E000BEBE65 /* back_button@2x.png */; };
+		26E5A88D1705492300BEBE65 /* UINavigationBar+customNavigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 26E5A88C1705492300BEBE65 /* UINavigationBar+customNavigation.m */; };
+		26E5A8901705497600BEBE65 /* AppNetworkAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 26E5A88F1705497600BEBE65 /* AppNetworkAPIClient.m */; };
+		26E5A89417056EDA00BEBE65 /* IPAddress.c in Sources */ = {isa = PBXBuildFile; fileRef = 26E5A89317056EDA00BEBE65 /* IPAddress.c */; };
 		26F39F4416FC3DEF001A6EF9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26F39F4316FC3DEF001A6EF9 /* UIKit.framework */; };
 		26F39F4616FC3DEF001A6EF9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26F39F4516FC3DEF001A6EF9 /* Foundation.framework */; };
 		26F39F4816FC3DEF001A6EF9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26F39F4716FC3DEF001A6EF9 /* CoreGraphics.framework */; };
@@ -55,9 +57,13 @@
 		26E5A87B1704291A00BEBE65 /* BBCustomBackButtonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBCustomBackButtonViewController.h; sourceTree = "<group>"; };
 		26E5A87C1704291A00BEBE65 /* BBCustomBackButtonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBCustomBackButtonViewController.m; sourceTree = "<group>"; };
 		26E5A88117042B2A00BEBE65 /* navigationBar_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigationBar_bg@2x.png"; sourceTree = "<group>"; };
-		26E5A88317042D4300BEBE65 /* UINavigationBar+customNavigation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+customNavigation.h"; sourceTree = "<group>"; };
-		26E5A88417042D4300BEBE65 /* UINavigationBar+customNavigation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationBar+customNavigation.m"; sourceTree = "<group>"; };
 		26E5A887170431E000BEBE65 /* back_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_button@2x.png"; sourceTree = "<group>"; };
+		26E5A88B1705492300BEBE65 /* UINavigationBar+customNavigation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+customNavigation.h"; sourceTree = "<group>"; };
+		26E5A88C1705492300BEBE65 /* UINavigationBar+customNavigation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationBar+customNavigation.m"; sourceTree = "<group>"; };
+		26E5A88E1705497600BEBE65 /* AppNetworkAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppNetworkAPIClient.h; sourceTree = "<group>"; };
+		26E5A88F1705497600BEBE65 /* AppNetworkAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppNetworkAPIClient.m; sourceTree = "<group>"; };
+		26E5A89217056EBC00BEBE65 /* IPAddress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IPAddress.h; sourceTree = "<group>"; };
+		26E5A89317056EDA00BEBE65 /* IPAddress.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IPAddress.c; sourceTree = "<group>"; };
 		26F39F4016FC3DEF001A6EF9 /* childDraw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = childDraw.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		26F39F4316FC3DEF001A6EF9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		26F39F4516FC3DEF001A6EF9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -125,13 +131,31 @@
 			path = GCPagedScrollView;
 			sourceTree = "<group>";
 		};
-		26E5A88617042D6700BEBE65 /* Category */ = {
+		26E5A8891705490000BEBE65 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				26E5A88317042D4300BEBE65 /* UINavigationBar+customNavigation.h */,
-				26E5A88417042D4300BEBE65 /* UINavigationBar+customNavigation.m */,
+				26E5A88E1705497600BEBE65 /* AppNetworkAPIClient.h */,
+				26E5A88F1705497600BEBE65 /* AppNetworkAPIClient.m */,
 			);
-			name = Category;
+			path = Network;
+			sourceTree = "<group>";
+		};
+		26E5A88A1705492300BEBE65 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				26E5A88B1705492300BEBE65 /* UINavigationBar+customNavigation.h */,
+				26E5A88C1705492300BEBE65 /* UINavigationBar+customNavigation.m */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
+		26E5A89117056EA600BEBE65 /* IPAddress */ = {
+			isa = PBXGroup;
+			children = (
+				26E5A89217056EBC00BEBE65 /* IPAddress.h */,
+				26E5A89317056EDA00BEBE65 /* IPAddress.c */,
+			);
+			name = IPAddress;
 			sourceTree = "<group>";
 		};
 		26F39F3716FC3DEF001A6EF9 = {
@@ -169,8 +193,9 @@
 		26F39F4916FC3DEF001A6EF9 /* childDraw */ = {
 			isa = PBXGroup;
 			children = (
+				26E5A88A1705492300BEBE65 /* Category */,
+				26E5A8891705490000BEBE65 /* Network */,
 				26F39F9C16FC46BB001A6EF9 /* AppDefs.h */,
-				26E5A88617042D6700BEBE65 /* Category */,
 				26F39F5216FC3DEF001A6EF9 /* AppDelegate.h */,
 				26F39F5316FC3DEF001A6EF9 /* AppDelegate.m */,
 				26F39F6016FC3E1C001A6EF9 /* MainViewController.h */,
@@ -227,6 +252,7 @@
 			isa = PBXGroup;
 			children = (
 				26E5A87B1704291A00BEBE65 /* BBCustomBackButtonViewController.h */,
+				26E5A89117056EA600BEBE65 /* IPAddress */,
 				26E5A87C1704291A00BEBE65 /* BBCustomBackButtonViewController.m */,
 				26F39F7616FC45CB001A6EF9 /* UIImage+ProportionalFill.h */,
 				26F39F7716FC45CB001A6EF9 /* UIImage+ProportionalFill.m */,
@@ -343,7 +369,9 @@
 				26F39F7A16FC45CB001A6EF9 /* UIImage+ProportionalFill.m in Sources */,
 				266921AA1704246400E6D771 /* GCPagedScrollView.m in Sources */,
 				26E5A87D1704291A00BEBE65 /* BBCustomBackButtonViewController.m in Sources */,
-				26E5A88517042D4300BEBE65 /* UINavigationBar+customNavigation.m in Sources */,
+				26E5A88D1705492300BEBE65 /* UINavigationBar+customNavigation.m in Sources */,
+				26E5A8901705497600BEBE65 /* AppNetworkAPIClient.m in Sources */,
+				26E5A89417056EDA00BEBE65 /* IPAddress.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,6 +12,10 @@
 #import "JSONKit/JSONKit.h"
 
 @interface MainViewController ()
+{
+    SystemSoundID completeSound;
+}
+
 @property(strong, nonatomic)UIImageView *titleImage;
 @property(strong, nonatomic)AlbumViewController *pageViewController;
 @property(strong, nonatomic)UIButton *enterButton;
@@ -114,12 +118,16 @@
 
 -(void) playSound {
     
-
-    
-    SystemSoundID completeSound;
     NSURL *audioPath = [[NSBundle mainBundle] URLForResource:@"sheep" withExtension:@"wav"];
     AudioServicesCreateSystemSoundID((__bridge CFURLRef)audioPath, &completeSound);
     AudioServicesPlaySystemSound (completeSound);
+    
+//    another method
+//    NSString *path =[[NSBundle mainBundle] pathForResource:@"sheep" ofType:@"mp3"];
+//    NSURL *url = [NSURL fileURLWithPath:path];
+//    AVAudioPlayer *player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:NULL];
+//    [player setVolume:1.0];
+//    [player play];
 }
 
 - (void)didReceiveMemoryWarning
