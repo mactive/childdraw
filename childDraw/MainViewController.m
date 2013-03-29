@@ -10,6 +10,15 @@
 #import "AlbumViewController.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "JSONKit/JSONKit.h"
+#import "AppNetworkAPIClient.h"
+
+#import "DDLog.h"
+// Log levels: off, error, warn, info, verbose
+#if DEBUG
+static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+#else
+static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
 
 @interface MainViewController ()
 {
@@ -100,6 +109,26 @@
     [self.animArea startAnimating];
     // that is overall seconds. hence: frames divided by about 30 or 20.
     [self.view addSubview:self.animArea];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self getItems];
+        
+}
+
+- (void)getItems
+{
+    [[AppNetworkAPIClient sharedClient]getItemsCount:10 withBlock:^(id responseObject, NSError *error) {
+        //
+        if (responseObject != nil) {
+            NSDictionary *responseDict = responseObject;
+            DDLogVerbose(@"%@",responseDict);
+            
+        }
+    }];
 }
 
 - (void)enterAction

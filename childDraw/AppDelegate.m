@@ -14,7 +14,6 @@
 #import "DDTTYLogger.h"
 
 #import "DDLog.h"
-
 // Log levels: off, error, warn, info, verbose
 #if DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
@@ -25,18 +24,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @interface AppDelegate()<UIAlertViewDelegate>
 
 @property (nonatomic, strong) UIAlertView *versionAlertView;
-
+@property (readwrite, nonatomic) CGFloat systemVersion;
 @end
 
 @implementation AppDelegate
 @synthesize mainViewController;
 @synthesize versionAlertView;
+@synthesize systemVersion;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Init DDLog
     [DDLog addLogger:[DDTTYLogger sharedInstance]];
-
+    self.systemVersion = [[UIDevice currentDevice].systemVersion floatValue];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
@@ -56,10 +57,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"navigationBar_bg.png"] forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:121/255 green:123/255 blue:126/255 alpha:1.0] ];
     [[UIBarButtonItem appearance] setTintColor:RGBACOLOR(55, 61, 70, 1)];
-    [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
+    
+    if (self.systemVersion > 6.0) {
+        [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
+    }
+    
     
     // actions
     [self getConfig];
+    
+    
+    
     [self.window makeKeyAndVisible];
     return YES;
 }
@@ -98,6 +106,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
     }
 }
+
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if ([alertView isEqual:self.versionAlertView]) {
@@ -108,15 +117,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                              @"itms-apps://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=%d",
                              M_APPLEID ];
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
-            
         }
     }
 }
 
-
-
 ///////////////////////////////////////////////////////
-// application delegate
+#pragma mark - application delegate
 ///////////////////////////////////////////////////////
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -169,6 +175,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         DDLogVerbose(@"key: %@, value: %@", key, [userInfo objectForKey:key]);
     }
 }
+
+
 //////////////////////////////////
 #pragma mark - getIPAddress
 //////////////////////////////////

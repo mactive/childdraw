@@ -65,8 +65,74 @@ static NSString * const kAppNetworkAPIBaseURLString = @"http://192.168.1.104:800
     [[AppNetworkAPIClient sharedClient] enqueueHTTPRequestOperation:loginOperation];
 }
 
+// getItemsCount
+- (void)getItemsCount:(NSInteger)count withBlock:(void(^)(id, NSError *))block
+{
+    NSString *pathString = [NSString stringWithFormat:@"%@%d",GET_ITEMS_PATH, count];
+    NSMutableURLRequest *itemRequest = [[AppNetworkAPIClient sharedClient] requestWithMethod:@"GET" path:pathString parameters:nil];
+    
+    AFJSONRequestOperation * itemOperation = [AFJSONRequestOperation JSONRequestOperationWithRequest:itemRequest success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+        //
+        DDLogVerbose(@"get getItemsCount JSON received: %@", JSON);
+        
+        [[NSUserDefaults standardUserDefaults] setObject:[JSON valueForKey:@"zip_prefix"] forKey:@"zip_prefix"];
+        
+        NSString* type = [JSON valueForKey:@"type"];
+        if (![@"error" isEqualToString:type]) {
+            if (block) {
+                block ([JSON valueForKey:@"items"], nil);
+            }
+        } else {
+            if (block) {
+                NSError *error = [[NSError alloc] initWithDomain:@"wingedstone.com" code:403 userInfo:nil];
+                block (nil, error);
+            }
+        }
+        
+    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+        //
+        DDLogVerbose(@"get getItemsCount failed: %@", error);
+        if (block) {
+            block(nil, error);
+        }
+    }];
+    
+    [[AppNetworkAPIClient sharedClient] enqueueHTTPRequestOperation:itemOperation];
+}
 
-// 上传devicetoken
+// getItemsThumbnail
+- (void)getThumbnailsWithBlock:(void(^)(id, NSError *))block
+{
+    NSMutableURLRequest *itemRequest = [[AppNetworkAPIClient sharedClient] requestWithMethod:@"GET" path:GET_THUMBNAIL_PATH parameters:nil];
+    
+    AFJSONRequestOperation * itemOperation = [AFJSONRequestOperation JSONRequestOperationWithRequest:itemRequest success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+        //
+        DDLogVerbose(@"getThumbnailsWithBlock JSON received: %@", JSON);
+        NSString* type = [JSON valueForKey:@"type"];
+        if (![@"error" isEqualToString:type]) {
+            if (block) {
+                block (JSON, nil);
+            }
+        } else {
+            if (block) {
+                NSError *error = [[NSError alloc] initWithDomain:@"wingedstone.com" code:403 userInfo:nil];
+                block (nil, error);
+            }
+        }
+        
+    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+        //
+        DDLogVerbose(@"getThumbnailsWithBlock failed: %@", error);
+        if (block) {
+            block(nil, error);
+        }
+    }];
+    
+    [[AppNetworkAPIClient sharedClient] enqueueHTTPRequestOperation:itemOperation];
+}
+
+
+// upload devicetoken
 - (void)postDeviceToken{
     
     NSString* csrfToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"csrfmiddlewaretoken"];
@@ -77,23 +143,59 @@ static NSString * const kAppNetworkAPIBaseURLString = @"http://192.168.1.104:800
                                      dToken, @"dt",
                                      nil];
     
-    NSMutableURLRequest *postRequest = [[AppNetworkAPIClient sharedClient] requestWithMethod:@"POST" path:POST_DEVICE_PATH parameters:postDict];
-    AFHTTPRequestOperation *oper = [[AppNetworkAPIClient sharedClient] HTTPRequestOperationWithRequest:postRequest success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[AppNetworkAPIClient sharedClient]postPath:POST_DEVICE_PATH parameters:postDict success:^(AFHTTPRequestOperation *operation, id responseObject) {
         DDLogInfo(@"device successfully uploaded");
-        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         DDLogInfo(@"device failed uploaded");
     }];
-    
-    if (self.isLoggedIn) {
-        [[AppNetworkAPIClient sharedClient] enqueueHTTPRequestOperation:oper];
-    } else {
-        [_queuedOperationLock lock];
-        [self.queuedOperations addObject:oper];
-        [_queuedOperationLock unlock];
-    }
-    
+
 }
 
+// feedback
+- (void)postFeedbackEmail:(NSString *)email andPhone:(NSString *)phone andContent:(NSString *)content withBlock:(void(^)(id, NSError *))block
+{
+    NSString* csrfToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"csrfmiddlewaretoken"];
+    
+    NSMutableDictionary *postDict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                     csrfToken, @"csrfmiddlewaretoken",
+                                     email, @"email",
+                                     phone, @"phone",
+                                     content, @"content",
+                                     nil];
+    DDLogInfo(@"%@",postDict);
+    
+    [[AppNetworkAPIClient sharedClient] postPath:POST_FEEDBACK_PATH parameters:postDict success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        DDLogInfo(@"upload feedback received response: %@", responseObject);
+        NSString* status = [responseObject valueForKey:@"status"];
+        if ([status isEqualToString:@"success"]) {
+            if (block ) {
+                block(responseObject, nil);
+            }
+        }
+        else {
+            if (block) {
+                NSError *error = [[NSError alloc] initWithDomain:@"wingedstone.com" code:403 userInfo:nil];
+                block (nil, error);
+            }
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        DDLogError(@"upload rating failed: %@", error);
+        if (block) {
+            block(nil, error);
+        }
+    }];
+}
+
+
+#pragma mark - common post path
+- (void)postPath:(NSString *)path
+      parameters:(NSDictionary *)parameters
+         success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+         failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+	NSURLRequest *request = [self requestWithMethod:@"POST" path:path parameters:parameters];
+	AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:success failure:failure];
+    [self enqueueHTTPRequestOperation:operation];
+}
 
 @end
