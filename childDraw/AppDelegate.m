@@ -10,7 +10,10 @@
 #import "MainViewController.h"
 #import "UINavigationBar+customNavigation.h"
 #import "AppNetworkAPIClient.h"
+#import "AFHTTPRequestOperation.h"
 #import "IPAddress.h"
+#import "ModelHelper.h"
+#import "Zipfile.h"
 #import "DDTTYLogger.h"
 
 #import "DDLog.h"
@@ -22,15 +25,22 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
 
 @interface AppDelegate()<UIAlertViewDelegate>
+{
+    NSManagedObjectContext *_managedObjectContext;
+    NSUInteger              _defaultGetCount;
 
-@property (nonatomic, strong) UIAlertView *versionAlertView;
-@property (readwrite, nonatomic) CGFloat systemVersion;
+}
+
+@property(nonatomic, strong) UIAlertView *versionAlertView;
+@property(readwrite, nonatomic) CGFloat systemVersion;
+@property(nonatomic,strong)NSMutableArray *downArray;
 @end
 
 @implementation AppDelegate
 @synthesize mainViewController;
 @synthesize versionAlertView;
 @synthesize systemVersion;
+@synthesize downArray;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -63,8 +73,24 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     
+    application.statusBarHidden = NO;
+    // Set up Core Data stack.
+    NSPersistentStoreCoordinator *persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[[NSManagedObjectModel alloc] initWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"childDraw" withExtension:@"momd"]]];
+    NSError *error;
+    NSPersistentStore *store = [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] URLByAppendingPathComponent:@"childDraww.sqlite"] options:nil error:&error];
+    if (store == nil) {
+        DDLogVerbose(@"Add-Persistent-Store Error: %@", error);
+    }
+    _managedObjectContext = [[NSManagedObjectContext alloc] init];
+    [_managedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
+    [ModelHelper sharedInstance].managedObjectContext = _managedObjectContext;
+    
+    
     // actions
     [self getConfig];
+    
+    _defaultGetCount  = 7;
+    [self downloadLastFiles:_defaultGetCount];
     
     
     
@@ -72,6 +98,101 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return YES;
 }
 
+- (void)downloadLastFiles:(NSInteger)count
+{
+    NSManagedObjectContext *moc = _managedObjectContext;    
+    
+    self.downArray = [[NSMutableArray alloc]init];
+    
+    [[AppNetworkAPIClient sharedClient]getItemsCount:count withBlock:^(id responseObject, NSString *zipPrefixString, NSError * error) {
+        
+//        NSDictionary *responseDict = responseObject;
+//        NSDictionary *responseItem;
+//        NSEnumerator *enumerator = [responseDict objectEnumerator];
+//
+//        while (responseItem = [enumerator nextObject]) {
+//            NSString *urlString = [NSString stringWithFormat:@"%@%@.zip",zipPrefixString,[responseItem objectForKey:@"key"]];
+//            [downloadURL addObject:urlString];
+//            [self downloadWithURLString:urlString];
+//        }
+        
+        if (!StringHasValue(zipPrefixString)) {
+            zipPrefixString = ZIPPREFIX;
+        }
+        
+        if (responseObject != nil) {
+            
+            NSArray *sourceData = [[NSArray alloc]initWithArray:responseObject];
+            
+            [sourceData enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                //
+                NSString *urlString = [NSString stringWithFormat:@"%@%@.zip",zipPrefixString,[obj objectForKey:@"key"]];
+                DDLogVerbose(@"urlString %@",urlString);
+                [self.downArray addObject:urlString];
+
+                Zipfile *newZipfile = [[ModelHelper sharedInstance] findZipfileWithFileName:[obj objectForKey:@"key"]];
+                if (newZipfile == nil) {
+                    newZipfile = [NSEntityDescription insertNewObjectForEntityForName:@"Zipfile" inManagedObjectContext:moc];
+                    [[ModelHelper sharedInstance]populateZipfile:newZipfile withServerJSONData:obj];
+                    DDLogVerbose(@"SYNC insert a zipfile");
+                    
+                    // go download
+                    [self downloadURLString:urlString withZipfile:newZipfile];
+                    newZipfile.downloadTime = [NSDate date];
+                    
+                }else{
+                    if ([newZipfile.isDownload isEqualToNumber:NUM_BOOL(NO)]) {
+                        DDLogVerbose(@"SYNC download a zipfile");
+                        // go download
+                        [self downloadURLString:urlString withZipfile:newZipfile];
+                        newZipfile.downloadTime = [NSDate date];
+                    }else{
+                        // 存在而且已经下载 不再下载
+                    }
+                }
+#warning mocsave
+             // MOCSave(moc);
+            }];
+            
+        }
+
+     
+     
+    }];
+}
+
+// download
+- (void)downloadURLString:(NSString *)urlString withZipfile:(Zipfile *)theZipfile
+{
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    // 不同的文件
+    NSString *path = [[paths objectAtIndex:0] stringByAppendingPathComponent:theZipfile.fileName];
+    operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"Successfully downloaded file to %@ %@", path,urlString);
+        theZipfile.isDownload = NUM_BOOL(YES);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        theZipfile.isDownload = NUM_BOOL(NO);
+        NSLog(@"Error: %@", error);
+    }];
+    
+    [operation start];
+}
+
+// unzip
+
+- (void)unzipFileWithPath:(NSString*)path
+{
+    // unzip pathdfdfddfadfd
+}
+
+///////////////////////////////////////////////////////
+#pragma mark -- get config
+///////////////////////////////////////////////////////
 
 - (BOOL)getConfig
 {
@@ -135,11 +256,24 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    [self saveContext];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+}
+
+- (void)saveContext
+{
+    NSError *error = nil;
+    if (_managedObjectContext != nil) {
+        if ([_managedObjectContext hasChanges] && ![_managedObjectContext save:&error]) {
+            // Replace this implementation with code to handle the error appropriately.
+            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            DDLogVerbose(@"Unresolved error saving object context s%@, %@", error, [error userInfo]);
+        }
+    }
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -150,6 +284,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    [self saveContext];
 }
 
 //////////////////////////////////

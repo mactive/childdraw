@@ -13,7 +13,7 @@
 #define M_APPLEID 626129422
 
 #define CUSTOM_NAV_HEIGHT 40.0f
-
+#define ZIPPREFIX @"http://babylearn.b0.upaiyun.com/"
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define RGBCOLOR(r,g,b) [UIColor colorWithRed:(r)/255.0f green:(g)/255.0f blue:(b)/255.0f alpha:1]
@@ -35,6 +35,7 @@ alpha:(a)]
 #define T(a)    NSLocalizedString((a), nil)
 
 #define INT(a)  [NSNumber numberWithInt:(a)]
+#define NUM_BOOL(a) [NSNumber numberWithBool:(a)]
 #define STR(a)  [NSString stringWithFormat:@"%@", (a)]
 #define STR_INT(a)  [NSString stringWithFormat:@"%d", (a)]
 

@@ -66,7 +66,7 @@ static NSString * const kAppNetworkAPIBaseURLString = @"http://192.168.1.104:800
 }
 
 // getItemsCount
-- (void)getItemsCount:(NSInteger)count withBlock:(void(^)(id, NSError *))block
+- (void)getItemsCount:(NSInteger)count withBlock:(void(^)(id, NSString *, NSError *))block
 {
     NSString *pathString = [NSString stringWithFormat:@"%@%d",GET_ITEMS_PATH, count];
     NSMutableURLRequest *itemRequest = [[AppNetworkAPIClient sharedClient] requestWithMethod:@"GET" path:pathString parameters:nil];
@@ -75,17 +75,18 @@ static NSString * const kAppNetworkAPIBaseURLString = @"http://192.168.1.104:800
         //
         DDLogVerbose(@"get getItemsCount JSON received: %@", JSON);
         
-        [[NSUserDefaults standardUserDefaults] setObject:[JSON valueForKey:@"zip_prefix"] forKey:@"zip_prefix"];
+        NSString *httpZipPrefix = [NSString stringWithFormat:@"http://%@/",[JSON valueForKey:@"zip_prefix"]];
+        [[NSUserDefaults standardUserDefaults] setObject:httpZipPrefix forKey:@"zip_prefix"];
         
         NSString* type = [JSON valueForKey:@"type"];
         if (![@"error" isEqualToString:type]) {
             if (block) {
-                block ([JSON valueForKey:@"items"], nil);
+                block ([JSON valueForKey:@"items"], httpZipPrefix , nil);
             }
         } else {
             if (block) {
                 NSError *error = [[NSError alloc] initWithDomain:@"wingedstone.com" code:403 userInfo:nil];
-                block (nil, error);
+                block (nil, nil, error);
             }
         }
         
@@ -93,7 +94,7 @@ static NSString * const kAppNetworkAPIBaseURLString = @"http://192.168.1.104:800
         //
         DDLogVerbose(@"get getItemsCount failed: %@", error);
         if (block) {
-            block(nil, error);
+            block(nil, nil, error);
         }
     }];
     
@@ -137,7 +138,7 @@ static NSString * const kAppNetworkAPIBaseURLString = @"http://192.168.1.104:800
     
     NSString* csrfToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"csrfmiddlewaretoken"];
     NSString* dToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"deviceToken"];
-    
+
     NSMutableDictionary *postDict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                      csrfToken, @"csrfmiddlewaretoken",
                                      dToken, @"dt",
@@ -145,7 +146,7 @@ static NSString * const kAppNetworkAPIBaseURLString = @"http://192.168.1.104:800
     
     [[AppNetworkAPIClient sharedClient]postPath:POST_DEVICE_PATH parameters:postDict success:^(AFHTTPRequestOperation *operation, id responseObject) {
         DDLogInfo(@"device successfully uploaded");
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) { 
         DDLogInfo(@"device failed uploaded");
     }];
 

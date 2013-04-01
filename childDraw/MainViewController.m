@@ -31,6 +31,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property(strong, nonatomic)UIButton *button1;
 @property(strong, nonatomic)NSArray *albumArray;
 @property(strong, nonatomic)UIImageView *animArea;
+@property(strong, nonatomic)UIButton *listButton;
 @end
 
 @implementation MainViewController
@@ -40,6 +41,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize albumArray;
 @synthesize button1;
 @synthesize animArea;
+@synthesize listButton;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -48,6 +50,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         // Custom initialization
         self.title = T(@"小羊咩咩叫");
         
+        self.listButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 29)];
+        [self.listButton setBackgroundImage:[UIImage imageNamed: @"list_button.png"] forState:UIControlStateNormal];
+        [self.listButton addTarget:self action:@selector(listAction) forControlEvents:UIControlEventTouchUpInside];
+        
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.listButton];
     }
     return self;
 }
@@ -114,21 +121,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    [self getItems];
-        
-}
-
-- (void)getItems
-{
-    [[AppNetworkAPIClient sharedClient]getItemsCount:10 withBlock:^(id responseObject, NSError *error) {
-        //
-        if (responseObject != nil) {
-            NSDictionary *responseDict = responseObject;
-            DDLogVerbose(@"%@",responseDict);
-            
-        }
-    }];
 }
 
 - (void)enterAction
