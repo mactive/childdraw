@@ -129,7 +129,7 @@
 
     UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(60, self.view.frame.size.height - 100, 200, 30)];
     label.textAlignment = NSTextAlignmentCenter;
-    label.text = [self.titleArray objectAtIndex:index];
+//    label.text = [self.titleArray objectAtIndex:index];
     label.backgroundColor = [UIColor clearColor];
     
     [view addSubview:label];

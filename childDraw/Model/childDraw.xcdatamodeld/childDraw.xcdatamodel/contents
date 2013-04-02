@@ -6,7 +6,7 @@
         <attribute name="fileName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="isDownload" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="isZiped" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="pixCount" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="picCount" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>

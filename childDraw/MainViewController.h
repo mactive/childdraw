@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Zipfile.h"
 
 @interface MainViewController : UIViewController
+
+@property(strong, nonatomic)NSString *planetString;
+@property(strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 @end

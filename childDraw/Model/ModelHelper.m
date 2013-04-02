@@ -75,8 +75,8 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     zipfile.downloadTime    = [NSDate date];
     zipfile.isDownload      = [NSNumber numberWithBool:NO];
     zipfile.isZiped         = [NSNumber numberWithBool:NO];
-    zipfile.pixCount        = @"0";
-    zipfile.aniCount        = @"0";
+    zipfile.picCount        = @"0";
+    zipfile.aniCount        = @"8";
     zipfile.title           = [json objectForKey:@"title"];
 }
 

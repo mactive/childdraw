@@ -15,7 +15,7 @@
 @dynamic isDownload;
 @dynamic isZiped;
 @dynamic downloadTime;
-@dynamic pixCount;
+@dynamic picCount;
 @dynamic aniCount;
 @dynamic title;
 

@@ -20,6 +20,7 @@
 		2652C6C31709947B00054D45 /* camera_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2652C6BC1709947B00054D45 /* camera_button@2x.png */; };
 		2652C6C41709947B00054D45 /* next_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2652C6BD1709947B00054D45 /* next_button@2x.png */; };
 		2652C6C51709947B00054D45 /* click_me@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2652C6BE1709947B00054D45 /* click_me@2x.png */; };
+		2652C6C8170AAE6900054D45 /* FirstDownloadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2652C6C7170AAE6900054D45 /* FirstDownloadViewController.m */; };
 		266921AA1704246400E6D771 /* GCPagedScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 266921A91704246400E6D771 /* GCPagedScrollView.m */; };
 		26E5A8781704289D00BEBE65 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26E5A8751704289D00BEBE65 /* Default-568h@2x.png */; };
 		26E5A8791704289D00BEBE65 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 26E5A8761704289D00BEBE65 /* Default.png */; };
@@ -77,6 +78,8 @@
 		2652C6BC1709947B00054D45 /* camera_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_button@2x.png"; sourceTree = "<group>"; };
 		2652C6BD1709947B00054D45 /* next_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "next_button@2x.png"; sourceTree = "<group>"; };
 		2652C6BE1709947B00054D45 /* click_me@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "click_me@2x.png"; sourceTree = "<group>"; };
+		2652C6C6170AAE6900054D45 /* FirstDownloadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstDownloadViewController.h; sourceTree = "<group>"; };
+		2652C6C7170AAE6900054D45 /* FirstDownloadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstDownloadViewController.m; sourceTree = "<group>"; };
 		266921A81704246400E6D771 /* GCPagedScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCPagedScrollView.h; sourceTree = "<group>"; };
 		266921A91704246400E6D771 /* GCPagedScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPagedScrollView.m; sourceTree = "<group>"; };
 		26E5A8751704289D00BEBE65 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -163,6 +166,15 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		2652C6C9170AAED700054D45 /* FirstDownloadIntro */ = {
+			isa = PBXGroup;
+			children = (
+				2652C6C6170AAE6900054D45 /* FirstDownloadViewController.h */,
+				2652C6C7170AAE6900054D45 /* FirstDownloadViewController.m */,
+			);
+			name = FirstDownloadIntro;
+			sourceTree = "<group>";
+		};
 		266921A71704246400E6D771 /* GCPagedScrollView */ = {
 			isa = PBXGroup;
 			children = (
@@ -238,6 +250,7 @@
 				2652C6AC170983E800054D45 /* Model */,
 				26E5A88A1705492300BEBE65 /* Category */,
 				26E5A8891705490000BEBE65 /* Network */,
+				2652C6C9170AAED700054D45 /* FirstDownloadIntro */,
 				26F39F9C16FC46BB001A6EF9 /* AppDefs.h */,
 				26F39F5216FC3DEF001A6EF9 /* AppDelegate.h */,
 				26F39F5316FC3DEF001A6EF9 /* AppDelegate.m */,
@@ -436,6 +449,7 @@
 				2652C6AF1709840700054D45 /* childDraw.xcdatamodeld in Sources */,
 				2652C6B21709877B00054D45 /* Zipfile.m in Sources */,
 				2652C6B71709882D00054D45 /* ModelHelper.m in Sources */,
+				2652C6C8170AAE6900054D45 /* FirstDownloadViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

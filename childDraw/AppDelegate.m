@@ -34,6 +34,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property(nonatomic, strong) UIAlertView *versionAlertView;
 @property(readwrite, nonatomic) CGFloat systemVersion;
 @property(nonatomic,strong)NSMutableArray *downArray;
+@property(nonatomic, strong)NSString *lastPlanet; // 最新的package
 @end
 
 @implementation AppDelegate
@@ -42,25 +43,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize systemVersion;
 @synthesize downArray;
 @synthesize LIBRARYPATH;
+@synthesize lastPlanet;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Init DDLog
     [DDLog addLogger:[DDTTYLogger sharedInstance]];
     self.systemVersion = [[UIDevice currentDevice].systemVersion floatValue];
-    
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
-    
-    // mainMenuViewController
-    
-    self.mainViewController = [[MainViewController alloc]initWithNibName:nil bundle:nil];
-    UINavigationController *mainController = [[UINavigationController alloc] initWithRootViewController:self.mainViewController];
-    
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.backgroundColor = BGCOLOR;
-    [self.window addSubview:self.mainViewController.view];
-    [self.window setRootViewController:mainController];
+    application.statusBarHidden = NO;
+
     
     // Global UINavigationBar style
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
@@ -73,8 +64,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
     }
     
-    
-    application.statusBarHidden = NO;
     // Set up Core Data stack.
     NSPersistentStoreCoordinator *persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[[NSManagedObjectModel alloc] initWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"childDraw" withExtension:@"momd"]]];
     NSError *error;
@@ -98,8 +87,49 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     
     
-    [self.window makeKeyAndVisible];
     return YES;
+}
+
+
+#pragma mark TODO
+
+#warning TODO 第一次下载有个intro 可爱的动画
+
+- (void)startIntroSession
+{
+    // 在intro的时候下载 然后下载完成10个后进去intro
+}
+
+- (void)startMainSession
+{
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    // Override point for customization after application launch.
+    
+    // mainMenuViewController
+    
+    self.mainViewController = [[MainViewController alloc]initWithNibName:nil bundle:nil];
+    UINavigationController *mainController = [[UINavigationController alloc] initWithRootViewController:self.mainViewController];
+    self.mainViewController.planetString = self.lastPlanet;
+    self.mainViewController.managedObjectContext = _managedObjectContext;
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.backgroundColor = BGCOLOR;
+    [self.window addSubview:self.mainViewController.view];
+    [self.window setRootViewController:mainController];
+    
+    [self.window makeKeyAndVisible];
+
+}
+
+-(NSString *)getTheLastPlanet:(NSArray *)data
+{
+    NSArray* sorted = [data sortedArrayUsingComparator:(NSComparator)^(NSDictionary *item1, NSDictionary *item2) {
+        NSString *score1 = [[item1 objectForKey:@"key"] stringValue];
+        NSString *score2 = [[item2 objectForKey:@"key"] stringValue];
+        return [score1 compare:score2 options:NSNumericSearch];
+    }];
+    
+    NSNumber * tmp = [(NSDictionary *)[sorted lastObject] objectForKey:@"key"];
+    return tmp.stringValue;
 }
 
 - (void)downloadLastFiles:(NSInteger)count
@@ -110,16 +140,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [[AppNetworkAPIClient sharedClient]getItemsCount:count withBlock:^(id responseObject, NSString *zipPrefixString, NSError * error) {
         
-//        NSDictionary *responseDict = responseObject;
-//        NSDictionary *responseItem;
-//        NSEnumerator *enumerator = [responseDict objectEnumerator];
-//
-//        while (responseItem = [enumerator nextObject]) {
-//            NSString *urlString = [NSString stringWithFormat:@"%@%@.zip",zipPrefixString,[responseItem objectForKey:@"key"]];
-//            [downloadURL addObject:urlString];
-//            [self downloadWithURLString:urlString];
-//        }
-        
         if (!StringHasValue(zipPrefixString)) {
             zipPrefixString = ZIPPREFIX;
         }
@@ -127,6 +147,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         if (responseObject != nil) {
             
             NSArray *sourceData = [[NSArray alloc]initWithArray:responseObject];
+            
+//            self.lastPlanet = [self getTheLastPlanet:sourceData];
+            self.lastPlanet = @"1364803267";
+#warning 要不要在没取道的时候显示个loading
             
             [sourceData enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 //
@@ -143,7 +167,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     // go download
                     [self downloadURLString:urlString withZipfile:newZipfile];
                     newZipfile.downloadTime = [NSDate date];
-                    
+                                    
                 }else{
                     if ([newZipfile.isDownload isEqualToNumber:NUM_BOOL(NO)]) {
                         DDLogVerbose(@"SYNC download a zipfile");
@@ -154,16 +178,29 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                         // 存在而且已经下载 不再下载
                     }
                 }
-#warning mocsave
-             // MOCSave(moc);
+#warning mocsave // MOCSave(moc);
             }];
             
+            
+        }else{
+            DDLogWarn(@"Not get nothing");
         }
-
-     
      
     }];
+    
 }
+
+- (void)checkIsDownloadedWithZipfile:(Zipfile *)zipfile
+{
+    if (zipfile.isDownload.boolValue && [zipfile.fileName isEqualToString:self.lastPlanet]) {
+        [self startMainSession];
+    }
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - download and unzip
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // download
 - (void)downloadURLString:(NSString *)urlString withZipfile:(Zipfile *)theZipfile
@@ -182,6 +219,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         theZipfile.isDownload = NUM_BOOL(YES);
         [self unzipFileName:theZipfile.fileName WithPath:path];
         
+        [self checkIsDownloadedWithZipfile:theZipfile];
+        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         theZipfile.isDownload = NUM_BOOL(NO);
         NSLog(@"Error: %@", error);
@@ -194,7 +233,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)unzipFileName:(NSString *)filename WithPath:(NSString*)path
 {
-    // unzip pathdfdfddfadfd
+    // unzip path to directory filename
     NSString *zipPath = path;
     NSString *destinationPath = [self.LIBRARYPATH stringByAppendingPathComponent:filename];
     [SSZipArchive unzipFileAtPath:zipPath toDestination:destinationPath];

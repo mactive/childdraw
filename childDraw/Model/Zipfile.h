@@ -16,7 +16,7 @@
 @property (nonatomic, retain) NSNumber * isDownload;
 @property (nonatomic, retain) NSNumber * isZiped;
 @property (nonatomic, retain) NSDate * downloadTime;
-@property (nonatomic, retain) NSString * pixCount;
+@property (nonatomic, retain) NSString * picCount;
 @property (nonatomic, retain) NSString * aniCount;
 @property (nonatomic, retain) NSString * title;
 
