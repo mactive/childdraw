@@ -71,7 +71,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 
 - (void)populateZipfile:(Zipfile *)zipfile withServerJSONData:(id)json
 {
-    zipfile.fileName        = [NSString stringWithFormat:@"%d",[json objectForKey:@"key"]];
+    zipfile.fileName        = [(NSNumber*)[json objectForKey:@"key"] stringValue];
     zipfile.downloadTime    = [NSDate date];
     zipfile.isDownload      = [NSNumber numberWithBool:NO];
     zipfile.isZiped         = [NSNumber numberWithBool:NO];

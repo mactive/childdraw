@@ -14,6 +14,7 @@
 #import "IPAddress.h"
 #import "ModelHelper.h"
 #import "Zipfile.h"
+#import "SSZipArchive.h"
 #import "DDTTYLogger.h"
 
 #import "DDLog.h"
@@ -28,7 +29,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     NSManagedObjectContext *_managedObjectContext;
     NSUInteger              _defaultGetCount;
-
 }
 
 @property(nonatomic, strong) UIAlertView *versionAlertView;
@@ -41,6 +41,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize versionAlertView;
 @synthesize systemVersion;
 @synthesize downArray;
+@synthesize LIBRARYPATH;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -85,6 +86,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [_managedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
     [ModelHelper sharedInstance].managedObjectContext = _managedObjectContext;
     
+    //
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+    self.LIBRARYPATH =[[paths objectAtIndex:0] stringByAppendingPathComponent:@"/Assets/"];
     
     // actions
     [self getConfig];
@@ -173,8 +177,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
         NSLog(@"Successfully downloaded file to %@ %@", path,urlString);
         theZipfile.isDownload = NUM_BOOL(YES);
+        [self unzipFileName:theZipfile.fileName WithPath:path];
+        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         theZipfile.isDownload = NUM_BOOL(NO);
         NSLog(@"Error: %@", error);
@@ -185,9 +192,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 // unzip
 
-- (void)unzipFileWithPath:(NSString*)path
+- (void)unzipFileName:(NSString *)filename WithPath:(NSString*)path
 {
     // unzip pathdfdfddfadfd
+    NSString *zipPath = path;
+    NSString *destinationPath = [self.LIBRARYPATH stringByAppendingPathComponent:filename];
+    [SSZipArchive unzipFileAtPath:zipPath toDestination:destinationPath];
 }
 
 ///////////////////////////////////////////////////////
