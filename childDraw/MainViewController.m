@@ -41,6 +41,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property(strong, nonatomic)Zipfile *theZipfile;
 @property(assign, nonatomic)NSInteger picCount;
 @property(assign, nonatomic)NSInteger aniCount;
+
+@property(strong, nonatomic)UIView *mainView;
+@property(strong, nonatomic)UIView *downloadView;
+@property(strong, nonatomic)UILabel *dlNumber;
+@property(strong, nonatomic)UILabel *dlTitle;
 @end
 
 @implementation MainViewController
@@ -58,6 +63,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize picCount;
 @synthesize aniCount;
+@synthesize mainView;
+@synthesize downloadView;
+@synthesize dlNumber,dlTitle;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -173,13 +181,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-        
-    self.enterButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [self.enterButton setTitle:@"Enter" forState:UIControlStateNormal];
-    
-    [self.enterButton setFrame:CGRectMake(60, 300, 200, 40)];
-    [self.enterButton addTarget:self action:@selector(enterAction) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.enterButton];
     
     self.pageViewController = [[AlbumViewController alloc] init];
     
@@ -191,32 +192,111 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     id json = [self.albumArray JSONString];
     NSLog(@"%@",json);
     
-    //button1
+    // download view
+    [self initMainView];
+    [self initDownloadView];
+
+}
+
+- (void)initMainView
+{
+    self.mainView  = [[UIView alloc]initWithFrame:CGRectMake(10, 50, TOTAL_WIDTH, self.view.frame.size.height -50)];
+    self.mainView.backgroundColor = [UIColor clearColor];
+    
+    self.enterButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [self.enterButton setTitle:@"Enter" forState:UIControlStateNormal];
+    
+    [self.enterButton setFrame:CGRectMake(60, 250, 200, 40)];
+    [self.enterButton addTarget:self action:@selector(enterAction) forControlEvents:UIControlEventTouchUpInside];
+    
+    // or animview
     self.button1 = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.button1.frame = CGRectMake(0, 0, 320, 290);
+    self.button1.frame = CGRectMake(0, 0, TOTAL_WIDTH, 290);
     [self.button1 setTitle:@"" forState:UIControlStateNormal];
     [self.button1 addTarget:self action:@selector(playSound) forControlEvents:UIControlEventTouchUpInside];
     self.button1.alpha = 1;
     self.button1.tag = 0;
-    [self.view addSubview:self.button1];
     
+    self.animArea = [[UIImageView alloc] initWithFrame:CGRectMake(60, 0, 200, 200)];
 
+    [self.mainView addSubview:self.button1];
+    [self.mainView addSubview:self.animArea];
+    [self.mainView addSubview:self.enterButton];
+
+    [self.mainView setHidden:YES];
+    [self.view addSubview:self.mainView];
+}
+
+- (void)initDownloadView
+{
+    self.downloadView  = [[UIView alloc]initWithFrame:CGRectMake((TOTAL_WIDTH-BIG_BUTTON_WIDTH)/2 , 50, BIG_BUTTON_WIDTH, BIG_BUTTON_WIDTH+50)];
+    UIImageView *bgView = [[UIImageView alloc]initWithFrame:CGRectMake(0 , 50, BIG_BUTTON_WIDTH, BIG_BUTTON_WIDTH)];
+    [bgView setImage:[UIImage imageNamed:@"circle_button_bg.png"]];
+    
+    self.dlTitle = [[UILabel alloc]initWithFrame:CGRectMake(0 , BIG_BUTTON_WIDTH+50, BIG_BUTTON_WIDTH, 20)];
+    self.dlTitle.backgroundColor = [UIColor clearColor];
+    self.dlTitle.font = [UIFont systemFontOfSize:14.0f];
+    self.dlTitle.textColor = GRAYCOLOR;
+    self.dlTitle.textAlignment = NSTextAlignmentCenter;
+    
+    self.dlNumber = [[UILabel alloc]initWithFrame:bgView.frame];
+    self.dlNumber.backgroundColor = [UIColor clearColor];
+    self.dlNumber.font = [UIFont systemFontOfSize:40.0f];
+    self.dlNumber.textColor = DARKCOLOR;
+    self.dlNumber.textAlignment = NSTextAlignmentCenter;
+    
+    [self.downloadView addSubview:bgView];
+    [self.downloadView addSubview:self.dlNumber];
+    [self.downloadView addSubview:self.dlTitle];
+    [self.view addSubview:self.downloadView];
+}
+
+- (void)downloadLastPlanet:(NSNumber *)value andTitle:(NSString *)title
+{
+    if ([title isEqualToString:self.planetString]) {
+        self.dlTitle.text = T(@"Downloading...");
+        self.dlNumber.text = [NSString stringWithFormat:@"%.0f%%",value.floatValue*100];
+        if (value.floatValue > 0.99) {
+//            [self downloadFinish];
+        }
+    }
+}
+
+- (void)downloadFinish
+{
+    [self moveYOffest:20 andDelay:0 andAlpha:0 withView:self.downloadView];
+    [self.downloadView setHidden:YES];
+    [self.mainView setHidden:NO];
+    
     // that is overall seconds. hence: frames divided by about 30 or 20.
     [self makeArrayWithString:self.planetString];
     
-    self.animArea = [[UIImageView alloc] initWithFrame:CGRectMake(60, 40, 200, 200)];
     self.animArea.animationImages = self.animationArray;
     self.animArea.animationRepeatCount = 0;
     self.animArea.animationDuration = 1.2;
     
     [self.animArea startAnimating];
-    [self.view addSubview:self.animArea];
+}
 
+- (void)moveYOffest:(CGFloat)offset andDelay:(CGFloat)delay andAlpha:(CGFloat)alpha withView:(UIView *)targetView
+{
+    CGRect rect = targetView.frame;
+    
+    rect.origin.y = rect.origin.y + offset ;
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.35];
+    [UIView setAnimationDelay:delay];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+    targetView.alpha = alpha;
+    targetView.frame = rect;
+    
+    [UIView commitAnimations];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+
 }
 
 - (void)enterAction

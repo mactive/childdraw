@@ -16,6 +16,7 @@
 #import "Zipfile.h"
 #import "SSZipArchive.h"
 #import "DDTTYLogger.h"
+#import "PassValueDelegate.h"
 
 #import "DDLog.h"
 // Log levels: off, error, warn, info, verbose
@@ -35,6 +36,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property(readwrite, nonatomic) CGFloat systemVersion;
 @property(nonatomic,strong)NSMutableArray *downArray;
 @property(nonatomic, strong)NSString *lastPlanet; // 最新的package
+
 @end
 
 @implementation AppDelegate
@@ -111,6 +113,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     UINavigationController *mainController = [[UINavigationController alloc] initWithRootViewController:self.mainViewController];
     self.mainViewController.planetString = self.lastPlanet;
     self.mainViewController.managedObjectContext = _managedObjectContext;
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = BGCOLOR;
     [self.window addSubview:self.mainViewController.view];
@@ -148,8 +151,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             NSArray *sourceData = [[NSArray alloc]initWithArray:responseObject];
             
-//            self.lastPlanet = [self getTheLastPlanet:sourceData];
-            self.lastPlanet = @"1364803267";
+            self.lastPlanet = [self getTheLastPlanet:sourceData];
+//            self.lastPlanet = @"1364803267";
+            [self startMainSession];
+
 #warning 要不要在没取道的时候显示个loading
             
             [sourceData enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -167,7 +172,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     // go download
                     [self downloadURLString:urlString withZipfile:newZipfile];
                     newZipfile.downloadTime = [NSDate date];
-                                    
+                    
+//                    [self checkIsDownloadedWithZipfile:newZipfile];
+                    
                 }else{
                     if ([newZipfile.isDownload isEqualToNumber:NUM_BOOL(NO)]) {
                         DDLogVerbose(@"SYNC download a zipfile");
@@ -190,12 +197,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
 }
 
-- (void)checkIsDownloadedWithZipfile:(Zipfile *)zipfile
-{
-    if (zipfile.isDownload.boolValue && [zipfile.fileName isEqualToString:self.lastPlanet]) {
-        [self startMainSession];
-    }
-}
+//- (void)checkIsDownloadedWithZipfile:(Zipfile *)zipfile
+//{
+//    if ([zipfile.fileName isEqualToString:self.lastPlanet]) {
+////        [self.mainViewController downloadLastPlanet];
+//    }
+//}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -213,16 +220,30 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSString *path = [[paths objectAtIndex:0] stringByAppendingPathComponent:theZipfile.fileName];
     operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
     
+    
+    [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        // pass to mainview
+        float progress = ((float)totalBytesRead) / totalBytesExpectedToRead;
+        DDLogVerbose(@"download precent %f",progress);
+        if ([self.lastPlanet isEqualToString:theZipfile.fileName]) {
+            [self.mainViewController downloadLastPlanet:[NSNumber numberWithFloat:progress] andTitle:theZipfile.fileName];
+        }
+    }];
+    
+    
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         NSLog(@"Successfully downloaded file to %@ %@", path,urlString);
         theZipfile.isDownload = NUM_BOOL(YES);
         [self unzipFileName:theZipfile.fileName WithPath:path];
-        
-        [self checkIsDownloadedWithZipfile:theZipfile];
-        
+        theZipfile.isZiped = NUM_BOOL(YES);
+        if ([self.lastPlanet isEqualToString:theZipfile.fileName]) {
+            [self.mainViewController downloadFinish];
+        }
+
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         theZipfile.isDownload = NUM_BOOL(NO);
+        theZipfile.isZiped = NUM_BOOL(NO);
         NSLog(@"Error: %@", error);
     }];
     

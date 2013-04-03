@@ -8,10 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "Zipfile.h"
+#import "PassValueDelegate.h"
 
-@interface MainViewController : UIViewController
+@interface MainViewController : UIViewController<PassValueDelegate>
 
 @property(strong, nonatomic)NSString *planetString;
 @property(strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
+- (void)downloadLastPlanet:(NSNumber *)value andTitle:(NSString *)title;
+- (void)downloadFinish;
 @end

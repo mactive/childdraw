@@ -28,7 +28,21 @@ alpha:(a)]
 
 #define BGCOLOR [UIColor colorWithRed:236.0/255.0 green:236.0/255.0 blue:236.0/255.0 alpha:1.0]
 #define BLUECOLOR [UIColor colorWithRed:70.0f/255.0f green:93.0f/255.0f blue:121.0f/255.0f alpha:1]
+#define GREENCOLOR [UIColor colorWithRed:57.0f/255.0f green:181.0f/255.0f blue:74.0f/255.0f alpha:1]
+#define REDCOLOR [UIColor colorWithRed:237.0f/255.0f green:28.0f/255.0f blue:36.0f/255.0f alpha:1]
+#define GRAYCOLOR [UIColor colorWithRed:158.0f/255.0f green:158.0f/255.0f blue:158.0f/255.0f alpha:1]
+#define HANDLEBORDERCOLOR [UIColor colorWithRed:228.0f/255.0f green:228.0f/255.0f blue:228.0f/255.0f alpha:1].CGColor
+#define HANDLEBGCOLOR [UIColor colorWithRed:248.0f/255.0f green:248.0f/255.0f blue:248.0f/255.0f alpha:1]
+#define DARKCOLOR [UIColor colorWithRed:57.0f/255.0f green:57.0f/255.0f blue:57.0f/255.0f alpha:1]
 
+#define TOTAL_WIDTH 320.0f
+#define BIG_BUTTON_WIDTH 128.0f
+
+
+// font
+#define CUSTOMFONT [UIFont fontWithName:@"Museo" size:16.0f]
+#define LITTLECUSTOMFONT [UIFont fontWithName:@"Museo" size:13.0f]
+#define TINYCUSTOMFONT [UIFont fontWithName:@"Museo" size:11.0f]
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // add by mactive
