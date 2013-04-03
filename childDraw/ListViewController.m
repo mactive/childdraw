@@ -11,6 +11,7 @@
 #import "AppNetworkAPIClient.h"
 #import "ModelHelper.h"
 #import <QuartzCore/QuartzCore.h>
+#import "UIImageView+AFNetworking.h"
 
 @interface ListViewController ()<UITableViewDataSource, UITableViewDelegate>
 
@@ -173,7 +174,11 @@
 - (void)configureCell:(UITableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
     
     NSDictionary *dict = [self.sourceData objectAtIndex:indexPath.row];
+    NSString *prefix = [[NSUserDefaults standardUserDefaults] objectForKey:@"thumbnail_prefix"];
+//    NSString *imagePath = 
+    
     cell.textLabel.text = [[dict objectForKey:@"key"] stringValue];
+    
     cell.imageView.image = [dict objectForKey:@"thumbnail"];
     
 //    cell.imageView.image = [UIImage imageNamed:@"5.png"];
