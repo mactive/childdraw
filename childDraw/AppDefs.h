@@ -38,6 +38,7 @@ alpha:(a)]
 #define TOTAL_WIDTH 320.0f
 #define BIG_BUTTON_WIDTH 128.0f
 
+#define DOWNLOADFINISH @"DownloadFinish"
 
 // font
 #define BIGCUSTOMFONT [UIFont fontWithName:@"Museo" size:40.0f]

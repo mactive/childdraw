@@ -24,6 +24,7 @@
 		2666F1B4170C012100E21BA4 /* circle_button_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2666F1B3170C012100E21BA4 /* circle_button_bg@2x.png */; };
 		2666F1B6170C08BE00E21BA4 /* Museo500-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2666F1B5170C08BE00E21BA4 /* Museo500-Regular.otf */; };
 		2666F1BE170C2C0A00E21BA4 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2666F1BD170C2C0A00E21BA4 /* ListViewController.m */; };
+		2666F1C1170C30D700E21BA4 /* ModelDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = 2666F1C0170C30D700E21BA4 /* ModelDownload.m */; };
 		266921AA1704246400E6D771 /* GCPagedScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 266921A91704246400E6D771 /* GCPagedScrollView.m */; };
 		26E5A8781704289D00BEBE65 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26E5A8751704289D00BEBE65 /* Default-568h@2x.png */; };
 		26E5A8791704289D00BEBE65 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 26E5A8761704289D00BEBE65 /* Default.png */; };
@@ -88,6 +89,8 @@
 		2666F1B7170C0E9B00E21BA4 /* PassValueDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PassValueDelegate.h; sourceTree = "<group>"; };
 		2666F1BC170C2C0A00E21BA4 /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListViewController.h; sourceTree = "<group>"; };
 		2666F1BD170C2C0A00E21BA4 /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListViewController.m; sourceTree = "<group>"; };
+		2666F1BF170C30D700E21BA4 /* ModelDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelDownload.h; sourceTree = "<group>"; };
+		2666F1C0170C30D700E21BA4 /* ModelDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModelDownload.m; sourceTree = "<group>"; };
 		266921A81704246400E6D771 /* GCPagedScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCPagedScrollView.h; sourceTree = "<group>"; };
 		266921A91704246400E6D771 /* GCPagedScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPagedScrollView.m; sourceTree = "<group>"; };
 		26E5A8751704289D00BEBE65 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -168,6 +171,8 @@
 				2652C6AD1709840700054D45 /* childDraw.xcdatamodeld */,
 				2652C6B51709882D00054D45 /* ModelHelper.h */,
 				2652C6B61709882D00054D45 /* ModelHelper.m */,
+				2666F1BF170C30D700E21BA4 /* ModelDownload.h */,
+				2666F1C0170C30D700E21BA4 /* ModelDownload.m */,
 				2652C6B01709877B00054D45 /* Zipfile.h */,
 				2652C6B11709877B00054D45 /* Zipfile.m */,
 			);
@@ -466,6 +471,7 @@
 				2652C6B71709882D00054D45 /* ModelHelper.m in Sources */,
 				2652C6C8170AAE6900054D45 /* FirstDownloadViewController.m in Sources */,
 				2666F1BE170C2C0A00E21BA4 /* ListViewController.m in Sources */,
+				2666F1C1170C30D700E21BA4 /* ModelDownload.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

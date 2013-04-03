@@ -13,6 +13,7 @@
 #import "AFHTTPRequestOperation.h"
 #import "IPAddress.h"
 #import "ModelHelper.h"
+#import "ModelDownload.h"
 #import "Zipfile.h"
 #import "SSZipArchive.h"
 #import "DDTTYLogger.h"
@@ -77,6 +78,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _managedObjectContext = [[NSManagedObjectContext alloc] init];
     [_managedObjectContext setPersistentStoreCoordinator:persistentStoreCoordinator];
     [ModelHelper sharedInstance].managedObjectContext = _managedObjectContext;
+    [ModelDownload sharedInstance].managedObjectContext = _managedObjectContext;
     
     //
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
@@ -158,37 +160,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
 //            self.lastPlanet = @"1364803267";
             [self startMainSession];
-
-#warning 要不要在没取道的时候显示个loading
+            [ModelDownload sharedInstance].lastPlanet = self.lastPlanet;
+            /* 绑定这两个 delegate */
+            [ModelDownload sharedInstance].delegate = (id)self.mainViewController;
             
             [sourceData enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                //
-                NSString *urlString = [NSString stringWithFormat:@"%@%@.zip",zipPrefixString,[obj objectForKey:@"key"]];
-                DDLogVerbose(@"urlString %@",urlString);
-                [self.downArray addObject:urlString];
-
-                Zipfile *newZipfile = [[ModelHelper sharedInstance] findZipfileWithFileName:[obj objectForKey:@"key"]];
-                if (newZipfile == nil) {
-                    newZipfile = [NSEntityDescription insertNewObjectForEntityForName:@"Zipfile" inManagedObjectContext:moc];
-                    [[ModelHelper sharedInstance]populateZipfile:newZipfile withServerJSONData:obj];
-                    DDLogVerbose(@"SYNC insert a zipfile");
-                    
-                    // go download
-                    [self downloadURLString:urlString withZipfile:newZipfile];
-                    newZipfile.downloadTime = [NSDate date];
-                    
-//                    [self checkIsDownloadedWithZipfile:newZipfile];
-                    
-                }else{
-                    if ([newZipfile.isDownload isEqualToNumber:NUM_BOOL(NO)]) {
-                        DDLogVerbose(@"SYNC download a zipfile");
-                        // go download
-                        [self downloadURLString:urlString withZipfile:newZipfile];
-                        newZipfile.downloadTime = [NSDate date];
-                    }else{
-                        // 存在而且已经下载 不再下载
-                    }
-                }
+                // 交给 delegate 去做
+                [[ModelDownload sharedInstance] downloadWithURL:obj];
 #warning mocsave // MOCSave(moc);
             }];
             
@@ -199,69 +177,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
      
     }];
     
-}
-
-//- (void)checkIsDownloadedWithZipfile:(Zipfile *)zipfile
-//{
-//    if ([zipfile.fileName isEqualToString:self.lastPlanet]) {
-////        [self.mainViewController downloadLastPlanet];
-//    }
-//}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark - download and unzip
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// download
-- (void)downloadURLString:(NSString *)urlString withZipfile:(Zipfile *)theZipfile
-{
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
-    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    // 不同的文件
-    NSString *path = [[paths objectAtIndex:0] stringByAppendingPathComponent:theZipfile.fileName];
-    operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
-    
-    
-    [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-        // pass to mainview
-        float progress = ((float)totalBytesRead) / totalBytesExpectedToRead;
-//        DDLogVerbose(@"download precent %f",progress);
-        if ([self.lastPlanet isEqualToString:theZipfile.fileName]) {
-            [self.mainViewController downloadLastPlanet:[NSNumber numberWithFloat:progress] andTitle:theZipfile.fileName];
-        }
-    }];
-    
-    
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-        NSLog(@"Successfully downloaded file to %@ %@", path,urlString);
-        theZipfile.isDownload = NUM_BOOL(YES);
-        [self unzipFileName:theZipfile.fileName WithPath:path];
-        theZipfile.isZiped = NUM_BOOL(YES);
-        if ([self.lastPlanet isEqualToString:theZipfile.fileName]) {
-            [self.mainViewController downloadFinish];
-        }
-
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        theZipfile.isDownload = NUM_BOOL(NO);
-        theZipfile.isZiped = NUM_BOOL(NO);
-        NSLog(@"Error: %@", error);
-    }];
-    
-    [operation start];
-}
-
-// unzip
-
-- (void)unzipFileName:(NSString *)filename WithPath:(NSString*)path
-{
-    // unzip path to directory filename
-    NSString *zipPath = path;
-    NSString *destinationPath = [self.LIBRARYPATH stringByAppendingPathComponent:filename];
-    [SSZipArchive unzipFileAtPath:zipPath toDestination:destinationPath];
 }
 
 ///////////////////////////////////////////////////////

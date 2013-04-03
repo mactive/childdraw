@@ -14,6 +14,7 @@
 #import "AppDelegate.h"
 #import "Zipfile.h"
 #import "ModelHelper.h"
+#import "PassValueDelegate.h"
 
 #import "DDLog.h"
 // Log levels: off, error, warn, info, verbose
@@ -23,7 +24,7 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
 
-@interface MainViewController ()
+@interface MainViewController ()<PassValueDelegate>
 {
     SystemSoundID completeSound;
 }
@@ -98,6 +99,25 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self initMainView];
     [self initDownloadView];
     
+}
+- (void)passNumberValue:(NSNumber *)value andTitle:(NSString *)title
+{
+    DDLogVerbose(@"*****%f %@",value.floatValue,title);
+    if (self.downloadView.hidden) {
+        [self.downloadView setHidden:NO];
+    }
+    
+    if ([title isEqualToString:self.planetString]) {
+        self.dlTitle.text = T(@"Downloading...");
+        self.dlNumber.text = [NSString stringWithFormat:@"%.0f%%",value.floatValue*100];
+    }
+
+}
+- (void)passStringValue:(NSString *)value andIndex:(NSUInteger)index
+{
+    if ([value isEqualToString:DOWNLOADFINISH]) {
+        [self downloadFinish];
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
