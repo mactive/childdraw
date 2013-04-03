@@ -67,7 +67,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     // Set up Core Data stack.
     NSPersistentStoreCoordinator *persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[[NSManagedObjectModel alloc] initWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"childDraw" withExtension:@"momd"]]];
     NSError *error;
-    NSPersistentStore *store = [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] URLByAppendingPathComponent:@"childDraww.sqlite"] options:nil error:&error];
+    NSPersistentStore *store = [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] URLByAppendingPathComponent:@"childDraw.sqlite"] options:nil error:&error];
     if (store == nil) {
         DDLogVerbose(@"Add-Persistent-Store Error: %@", error);
     }
@@ -333,7 +333,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-    [self saveContext];
+//    [self saveContext];
 }
 
 //////////////////////////////////

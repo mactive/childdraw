@@ -113,10 +113,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             self.aniCount = self.aniCount + 1;
         }
         
-        NSLog(@"File %d: %@", (count + 1), [directoryContent objectAtIndex:count]);
+//        NSLog(@"File %d: %@", (count + 1), [directoryContent objectAtIndex:count]);
 //        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:name]];
         
-        DDLogVerbose(@"pic %d, ani %d",self.picCount, self.aniCount);
+//        DDLogVerbose(@"pic %d, ani %d",self.picCount, self.aniCount);
 
     }
     
