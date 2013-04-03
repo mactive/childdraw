@@ -31,7 +31,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property(strong, nonatomic)UIImageView *titleImage;
 @property(strong, nonatomic)AlbumViewController *pageViewController;
 @property(strong, nonatomic)UIButton *enterButton;
-@property(strong, nonatomic)UIButton *button1;
+@property(strong, nonatomic)UIButton *transButton;
 
 @property(strong, nonatomic)NSArray *albumArray;
 @property(strong, nonatomic)NSArray *animationArray;
@@ -55,7 +55,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize albumArray;
 @synthesize animationArray;
 @synthesize audioPath;
-@synthesize button1;
+@synthesize transButton;
 @synthesize animArea;
 @synthesize listButton;
 @synthesize planetString;
@@ -82,101 +82,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     return self;
 }
-// 整理数据 写数据库
-- (void)makeArrayWithString:(NSString *)planet
-{
-    self.theZipfile = [[ModelHelper sharedInstance]findZipfileWithFileName:planet];
-    
-    if (self.theZipfile.isDownload.boolValue) {
-        NSString *path = [[self appDelegate].LIBRARYPATH stringByAppendingPathComponent:planet];
-        NSArray *tt = [self listFileAtPath:path];
-        
-        DDLogVerbose(@"------%@",path);
-    }
-    
-
-
-}
-
--(NSArray *)listFileAtPath:(NSString *)path
-{
-    self.picCount = 0;
-    self.aniCount = 0;
-    int count;
-    
-    NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:NULL];
-    for (count = 0; count < (int)[directoryContent count]; count++)
-    {
-        NSString *name = [directoryContent objectAtIndex:count];
-        
-        NSRange pRange = [name rangeOfString:@"p"];
-        if (pRange.location == 0) {
-//            DDLogVerbose(@"%@",[name substringFromIndex:1]);
-            self.picCount = self.picCount + 1;
-        }
-        
-        NSRange aRange = [name rangeOfString:@"a"];
-        if (aRange.location == 0) {
-//            DDLogVerbose(@"%@",[name substringFromIndex:1]);
-            self.aniCount = self.aniCount + 1;
-        }
-        
-//        NSLog(@"File %d: %@", (count + 1), [directoryContent objectAtIndex:count]);
-//        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:name]];
-        
-//        DDLogVerbose(@"pic %d, ani %d",self.picCount, self.aniCount);
-
-    }
-    
-    
-    self.theZipfile.aniCount = STR_INT(self.aniCount);
-    self.theZipfile.picCount = STR_INT(self.picCount);
-    
-    
-//    self.albumArray = self
-    self.albumArray = [self makeAlbumArrayWithCount:self.picCount andPath:path];
-    self.animationArray = [self makeAnimationArrayWithCount:self.aniCount andPath:path];
-    self.audioPath = [path stringByAppendingPathComponent:@"/sound.wav"];
-    
-    return directoryContent;
-}
-
-// make album array
-
-- (NSArray *)makeAlbumArrayWithCount:(NSInteger)count andPath:(NSString *)path
-{
-    NSMutableArray *tmpArray = [[NSMutableArray alloc]init];
-    
-    for (int i = 0; i < count; i++) {
-        NSString *picFilePath = [NSString stringWithFormat:@"%@/p%d.png",path,i];
-        UIImage *image = [UIImage imageWithContentsOfFile:picFilePath];
-//        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"%d.png",i+1]];
-
-        [tmpArray addObject:image];
-//        [tmpArray insertObject:image atIndex:i];
-    }
-    
-    NSArray *resultArray = [[NSArray alloc]initWithArray:tmpArray];
-    
-    return resultArray;
-}
-
-// make animation array
-- (NSArray *)makeAnimationArrayWithCount:(NSInteger)count andPath:(NSString *)path
-{
-    NSMutableArray *tmpArray = [[NSMutableArray alloc]init];
-    
-    for (int i = 0; i < count; i++) {
-        NSString *picFilePath = [NSString stringWithFormat:@"%@/a%d.png",path,i];
-        UIImage *image = [UIImage imageWithContentsOfFile:picFilePath];
-        
-        [tmpArray addObject:image];
-    }
-    
-    NSArray *resultArray = [[NSArray alloc]initWithArray:tmpArray];
-    
-    return resultArray;
-}
 
 - (void)viewDidLoad
 {
@@ -189,14 +94,103 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.albumArray = [[NSArray alloc]init];
     self.animationArray = [[NSArray alloc]init];
     
-    id json = [self.albumArray JSONString];
-    NSLog(@"%@",json);
     
     // download view
     [self initMainView];
     [self initDownloadView];
-
+    
 }
+
+/////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - file verify and count  
+/////////////////////////////////////////////////////////////////////////////////////
+// 整理数据 写数据库
+- (void)makeArrayWithString:(NSString *)planet
+{
+    self.theZipfile = [[ModelHelper sharedInstance]findZipfileWithFileName:planet];
+    
+    if (self.theZipfile.isDownload.boolValue) {
+        NSString *path = [[self appDelegate].LIBRARYPATH stringByAppendingPathComponent:planet];
+        [self listFileAtPath:path];
+        
+        DDLogVerbose(@"Dictionary path: %@",path);
+    }
+}
+
+// 检查文件数据 
+-(void)listFileAtPath:(NSString *)path
+{
+    self.picCount = 0;
+    self.aniCount = 0;
+    
+    NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:NULL];
+    for (int count = 0; count < (int)[directoryContent count]; count++)
+    {
+        NSString *name = [directoryContent objectAtIndex:count];
+        
+        // check picture
+        NSRange pRange = [name rangeOfString:@"p"];
+        if (pRange.location == 0) {
+            self.picCount = self.picCount + 1;
+        }
+        
+        // check animation
+        NSRange aRange = [name rangeOfString:@"a"];
+        if (aRange.location == 0) {
+            self.aniCount = self.aniCount + 1;
+        }
+//        DDLogVerbose(@"pic %d, ani %d",self.picCount, self.aniCount);
+
+    }
+    
+    // count 
+    self.theZipfile.aniCount = STR_INT(self.aniCount);
+    self.theZipfile.picCount = STR_INT(self.picCount);
+    
+    self.albumArray = [self makeAlbumArrayWithCount:self.picCount andPath:path];
+    self.animationArray = [self makeAnimationArrayWithCount:self.aniCount andPath:path];
+    self.audioPath = [path stringByAppendingPathComponent:@"/sound.wav"];
+    
+}
+
+/* 生成数组 make album array */
+
+- (NSArray *)makeAlbumArrayWithCount:(NSInteger)count andPath:(NSString *)path
+{
+    NSMutableArray *tmpArray = [[NSMutableArray alloc]init];
+    
+    for (int i = 0; i < count; i++) {
+        NSString *picFilePath = [NSString stringWithFormat:@"%@/p%d.png",path,i];
+        UIImage *image = [UIImage imageWithContentsOfFile:picFilePath];
+        [tmpArray addObject:image];
+    }
+    
+    NSArray *resultArray = [[NSArray alloc]initWithArray:tmpArray];
+    
+    return resultArray;
+}
+
+/* 生成数组 make animation array */
+
+- (NSArray *)makeAnimationArrayWithCount:(NSInteger)count andPath:(NSString *)path
+{
+    NSMutableArray *tmpArray = [[NSMutableArray alloc]init];
+    
+    for (int i = 0; i < count; i++) {
+        NSString *picFilePath = [NSString stringWithFormat:@"%@/a%d.png",path,i];
+        UIImage *image = [UIImage imageWithContentsOfFile:picFilePath];
+        [tmpArray addObject:image];
+    }
+    
+    NSArray *resultArray = [[NSArray alloc]initWithArray:tmpArray];
+    return resultArray;
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - init mainView and DownloadView
+/////////////////////////////////////////////////////////////////////////////////////
 
 - (void)initMainView
 {
@@ -210,16 +204,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.enterButton addTarget:self action:@selector(enterAction) forControlEvents:UIControlEventTouchUpInside];
     
     // or animview
-    self.button1 = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.button1.frame = CGRectMake(0, 0, TOTAL_WIDTH, 290);
-    [self.button1 setTitle:@"" forState:UIControlStateNormal];
-    [self.button1 addTarget:self action:@selector(playSound) forControlEvents:UIControlEventTouchUpInside];
-    self.button1.alpha = 1;
-    self.button1.tag = 0;
+    self.transButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.transButton.frame = CGRectMake(0, 0, TOTAL_WIDTH, 290);
+    [self.transButton setTitle:@"" forState:UIControlStateNormal];
+    [self.transButton addTarget:self action:@selector(playSound) forControlEvents:UIControlEventTouchUpInside];
+    self.transButton.alpha = 1;
+    self.transButton.tag = 0;
     
     self.animArea = [[UIImageView alloc] initWithFrame:CGRectMake(60, 0, 200, 200)];
 
-    [self.mainView addSubview:self.button1];
+    [self.mainView addSubview:self.transButton];
     [self.mainView addSubview:self.animArea];
     [self.mainView addSubview:self.enterButton];
 
@@ -241,7 +235,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     self.dlNumber = [[UILabel alloc]initWithFrame:bgView.frame];
     self.dlNumber.backgroundColor = [UIColor clearColor];
-    self.dlNumber.font = [UIFont systemFontOfSize:40.0f];
+    self.dlNumber.font = BIGCUSTOMFONT;
     self.dlNumber.textColor = DARKCOLOR;
     self.dlNumber.textAlignment = NSTextAlignmentCenter;
     
@@ -251,16 +245,21 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.view addSubview:self.downloadView];
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - download progress
+/////////////////////////////////////////////////////////////////////////////////////
 - (void)downloadLastPlanet:(NSNumber *)value andTitle:(NSString *)title
 {
     if ([title isEqualToString:self.planetString]) {
         self.dlTitle.text = T(@"Downloading...");
         self.dlNumber.text = [NSString stringWithFormat:@"%.0f%%",value.floatValue*100];
-        if (value.floatValue > 0.99) {
-//            [self downloadFinish];
-        }
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - download finish
+/////////////////////////////////////////////////////////////////////////////////////
 
 - (void)downloadFinish
 {
@@ -293,11 +292,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [UIView commitAnimations];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
 
-}
 
 - (void)enterAction
 {
@@ -318,6 +313,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSURL *audioURL = [NSURL fileURLWithPath:self.audioPath];
     AudioServicesCreateSystemSoundID((__bridge CFURLRef)audioURL, &completeSound);
     AudioServicesPlaySystemSound (completeSound);
+}
+
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning

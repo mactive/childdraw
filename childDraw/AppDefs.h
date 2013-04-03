@@ -40,6 +40,7 @@ alpha:(a)]
 
 
 // font
+#define BIGCUSTOMFONT [UIFont fontWithName:@"Museo" size:40.0f]
 #define CUSTOMFONT [UIFont fontWithName:@"Museo" size:16.0f]
 #define LITTLECUSTOMFONT [UIFont fontWithName:@"Museo" size:13.0f]
 #define TINYCUSTOMFONT [UIFont fontWithName:@"Museo" size:11.0f]
