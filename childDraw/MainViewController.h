@@ -8,9 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "Zipfile.h"
-#import "PassValueDelegate.h"
 
-@interface MainViewController : UIViewController<PassValueDelegate>
+@interface MainViewController : UIViewController
 
 @property(strong, nonatomic)NSString *planetString;
 @property(strong, nonatomic) NSManagedObjectContext *managedObjectContext;

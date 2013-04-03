@@ -23,6 +23,7 @@
 		2652C6C8170AAE6900054D45 /* FirstDownloadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2652C6C7170AAE6900054D45 /* FirstDownloadViewController.m */; };
 		2666F1B4170C012100E21BA4 /* circle_button_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2666F1B3170C012100E21BA4 /* circle_button_bg@2x.png */; };
 		2666F1B6170C08BE00E21BA4 /* Museo500-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2666F1B5170C08BE00E21BA4 /* Museo500-Regular.otf */; };
+		2666F1BE170C2C0A00E21BA4 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2666F1BD170C2C0A00E21BA4 /* ListViewController.m */; };
 		266921AA1704246400E6D771 /* GCPagedScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 266921A91704246400E6D771 /* GCPagedScrollView.m */; };
 		26E5A8781704289D00BEBE65 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26E5A8751704289D00BEBE65 /* Default-568h@2x.png */; };
 		26E5A8791704289D00BEBE65 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 26E5A8761704289D00BEBE65 /* Default.png */; };
@@ -85,6 +86,8 @@
 		2666F1B3170C012100E21BA4 /* circle_button_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "circle_button_bg@2x.png"; sourceTree = "<group>"; };
 		2666F1B5170C08BE00E21BA4 /* Museo500-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Museo500-Regular.otf"; sourceTree = "<group>"; };
 		2666F1B7170C0E9B00E21BA4 /* PassValueDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PassValueDelegate.h; sourceTree = "<group>"; };
+		2666F1BC170C2C0A00E21BA4 /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListViewController.h; sourceTree = "<group>"; };
+		2666F1BD170C2C0A00E21BA4 /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListViewController.m; sourceTree = "<group>"; };
 		266921A81704246400E6D771 /* GCPagedScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCPagedScrollView.h; sourceTree = "<group>"; };
 		266921A91704246400E6D771 /* GCPagedScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPagedScrollView.m; sourceTree = "<group>"; };
 		26E5A8751704289D00BEBE65 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -264,6 +267,8 @@
 				26F39F6116FC3E1C001A6EF9 /* MainViewController.m */,
 				26F39F6D16FC4433001A6EF9 /* AlbumViewController.h */,
 				26F39F6E16FC4433001A6EF9 /* AlbumViewController.m */,
+				2666F1BC170C2C0A00E21BA4 /* ListViewController.h */,
+				2666F1BD170C2C0A00E21BA4 /* ListViewController.m */,
 				26F39F7416FC45CB001A6EF9 /* thrid */,
 				26F39F6616FC4083001A6EF9 /* Resources */,
 				26F39F4A16FC3DEF001A6EF9 /* Supporting Files */,
@@ -460,6 +465,7 @@
 				2652C6B21709877B00054D45 /* Zipfile.m in Sources */,
 				2652C6B71709882D00054D45 /* ModelHelper.m in Sources */,
 				2652C6C8170AAE6900054D45 /* FirstDownloadViewController.m in Sources */,
+				2666F1BE170C2C0A00E21BA4 /* ListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

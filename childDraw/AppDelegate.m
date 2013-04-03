@@ -16,7 +16,6 @@
 #import "Zipfile.h"
 #import "SSZipArchive.h"
 #import "DDTTYLogger.h"
-#import "PassValueDelegate.h"
 
 #import "DDLog.h"
 // Log levels: off, error, warn, info, verbose
