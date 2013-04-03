@@ -72,7 +72,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        self.title = T(@"小羊咩咩叫");
         
         self.listButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 29)];
         [self.listButton setBackgroundImage:[UIImage imageNamed: @"list_button.png"] forState:UIControlStateNormal];
@@ -194,13 +193,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)initMainView
 {
-    self.mainView  = [[UIView alloc]initWithFrame:CGRectMake(10, 50, TOTAL_WIDTH, self.view.frame.size.height -50)];
+    self.mainView  = [[UIView alloc]initWithFrame:CGRectMake(10, 40, TOTAL_WIDTH, self.view.frame.size.height)];
     self.mainView.backgroundColor = [UIColor clearColor];
     
     self.enterButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.enterButton setTitle:@"Enter" forState:UIControlStateNormal];
     
-    [self.enterButton setFrame:CGRectMake(60, 250, 200, 40)];
+    [self.enterButton setFrame:CGRectMake(60, 280, 200, 40)];
     [self.enterButton addTarget:self action:@selector(enterAction) forControlEvents:UIControlEventTouchUpInside];
     
     // or animview
@@ -211,7 +210,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.transButton.alpha = 1;
     self.transButton.tag = 0;
     
-    self.animArea = [[UIImageView alloc] initWithFrame:CGRectMake(60, 0, 200, 200)];
+    self.animArea = [[UIImageView alloc] initWithFrame:CGRectMake(35, 0, 250, 250)];
 
     [self.mainView addSubview:self.transButton];
     [self.mainView addSubview:self.animArea];
@@ -227,11 +226,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     UIImageView *bgView = [[UIImageView alloc]initWithFrame:CGRectMake(0 , 50, BIG_BUTTON_WIDTH, BIG_BUTTON_WIDTH)];
     [bgView setImage:[UIImage imageNamed:@"circle_button_bg.png"]];
     
-    self.dlTitle = [[UILabel alloc]initWithFrame:CGRectMake(0 , BIG_BUTTON_WIDTH+50, BIG_BUTTON_WIDTH, 20)];
+    self.dlTitle = [[UILabel alloc]initWithFrame:CGRectMake(0 , BIG_BUTTON_WIDTH+60, BIG_BUTTON_WIDTH, 20)];
     self.dlTitle.backgroundColor = [UIColor clearColor];
     self.dlTitle.font = [UIFont systemFontOfSize:14.0f];
     self.dlTitle.textColor = GRAYCOLOR;
     self.dlTitle.textAlignment = NSTextAlignmentCenter;
+    self.dlTitle.text = T(@"Waiting...");
     
     self.dlNumber = [[UILabel alloc]initWithFrame:bgView.frame];
     self.dlNumber.backgroundColor = [UIColor clearColor];
@@ -243,6 +243,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.downloadView addSubview:self.dlNumber];
     [self.downloadView addSubview:self.dlTitle];
     [self.view addSubview:self.downloadView];
+    [self.downloadView setHidden:YES];
 }
 
 
@@ -251,6 +252,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 /////////////////////////////////////////////////////////////////////////////////////
 - (void)downloadLastPlanet:(NSNumber *)value andTitle:(NSString *)title
 {
+    if (self.downloadView.hidden) {
+        [self.downloadView setHidden:NO];
+    }
+    
     if ([title isEqualToString:self.planetString]) {
         self.dlTitle.text = T(@"Downloading...");
         self.dlNumber.text = [NSString stringWithFormat:@"%.0f%%",value.floatValue*100];
@@ -266,6 +271,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self moveYOffest:20 andDelay:0 andAlpha:0 withView:self.downloadView];
     [self.downloadView setHidden:YES];
     [self.mainView setHidden:NO];
+    [self.mainView setAlpha:0];
+    [self moveYOffest:0 andDelay:0.3 andAlpha:1 withView:self.mainView];
+    
     
     // that is overall seconds. hence: frames divided by about 30 or 20.
     [self makeArrayWithString:self.planetString];
@@ -308,7 +316,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 
--(void) playSound {
+-(void)playSound {
     
     NSURL *audioURL = [NSURL fileURLWithPath:self.audioPath];
     AudioServicesCreateSystemSoundID((__bridge CFURLRef)audioURL, &completeSound);
@@ -319,6 +327,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.theZipfile = [[ModelHelper sharedInstance]findZipfileWithFileName:self.planetString];
+    if (self.theZipfile.isDownload.floatValue) {
+        [self.downloadView setHidden:YES];
+        [self downloadFinish];
+    }
 }
 
 - (void)didReceiveMemoryWarning

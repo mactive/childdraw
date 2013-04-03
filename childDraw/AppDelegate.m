@@ -36,6 +36,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property(readwrite, nonatomic) CGFloat systemVersion;
 @property(nonatomic,strong)NSMutableArray *downArray;
 @property(nonatomic, strong)NSString *lastPlanet; // 最新的package
+@property(nonatomic, strong)NSString *lastPlanetTitle; // 最新的package
 
 @end
 
@@ -46,6 +47,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize downArray;
 @synthesize LIBRARYPATH;
 @synthesize lastPlanet;
+@synthesize lastPlanetTitle;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -112,6 +114,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.mainViewController = [[MainViewController alloc]initWithNibName:nil bundle:nil];
     UINavigationController *mainController = [[UINavigationController alloc] initWithRootViewController:self.mainViewController];
     self.mainViewController.planetString = self.lastPlanet;
+    self.mainViewController.title = StringHasValue(self.lastPlanetTitle) ? self.lastPlanetTitle : T(@"一起来画画") ;
     self.mainViewController.managedObjectContext = _managedObjectContext;
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -123,7 +126,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 }
 
--(NSString *)getTheLastPlanet:(NSArray *)data
+-(void)getTheLastPlanet:(NSArray *)data
 {
     NSArray* sorted = [data sortedArrayUsingComparator:(NSComparator)^(NSDictionary *item1, NSDictionary *item2) {
         NSString *score1 = [[item1 objectForKey:@"key"] stringValue];
@@ -132,7 +135,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }];
     
     NSNumber * tmp = [(NSDictionary *)[sorted lastObject] objectForKey:@"key"];
-    return tmp.stringValue;
+    self.lastPlanet = tmp.stringValue;
+    self.lastPlanetTitle = [(NSDictionary *)[sorted lastObject] objectForKey:@"title"];
 }
 
 - (void)downloadLastFiles:(NSInteger)count
@@ -151,7 +155,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             NSArray *sourceData = [[NSArray alloc]initWithArray:responseObject];
             
-            self.lastPlanet = [self getTheLastPlanet:sourceData];
+            [self getTheLastPlanet:sourceData];
+            
 //            self.lastPlanet = @"1364803267";
             [self startMainSession];
 
@@ -224,7 +229,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         // pass to mainview
         float progress = ((float)totalBytesRead) / totalBytesExpectedToRead;
-        DDLogVerbose(@"download precent %f",progress);
+//        DDLogVerbose(@"download precent %f",progress);
         if ([self.lastPlanet isEqualToString:theZipfile.fileName]) {
             [self.mainViewController downloadLastPlanet:[NSNumber numberWithFloat:progress] andTitle:theZipfile.fileName];
         }
