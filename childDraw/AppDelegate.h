@@ -9,11 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "MainViewController.h"
 
+@class ListViewController;
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) MainViewController *mainViewController;
 @property (strong, nonatomic) NSString *LIBRARYPATH;
-
+@property (strong, nonatomic) ListViewController *listViewContorller;
 
 @end

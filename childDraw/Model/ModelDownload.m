@@ -137,7 +137,6 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 
 - (void)unzipFileName:(NSString *)filename WithPath:(NSString*)path
 {
-    
     // unzip path to directory filename
     NSString *zipPath = path;
     NSString *destinationPath = [[self appDelegate].LIBRARYPATH stringByAppendingPathComponent:filename];

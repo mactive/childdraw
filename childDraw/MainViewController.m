@@ -15,6 +15,9 @@
 #import "Zipfile.h"
 #import "ModelHelper.h"
 #import "PassValueDelegate.h"
+#import "ListViewController.h"
+#import <QuartzCore/QuartzCore.h>
+
 
 #import "DDLog.h"
 // Log levels: off, error, warn, info, verbose
@@ -33,6 +36,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property(strong, nonatomic)AlbumViewController *pageViewController;
 @property(strong, nonatomic)UIButton *enterButton;
 @property(strong, nonatomic)UIButton *transButton;
+@property(strong, nonatomic)CATransition* transition;
 
 @property(strong, nonatomic)NSArray *albumArray;
 @property(strong, nonatomic)NSArray *animationArray;
@@ -67,6 +71,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize mainView;
 @synthesize downloadView;
 @synthesize dlNumber,dlTitle;
+@synthesize transition;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -83,6 +88,22 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return self;
 }
 
+
+- (void)listAction
+{
+    [self.navigationController.view.layer addAnimation:self.transition forKey:kCATransition];
+    [self.navigationController pushViewController:[self appDelegate].listViewContorller animated:NO];
+}
+
+- (void)initViewControllers
+{
+
+    [self appDelegate].listViewContorller = [[ListViewController alloc]initWithNibName:nil bundle:nil];
+    [self appDelegate].listViewContorller.managedObjectContext = self.managedObjectContext;
+
+}
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -98,7 +119,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     // download view
     [self initMainView];
     [self initDownloadView];
+    [self initViewControllers];
     
+    // transition animation
+    self.transition = [CATransition animation];
+    self.transition.duration = 0.1;
+    self.transition.type = kCATransitionFade;
+    self.transition.timingFunction = UIViewAnimationCurveEaseInOut;
+    self.transition.subtype = kCATransitionFromLeft;
+
 }
 - (void)passNumberValue:(NSNumber *)value andTitle:(NSString *)title
 {

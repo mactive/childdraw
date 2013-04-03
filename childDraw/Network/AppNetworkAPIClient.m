@@ -17,8 +17,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
 
 // default 
-static NSString * const kAppNetworkAPIBaseURLString = @"http://192.168.1.104:8004/";
-//static NSString * const kAppNetworkAPIBaseURLString = @"http://c.wingedstone.com:8004/";
+//static NSString * const kAppNetworkAPIBaseURLString = @"http://192.168.1.104:8004/";
+static NSString * const kAppNetworkAPIBaseURLString = @"http://c.wingedstone.com:8004/";
 
 @interface AppNetworkAPIClient ()
 {
@@ -74,7 +74,7 @@ static NSString * const kAppNetworkAPIBaseURLString = @"http://192.168.1.104:800
     
     AFJSONRequestOperation * itemOperation = [AFJSONRequestOperation JSONRequestOperationWithRequest:itemRequest success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         //
-        DDLogVerbose(@"get getItemsCount JSON received: %@", JSON);
+//        DDLogVerbose(@"get getItemsCount JSON received: %@", JSON);
         
         NSString *httpZipPrefix = [NSString stringWithFormat:@"http://%@/",[JSON valueForKey:@"zip_prefix"]];
         [[NSUserDefaults standardUserDefaults] setObject:httpZipPrefix forKey:@"zip_prefix"];
@@ -103,22 +103,25 @@ static NSString * const kAppNetworkAPIBaseURLString = @"http://192.168.1.104:800
 }
 
 // getItemsThumbnail
-- (void)getThumbnailsWithBlock:(void(^)(id, NSError *))block
+- (void)getThumbnailsWithBlock:(void(^)(id, NSString *, NSError *))block
 {
     NSMutableURLRequest *itemRequest = [[AppNetworkAPIClient sharedClient] requestWithMethod:@"GET" path:GET_THUMBNAIL_PATH parameters:nil];
     
     AFJSONRequestOperation * itemOperation = [AFJSONRequestOperation JSONRequestOperationWithRequest:itemRequest success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         //
+        NSString *thumbnailPrefix = [NSString stringWithFormat:@"http://%@/",[JSON valueForKey:@"thumbnail_prefix"]];
+        [[NSUserDefaults standardUserDefaults] setObject:thumbnailPrefix forKey:@"thumbnail_prefix"];
+
         DDLogVerbose(@"getThumbnailsWithBlock JSON received: %@", JSON);
         NSString* type = [JSON valueForKey:@"type"];
         if (![@"error" isEqualToString:type]) {
             if (block) {
-                block (JSON, nil);
+                block ([JSON valueForKey:@"items"],thumbnailPrefix, nil);
             }
         } else {
             if (block) {
                 NSError *error = [[NSError alloc] initWithDomain:@"wingedstone.com" code:403 userInfo:nil];
-                block (nil, error);
+                block (nil, nil, error);
             }
         }
         
@@ -126,7 +129,7 @@ static NSString * const kAppNetworkAPIBaseURLString = @"http://192.168.1.104:800
         //
         DDLogVerbose(@"getThumbnailsWithBlock failed: %@", error);
         if (block) {
-            block(nil, error);
+            block(nil, nil, error);
         }
     }];
     

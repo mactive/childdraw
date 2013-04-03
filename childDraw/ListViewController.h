@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BBCustomBackButtonViewController.h"
+@interface ListViewController : BBCustomBackButtonViewController
 
-@interface ListViewController : UITableViewController
+@property(strong, nonatomic)NSManagedObjectContext *managedObjectContext;
 
 @end

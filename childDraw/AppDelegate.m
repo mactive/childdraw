@@ -48,6 +48,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize LIBRARYPATH;
 @synthesize lastPlanet;
 @synthesize lastPlanetTitle;
+@synthesize listViewContorller;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
