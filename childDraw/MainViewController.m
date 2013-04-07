@@ -380,6 +380,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.animArea startAnimating];
+
 //    self.theZipfile = [[ModelHelper sharedInstance]findZipfileWithFileName:self.planetString];
 //    if (self.theZipfile.isDownload.floatValue) {
 //        [self.downloadView setHidden:YES];
