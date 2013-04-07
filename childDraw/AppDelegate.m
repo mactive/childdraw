@@ -115,7 +115,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     self.mainViewController = [[MainViewController alloc]initWithNibName:nil bundle:nil];
     UINavigationController *mainController = [[UINavigationController alloc] initWithRootViewController:self.mainViewController];
-    self.mainViewController.planetString = self.lastPlanet;
     self.mainViewController.title = StringHasValue(self.lastPlanetTitle) ? self.lastPlanetTitle : T(@"一起来画画") ;
     self.mainViewController.managedObjectContext = _managedObjectContext;
     
@@ -143,7 +142,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)downloadLastFiles:(NSInteger)count
 {
-    NSManagedObjectContext *moc = _managedObjectContext;    
+    [self startMainSession];
+
+    NSManagedObjectContext *moc = _managedObjectContext;
     
     self.downArray = [[NSMutableArray alloc]init];
     
@@ -158,9 +159,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             NSArray *sourceData = [[NSArray alloc]initWithArray:responseObject];
             
             [self getTheLastPlanet:sourceData];
-            
+            self.mainViewController.planetString = self.lastPlanet;
+
 //            self.lastPlanet = @"1364803267";
-            [self startMainSession];
             [ModelDownload sharedInstance].lastPlanet = self.lastPlanet;
             /* 绑定这两个 delegate */
             [ModelDownload sharedInstance].delegate = (id)self.mainViewController;

@@ -131,12 +131,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 - (void)passNumberValue:(NSNumber *)value andTitle:(NSString *)title
 {
-    DDLogVerbose(@"*****%f %@",value.floatValue,title);
+//    DDLogVerbose(@"*****%f %@",value.floatValue,title);
     if ([title isEqualToString:self.planetString]) {
         self.dlTitle.text = T(@"Downloading...");
         self.dlNumber.text = [NSString stringWithFormat:@"%.0f%%",value.floatValue*100];
     }
-
 }
 - (void)passStringValue:(NSString *)value andIndex:(NSUInteger)index
 {
@@ -168,9 +167,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     self.picCount = 0;
     self.aniCount = 0;
-    self.albumArray = [[NSArray alloc] init];
-    self.animationArray = [[NSArray alloc] init];
-    self.audioPath = @"";
+//    self.albumArray = [[NSArray alloc] init];
+//    self.animationArray = [[NSArray alloc] init];
+//    self.audioPath = @"";
     
     
     NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:NULL];
@@ -199,6 +198,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     self.albumArray = [self makeAlbumArrayWithCount:self.picCount andPath:path];
     self.animationArray = [self makeAnimationArrayWithCount:self.aniCount andPath:path];
+
     self.audioPath = [path stringByAppendingPathComponent:@"/sound.wav"];
     DDLogVerbose(@"path %@ %@ ",path, self.planetString);
     
@@ -333,7 +333,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     // that is overall seconds. hence: frames divided by about 30 or 20.
     [self makeArrayWithString:self.planetString];
     
-    self.animArea.animationImages = self.animationArray;
+    DDLogVerbose(@"%@",self.animArea.animationImages);
+    [self.animArea setAnimationImages:self.animationArray];
     self.animArea.animationRepeatCount = 0;
     self.animArea.animationDuration = 1.2;
     
@@ -384,6 +385,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 //        [self.downloadView setHidden:YES];
 //        [self downloadFinish];
 //    }
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self.animArea stopAnimating];
 }
 
 - (void)didReceiveMemoryWarning
