@@ -88,7 +88,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     // actions
     [self getConfig];
     
-    _defaultGetCount  = 7;
+    _defaultGetCount  = 1;
     [self downloadLastFiles:_defaultGetCount];
     
     

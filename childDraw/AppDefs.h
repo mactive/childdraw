@@ -34,12 +34,13 @@ alpha:(a)]
 #define HANDLEBORDERCOLOR [UIColor colorWithRed:228.0f/255.0f green:228.0f/255.0f blue:228.0f/255.0f alpha:1].CGColor
 #define HANDLEBGCOLOR [UIColor colorWithRed:248.0f/255.0f green:248.0f/255.0f blue:248.0f/255.0f alpha:1]
 #define DARKCOLOR [UIColor colorWithRed:57.0f/255.0f green:57.0f/255.0f blue:57.0f/255.0f alpha:1]
+#define BORDERCOLOR [UIColor colorWithRed:196.0f/255.0f green:196.0f/255.0f blue:196.0f/255.0f alpha:1]
 
 #define TOTAL_WIDTH 320.0f
 #define BIG_BUTTON_WIDTH 128.0f
 
 #define DOWNLOADFINISH @"DownloadFinish"
-
+#define DOWNLOADING @"Downloading"
 // font
 #define BIGCUSTOMFONT [UIFont fontWithName:@"Museo" size:40.0f]
 #define CUSTOMFONT [UIFont fontWithName:@"Museo" size:16.0f]

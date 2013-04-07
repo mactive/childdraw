@@ -11,7 +11,19 @@
 #import "AppNetworkAPIClient.h"
 #import "ModelHelper.h"
 #import <QuartzCore/QuartzCore.h>
-#import "UIImageView+AFNetworking.h"
+#import "ModelDownload.h"
+#import "MainViewController.h"
+#import "ThumbnailUIButton.h"
+#import "MBProgressHUD.h"
+#import "AppDelegate.h"
+#import "DDLog.h"
+
+// Log levels: off, error, warn, info, verbose
+#if DEBUG
+static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+#else
+static const int ddLogLevel = LOG_LEVEL_OFF;
+#endif
 
 @interface ListViewController ()<UITableViewDataSource, UITableViewDelegate>
 
@@ -40,7 +52,6 @@
         [self.settingButton setBackgroundImage:[UIImage imageNamed: @"setting_button.png"] forState:UIControlStateNormal];
         [self.settingButton addTarget:self action:@selector(settingAction) forControlEvents:UIControlEventTouchUpInside];
         
-        
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.settingButton];
     }
     return self;
@@ -53,7 +64,9 @@
     self.title = T(@"全部列表");
     
     self.view.backgroundColor = BGCOLOR;
-    self.tableView = [[UITableView alloc]initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    CGRect tableRect = CGRectMake(0, 0, TOTAL_WIDTH, self.view.frame.size.height -30);
+    self.tableView = [[UITableView alloc] initWithFrame:tableRect style:UITableViewStylePlain];
+    
     self.tableView.backgroundColor = BGCOLOR;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     //    self.tableView.separatorColor = SEPCOLOR;
@@ -65,6 +78,7 @@
     
     self.sourceData = [[NSArray alloc]init];
     [self populateData];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -75,12 +89,15 @@
 // 解析公司列表
 - (void)populateData
 {
-    self.sourceDict = [[NSMutableDictionary alloc]init];
+    MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    HUD.labelText = T(@"努力加载中");
+    
     [[AppNetworkAPIClient sharedClient]getThumbnailsWithBlock:^(id responseDict, NSString *thumbnailPrefix, NSError *error) {
         //
         if (responseDict != nil) {
-            self.sourceDict = responseDict;
-            NSArray *tempArray = [self.sourceDict allValues];
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+
+            NSArray *tempArray = [[NSArray alloc] initWithArray:responseDict];
             NSMutableArray *tempMutableArray = [[NSMutableArray alloc]init];
             NSEntityDescription *entity = [NSEntityDescription entityForName:@"Zipfile" inManagedObjectContext:self.managedObjectContext];
             
@@ -90,16 +107,19 @@
                 if (aZipfile == nil) {
                     aZipfile = (Zipfile *)[[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
                     [[ModelHelper sharedInstance]populateZipfile:aZipfile withServerJSONData:dict];
+//                    [[ModelDownload sharedInstance] downloadWithURL:dict];
+                }else{
+//                    [[ModelDownload sharedInstance] downloadAndUpdate:aZipfile];
                 }
-
                 [tempMutableArray addObject:aZipfile];
             }
             
-            
             self.sourceData = [[NSArray alloc]initWithArray:tempMutableArray];
-            
             [self.tableView reloadData];
+            
         }else{
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+
 //            [ConvenienceMethods showHUDAddedTo:self.view animated:YES text:T(@"网络错误 暂时无法刷新") andHideAfterDelay:1];
         }
     }];
@@ -112,11 +132,129 @@
     // Dispose of any resources that can be recreated.
 }
 
+#define CELL_HEIGHT     130.0f
+#define BUTTON_PER_CELL 2
+
+#define BUTTON_L_TAG    1
+#define LABEL_L_TAG     2
+
+#define BUTTON_R_TAG    3
+#define LABEL_R_TAG     4
+
+#define BUTTON_X        10.0f
+#define BUTTON_Y        0.0f
+#define BUTTON_WIDTH    145.0f
+#define BUTTON_HEIGHT   90.0f
+#define LABEL_HEIGHT    24.0f
+
+
+- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier{
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+    
+    // left button
+    UILabel *labelLeft = [[UILabel alloc]initWithFrame:CGRectMake(BUTTON_X, BUTTON_HEIGHT, BUTTON_WIDTH, LABEL_HEIGHT)];
+    labelLeft.textAlignment = NSTextAlignmentCenter;
+    labelLeft.font = [UIFont boldSystemFontOfSize:14];
+    labelLeft.textColor = BLUECOLOR;
+    labelLeft.backgroundColor = [UIColor clearColor];
+    labelLeft.numberOfLines = 1;
+    labelLeft.tag = LABEL_L_TAG;
+    
+    ThumbnailUIButton *buttonLeft = [ThumbnailUIButton buttonWithType:UIButtonTypeCustom];
+    [buttonLeft setFrame:CGRectMake(BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT)];
+    buttonLeft.tag = BUTTON_L_TAG;
+
+    // right button
+    UILabel *labelRight = [[UILabel alloc]initWithFrame:CGRectMake(BUTTON_X*2+BUTTON_WIDTH, BUTTON_HEIGHT, BUTTON_WIDTH, LABEL_HEIGHT)];
+    labelRight.textAlignment = NSTextAlignmentCenter;
+    labelRight.font = [UIFont boldSystemFontOfSize:14];
+    labelRight.textColor = BLUECOLOR;
+    labelRight.backgroundColor = [UIColor clearColor];
+    labelRight.numberOfLines = 1;
+    labelRight.tag = LABEL_R_TAG;
+    
+    ThumbnailUIButton *buttonRight = [ThumbnailUIButton buttonWithType:UIButtonTypeCustom];
+    [buttonRight setFrame:CGRectMake(BUTTON_X*2+BUTTON_WIDTH, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT)];
+    buttonRight.tag = BUTTON_R_TAG;
+    
+    
+    [cell.contentView addSubview:labelLeft];
+    [cell.contentView addSubview:buttonLeft];
+    [cell.contentView addSubview:labelRight];
+    [cell.contentView addSubview:buttonRight];
+    
+    return  cell;
+}
+
+- (NSUInteger)leftIndex:(NSIndexPath *)indexPath
+{
+    return indexPath.row * BUTTON_PER_CELL;
+}
+
+- (NSUInteger)rightIndex:(NSIndexPath *)indexPath
+{
+    return indexPath.row * BUTTON_PER_CELL+1;
+}
+
+- (void)configureCell:(UITableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
+    
+    NSUInteger count = [self.sourceData count];
+    // left
+    UILabel *leftLabel = (UILabel *)[cell viewWithTag:LABEL_L_TAG];
+    ThumbnailUIButton *leftButton = (ThumbnailUIButton *)[cell viewWithTag:BUTTON_L_TAG];
+
+    
+    // right
+    UILabel *rightLabel = (UILabel *)[cell viewWithTag:LABEL_R_TAG];
+    ThumbnailUIButton *rightButton = (ThumbnailUIButton *)[cell viewWithTag:BUTTON_R_TAG];
+    
+    
+    Zipfile *leftZipfile = [self.sourceData objectAtIndex:[self leftIndex:indexPath]];
+    leftLabel.text = leftZipfile.title;
+    [leftButton setAvatar:leftZipfile.fileName];
+    
+    
+    // 偶数
+    if (count %2 == 0 || (count %2 == 1 && indexPath.row < floor(count / 2))) {
+        NSLog(@"%d %d show",indexPath.row, count);
+        
+        Zipfile *rightZipfile = [self.sourceData objectAtIndex:[self rightIndex:indexPath]];
+        rightLabel.text = rightZipfile.title;
+        [rightButton setAvatar:rightZipfile.fileName];
+        [rightButton setHidden:NO];
+        
+    }else{
+        [rightButton setHidden:YES];
+    }
+    
+    leftButton.buttonIndex = indexPath.row * BUTTON_PER_CELL;
+    rightButton.buttonIndex= indexPath.row * BUTTON_PER_CELL + 1;
+    
+    [leftButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [rightButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+
+}
+
+- (void)buttonClick:(ThumbnailUIButton *)sender
+{
+    NSLog(@"sender.buttonIndex %d",sender.buttonIndex);
+    [self.navigationController popToRootViewControllerAnimated:NO];
+
+    Zipfile *theZipfile = [self.sourceData objectAtIndex:sender.buttonIndex];
+    
+    [self appDelegate].mainViewController.planetString = theZipfile.fileName;
+    [self appDelegate].mainViewController.title = theZipfile.title;
+
+    [ModelDownload sharedInstance].lastPlanet = theZipfile.fileName;
+    /* 绑定这两个 delegate */
+    [ModelDownload sharedInstance].delegate = (id)[self appDelegate].mainViewController;
+    [[ModelDownload sharedInstance] downloadAndUpdate:theZipfile];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
     return 1;
 }
@@ -124,9 +262,13 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [self.sourceData count];
+    NSUInteger count = [self.sourceData count];
+    if (count % 2 == 0) {
+        return floor(count / 2);
+    }else{
+        return floor(count / 2) + 1;
+    }
 }
-#define CELL_HEIGHT 50.0f
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -150,41 +292,6 @@
     return cell;
 }
 
-- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier{
-    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-    
-    cell.textLabel.font = [UIFont systemFontOfSize:14];
-    cell.textLabel.textColor = RGBCOLOR(195, 70, 21);
-    cell.textLabel.backgroundColor = [UIColor clearColor];
-    cell.textLabel.layer.cornerRadius = 5.0f;
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(80, 30 , 60, 15)];
-    label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont boldSystemFontOfSize:10];
-    label.textColor = [UIColor whiteColor];
-    [label.layer setCornerRadius:3];
-    label.numberOfLines = 0;
-    
-    [cell.contentView addSubview:label];
-    
-    return  cell;
-}
-
-- (void)configureCell:(UITableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
-    
-    NSDictionary *dict = [self.sourceData objectAtIndex:indexPath.row];
-    NSString *prefix = [[NSUserDefaults standardUserDefaults] objectForKey:@"thumbnail_prefix"];
-//    NSString *imagePath = 
-    
-    cell.textLabel.text = [[dict objectForKey:@"key"] stringValue];
-    
-    cell.imageView.image = [dict objectForKey:@"thumbnail"];
-    
-//    cell.imageView.image = [UIImage imageNamed:@"5.png"];
-//    cell.textLabel.text = @"title";
-}
-
 
 - (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -198,11 +305,16 @@
 //    Company *aCompany = [self.sourceData objectAtIndex:indexPath.row];
     
 //    [self getDict:aCompany.companyID];
+//    back to mainviewcontroller and set
     
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Accessors & selectors
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (AppDelegate *)appDelegate
+{
+	return (AppDelegate *)[[UIApplication sharedApplication] delegate];
+}
 
 @end

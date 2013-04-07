@@ -74,7 +74,7 @@ static NSString * const kAppNetworkAPIBaseURLString = @"http://c.wingedstone.com
     
     AFJSONRequestOperation * itemOperation = [AFJSONRequestOperation JSONRequestOperationWithRequest:itemRequest success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         //
-//        DDLogVerbose(@"get getItemsCount JSON received: %@", JSON);
+        DDLogVerbose(@"get getItemsCount JSON received: %@", JSON);
         
         NSString *httpZipPrefix = [NSString stringWithFormat:@"http://%@/",[JSON valueForKey:@"zip_prefix"]];
         [[NSUserDefaults standardUserDefaults] setObject:httpZipPrefix forKey:@"zip_prefix"];

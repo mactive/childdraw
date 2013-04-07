@@ -132,10 +132,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)passNumberValue:(NSNumber *)value andTitle:(NSString *)title
 {
     DDLogVerbose(@"*****%f %@",value.floatValue,title);
-    if (self.downloadView.hidden) {
-        [self.downloadView setHidden:NO];
-    }
-    
     if ([title isEqualToString:self.planetString]) {
         self.dlTitle.text = T(@"Downloading...");
         self.dlNumber.text = [NSString stringWithFormat:@"%.0f%%",value.floatValue*100];
@@ -146,6 +142,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     if ([value isEqualToString:DOWNLOADFINISH]) {
         [self downloadFinish];
+    }else if([value isEqualToString:DOWNLOADING]){
+        [self.mainView setHidden:YES];
+        [self.downloadView setAlpha:1];
+        [self.downloadView setHidden:NO];
     }
 }
 
@@ -157,12 +157,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     self.theZipfile = [[ModelHelper sharedInstance]findZipfileWithFileName:planet];
     
-    if (self.theZipfile.isDownload.boolValue) {
-        NSString *path = [[self appDelegate].LIBRARYPATH stringByAppendingPathComponent:planet];
-        [self listFileAtPath:path];
-        
-        DDLogVerbose(@"Dictionary path: %@",path);
-    }
+    NSString *path = [[self appDelegate].LIBRARYPATH stringByAppendingPathComponent:planet];
+    [self listFileAtPath:path];
+    
+    DDLogVerbose(@"Dictionary path: %@",path);
 }
 
 // 检查文件数据 
@@ -170,6 +168,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     self.picCount = 0;
     self.aniCount = 0;
+    self.albumArray = [[NSArray alloc] init];
+    self.animationArray = [[NSArray alloc] init];
+    self.audioPath = @"";
+    
     
     NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:NULL];
     for (int count = 0; count < (int)[directoryContent count]; count++)
@@ -198,6 +200,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.albumArray = [self makeAlbumArrayWithCount:self.picCount andPath:path];
     self.animationArray = [self makeAnimationArrayWithCount:self.aniCount andPath:path];
     self.audioPath = [path stringByAppendingPathComponent:@"/sound.wav"];
+    DDLogVerbose(@"path %@ %@ ",path, self.planetString);
     
 }
 
@@ -319,11 +322,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     [self moveYOffest:20 andDelay:0 andAlpha:0 withView:self.downloadView];
     [self.downloadView setHidden:YES];
+    [self moveYOffest:-20 andDelay:1 andAlpha:0 withView:self.downloadView];
+    
     [self.mainView setHidden:NO];
     [self.mainView setAlpha:0];
     [self moveYOffest:0 andDelay:0.3 andAlpha:1 withView:self.mainView];
     
     
+    DDLogVerbose(@"Main View %@",self.planetString);
     // that is overall seconds. hence: frames divided by about 30 or 20.
     [self makeArrayWithString:self.planetString];
     
@@ -353,11 +359,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)enterAction
 {
-    
     self.pageViewController.albumArray = self.albumArray;
-//    self.pageViewController.titleArray = [[NSArray alloc]initWithObjects:
-//    T(@"两个圈圈放中间"),T(@"眼在头上身描边"),T(@"四个小腿画下面"),T(@"最后加上耳鼻眼"),T(@"咩. 咩. 咩. "), nil];
-    //    albumViewController.albumIndex = sender.tag;
+    [self.pageViewController refreshSubView];
     [self.pageViewController setHidesBottomBarWhenPushed:YES];
     // Pass the selected object to the new view controller.
     [self.navigationController pushViewController:self.pageViewController animated:YES];
@@ -376,11 +379,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.theZipfile = [[ModelHelper sharedInstance]findZipfileWithFileName:self.planetString];
-    if (self.theZipfile.isDownload.floatValue) {
-        [self.downloadView setHidden:YES];
-        [self downloadFinish];
-    }
+//    self.theZipfile = [[ModelHelper sharedInstance]findZipfileWithFileName:self.planetString];
+//    if (self.theZipfile.isDownload.floatValue) {
+//        [self.downloadView setHidden:YES];
+//        [self downloadFinish];
+//    }
 }
 
 - (void)didReceiveMemoryWarning

@@ -21,4 +21,6 @@
 + (ModelDownload *)sharedInstance;
 
 -(void)downloadWithURL:(NSDictionary *)obj;
+-(void)downloadAndUpdate:(Zipfile *)zipfile;
+
 @end

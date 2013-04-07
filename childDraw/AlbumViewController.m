@@ -54,22 +54,10 @@
     self.scrollView.pagingEnabled = YES;
     self.scrollView.delegate = self;
 
-    
     for (NSUInteger index = 0; index < [self.albumArray count]; index ++) {
         //You add your content views here
         id obj = [self.albumArray objectAtIndex:index];
-//        if ([obj isKindOfClass:[UIImage class]]) {
-//            continue;
-//        } 
-//        else if ([obj isKindOfClass:[NSString class]]) {
-//            NSString *urlPath = obj;
-//            if (!StringHasValue(urlPath)) {
-//                continue;
-//            }
-//        }else {
-//            continue;
-//        }
-//        
+        
         [self.scrollView addContentSubview:[self createViewForObj:obj withIndex:index]];
         [self.targetArray addObject:[self createViewForObj:obj withIndex:index]];
     }
@@ -83,6 +71,7 @@
     self.targetView = [self.targetArray objectAtIndex:self.scrollView.page];
     //DDLogVerbose(@"page %d %@",self.scrollView.page,self.targetView);
     self.title = [NSString stringWithFormat:@"%d/%d",self.scrollView.page+1,[self.albumArray count]];
+
 }
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
@@ -137,6 +126,19 @@
     return view;
 }
 
+- (void)refreshSubView
+{
+    [self.scrollView removeAllContentSubviews];
+    self.targetArray = [[NSMutableArray alloc]init];
+    
+    for (NSUInteger index = 0; index < [self.albumArray count]; index ++) {
+        //You add your content views here
+        id obj = [self.albumArray objectAtIndex:index];
+        
+        [self.scrollView addContentSubview:[self createViewForObj:obj withIndex:index]];
+        [self.targetArray addObject:[self createViewForObj:obj withIndex:index]];
+    }
+}
 
 
 @end

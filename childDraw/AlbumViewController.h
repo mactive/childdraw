@@ -18,6 +18,6 @@
 @property (nonatomic, readwrite) NSUInteger albumIndex;
 
 
-
+- (void)refreshSubView;
 
 @end

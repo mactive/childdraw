@@ -3,6 +3,7 @@ DEPENDENCIES:
 - AFNetworking (~> 1.2)
 - CocoaLumberjack (~> 1.6)
 - JSONKit (~> 1.4.0)
+- MBProgressHUD (~> 0.6)
 - MTStatusBarOverlay (~> 0.9.1)
 - RegexKitLite (~> 4.0)
 - SSZipArchive (~> 0.2.3)
@@ -11,16 +12,18 @@ PODS:
 - AFNetworking (1.2.0)
 - CocoaLumberjack (1.6)
 - JSONKit (1.4)
+- MBProgressHUD (0.6)
 - MTStatusBarOverlay (0.9.1)
 - RegexKitLite (4.0)
 - SSZipArchive (0.2.3)
 
-SPEC CHECKSUMS: 
-  CocoaLumberjack: 0f2fa7090a23f13261072d882e017c688300efbe
-  RegexKitLite: 293ff6f3cf8f34277989a37802162c6961a2b35a
-  MTStatusBarOverlay: 2cee705996e4e307191d423bf49e583b9b2c14ac
-  JSONKit: 0e3367114e2799047082628156e09893d8268f91
-  AFNetworking: 3cbae45f61a9f995cdbd56bd571223910d7f4e44
-  SSZipArchive: 737bef17f4cc07dffd75df628374cff71ec36359
-
 COCOAPODS: 0.16.4
+
+SPEC CHECKSUMS: 
+  JSONKit: 0e3367114e2799047082628156e09893d8268f91
+  MBProgressHUD: 9b55a90566fb5d07df0602f6fd9fa04510ad5d52
+  CocoaLumberjack: 0f2fa7090a23f13261072d882e017c688300efbe
+  MTStatusBarOverlay: 2cee705996e4e307191d423bf49e583b9b2c14ac
+  SSZipArchive: 737bef17f4cc07dffd75df628374cff71ec36359
+  AFNetworking: 3cbae45f61a9f995cdbd56bd571223910d7f4e44
+  RegexKitLite: 293ff6f3cf8f34277989a37802162c6961a2b35a

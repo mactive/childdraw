@@ -56,9 +56,12 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     }
     
     NSManagedObjectContext *moc = self.managedObjectContext;
-
-    NSString *zipPrefixString = ZIPPREFIX;
-
+    
+    // zipPrefixString
+    NSString *zipPrefixString = [[NSUserDefaults standardUserDefaults] objectForKey:@"zip_prefix"];
+    if (!StringHasValue(zipPrefixString)) {
+        zipPrefixString = ZIPPREFIX;
+    }
     
     NSString *urlString = [NSString stringWithFormat:@"%@%@.zip",zipPrefixString,keyString];
     DDLogVerbose(@"urlString %@",urlString);
@@ -74,8 +77,6 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
         [self downloadURLString:urlString withZipfile:newZipfile];
         newZipfile.downloadTime = [NSDate date];
         
-        //                    [self checkIsDownloadedWithZipfile:newZipfile];
-        
     }else{
         if ([newZipfile.isDownload isEqualToNumber:NUM_BOOL(NO)]) {
             DDLogVerbose(@"SYNC download a zipfile");
@@ -87,6 +88,25 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
         }
     }
 }
+
+- (void)downloadAndUpdate:(Zipfile *)theZipfile
+{    
+    if (theZipfile.isDownload.floatValue) {
+        [self.delegate passStringValue:DOWNLOADFINISH andIndex:0];
+    }else{
+        // zipPrefixString
+        NSString *zipPrefixString = [[NSUserDefaults standardUserDefaults] objectForKey:@"zip_prefix"];
+        if (!StringHasValue(zipPrefixString)) {
+            zipPrefixString = ZIPPREFIX;
+        }
+        
+        NSString *urlString = [NSString stringWithFormat:@"%@%@.zip",zipPrefixString,theZipfile.fileName];
+        [self downloadURLString:urlString withZipfile:theZipfile];
+        theZipfile.downloadTime = [NSDate date];
+
+    }
+}
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - download and unzip
@@ -104,6 +124,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
     
     
+    [self.delegate passStringValue:DOWNLOADING andIndex:0];
     [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         // pass to mainview
         float progress = ((float)totalBytesRead) / totalBytesExpectedToRead;
@@ -116,7 +137,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        NSLog(@"Successfully downloaded file to %@ %@", path,urlString);
+        DDLogVerbose(@"Successfully downloaded file to %@ %@", path,urlString);
         theZipfile.isDownload = NUM_BOOL(YES);
         [self unzipFileName:theZipfile.fileName WithPath:path];
         theZipfile.isZiped = NUM_BOOL(YES);
@@ -127,7 +148,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         theZipfile.isDownload = NUM_BOOL(NO);
         theZipfile.isZiped = NUM_BOOL(NO);
-        NSLog(@"Error: %@", error);
+        DDLogError(@"Error: %@", error);
     }];
     
     [operation start];
