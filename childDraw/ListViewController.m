@@ -132,7 +132,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     // Dispose of any resources that can be recreated.
 }
 
-#define CELL_HEIGHT     130.0f
+#define CELL_HEIGHT     125.0f
 #define BUTTON_PER_CELL 2
 
 #define BUTTON_L_TAG    1
@@ -141,11 +141,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 #define BUTTON_R_TAG    3
 #define LABEL_R_TAG     4
 
-#define BUTTON_X        10.0f
+#define BUTTON_X        13.0f
 #define BUTTON_Y        0.0f
-#define BUTTON_WIDTH    145.0f
-#define BUTTON_HEIGHT   90.0f
+#define BUTTON_WIDTH    135.0f
+#define BUTTON_HEIGHT   95.0f
 #define LABEL_HEIGHT    24.0f
+#define BG_Y            93.0f
+#define BG_HEIGHT       15.0f
 
 
 - (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier{
@@ -177,7 +179,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [buttonRight setFrame:CGRectMake(BUTTON_X*2+BUTTON_WIDTH, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT)];
     buttonRight.tag = BUTTON_R_TAG;
     
+    UIImageView *cell_bg = [[UIImageView alloc]initWithFrame:CGRectMake(0, BG_Y, TOTAL_WIDTH, BG_HEIGHT)];
+    [cell_bg setImage:[UIImage imageNamed:@"cell_shadow.png"]];
     
+    [cell.contentView addSubview:cell_bg];
     [cell.contentView addSubview:labelLeft];
     [cell.contentView addSubview:buttonLeft];
     [cell.contentView addSubview:labelRight];

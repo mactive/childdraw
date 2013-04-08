@@ -84,7 +84,8 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
             [self downloadURLString:urlString withZipfile:newZipfile];
             newZipfile.downloadTime = [NSDate date];
         }else{
-            // 存在而且已经下载 不再下载
+            // 存在而且已经下载 不再下载 直接播放
+            [self.delegate passStringValue:DOWNLOADFINISH andIndex:0];
         }
     }
 }

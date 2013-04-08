@@ -26,15 +26,10 @@
     if (self) {
         // Initialization code
         self.avatarView = [[UIImageView alloc]initWithFrame:frame];
-        [self.layer setCornerRadius:5.0f];
+        [self.layer setCornerRadius:10.0f];
         [self.layer setMasksToBounds:YES];
         [self.layer setBorderColor:BORDERCOLOR.CGColor];
         [self.layer setBorderWidth:1.0f];
-        
-        self.layer.shadowColor = [UIColor blackColor].CGColor;
-        self.layer.shadowOpacity = 0.6;
-        self.layer.shadowRadius = 5;
-        self.layer.shadowOffset = CGSizeMake(0.0f, 5.0f);
         
 //        self.colorArray = [[NSArray alloc] initWithObjects:
 //                           RGBCOLOR(230,255,193),
@@ -54,7 +49,8 @@
                            RGBCOLOR(231,158,130),
                            RGBCOLOR(66,166,211),
                            RGBCOLOR(136,143,154),nil];
-        
+        self.backgroundColor = [UIColor whiteColor];
+
         NSUInteger randomIndex = arc4random() % [self.colorArray count];
         self.backgroundColor = [UIColor clearColor];
         
@@ -95,8 +91,8 @@
     NSString *prefix = [[NSUserDefaults standardUserDefaults] objectForKey:@"thumbnail_prefix"];
     NSString *url = [NSString stringWithFormat:@"%@%@.png",prefix,filename];
     NSLog(@"URL %@",url);
-    [self.avatarView setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"icon.png"]];
-    [self addSubview:self.avatarView];
+//    [self.avatarView setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"icon.png"]];
+//    [self addSubview:self.avatarView];
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
     [self.avatarView setImageWithURLRequest:request
                            placeholderImage:nil

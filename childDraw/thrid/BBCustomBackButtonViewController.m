@@ -17,6 +17,8 @@
 #define kBackButtonMarginRight      7.0f
 // padding added to back button
 #define kBackButtonPadding          10.0f
+// 导航部分高度
+#define CUSTOM_BUTTON_HEIGHT        30.0f 
 
 
 @implementation BBCustomBackButtonViewController
@@ -132,22 +134,24 @@
 - (void)addCustomBackButtonWithTitle:(NSString *)title
 {
     UIImageView *backArraw = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"back_button.png"]];
-    [backArraw setFrame:CGRectMake(15, 5, 15, 15)];
+    [backArraw setFrame:CGRectMake(15, (CUSTOM_BUTTON_HEIGHT-15)/2-2, 15, 15)];
     //    image = [[UIImage imageNamed:@"back_button.png"]
 //                        resizableImageWithCapInsets:UIEdgeInsetsMake(14, 16, 14, 20) ];
 
     UIFont *font = [UIFont boldSystemFontOfSize:12.0f];
     CGSize textSize = [title sizeWithFont:font];
-    CGSize buttonSize = CGSizeMake(textSize.width + kBackButtonPadding * 2, CUSTOM_NAV_HEIGHT);
+    CGSize buttonSize = CGSizeMake(textSize.width + kBackButtonPadding * 2, CUSTOM_BUTTON_HEIGHT);
 
     UIButton *button = [[[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, buttonSize.width, buttonSize.height)] autorelease];
+    
 //    [button setTitle:title forState:UIControlStateNormal];
-//    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//    [button setTitleColor:BLUECOLOR forState:UIControlStateNormal];
 //    [button.titleLabel setFont:font];
 //    [button.titleLabel setShadowOffset:CGSizeMake(0, -1)];
+    
     [button addSubview:backArraw];
     [button addTarget:self action:@selector(didTouchBackButton:) forControlEvents:UIControlEventTouchUpInside];
-
+//    [button setBackgroundColor:[UIColor redColor]];
     // defaults are bright to show demo
     // override in viewDidLoad by accessing self.backButton
 

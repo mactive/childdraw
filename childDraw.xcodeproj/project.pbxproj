@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		261CBF221711404800F59321 /* ThumbnailUIButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 261CBF211711404800F59321 /* ThumbnailUIButton.m */; };
+		261CBF251712728F00F59321 /* cell_shadow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 261CBF241712728F00F59321 /* cell_shadow@2x.png */; };
+		261CBF2717127A7E00F59321 /* list_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 261CBF2617127A7E00F59321 /* list_bg@2x.png */; };
+		261CBF2A1712A1C700F59321 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 261CBF291712A1C700F59321 /* SettingViewController.m */; };
 		2652C6AA170969C500054D45 /* list_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2652C6A8170969C500054D45 /* list_button@2x.png */; };
 		2652C6AB170969C500054D45 /* setting_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2652C6A9170969C500054D45 /* setting_button@2x.png */; };
 		2652C6AF1709840700054D45 /* childDraw.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2652C6AD1709840700054D45 /* childDraw.xcdatamodeld */; };
@@ -57,6 +60,10 @@
 /* Begin PBXFileReference section */
 		261CBF201711404800F59321 /* ThumbnailUIButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumbnailUIButton.h; sourceTree = "<group>"; };
 		261CBF211711404800F59321 /* ThumbnailUIButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThumbnailUIButton.m; sourceTree = "<group>"; };
+		261CBF241712728F00F59321 /* cell_shadow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cell_shadow@2x.png"; sourceTree = "<group>"; };
+		261CBF2617127A7E00F59321 /* list_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "list_bg@2x.png"; sourceTree = "<group>"; };
+		261CBF281712A1C600F59321 /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
+		261CBF291712A1C700F59321 /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
 		2652C6A8170969C500054D45 /* list_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "list_button@2x.png"; sourceTree = "<group>"; };
 		2652C6A9170969C500054D45 /* setting_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "setting_button@2x.png"; sourceTree = "<group>"; };
 		2652C6AE1709840700054D45 /* childDraw.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = childDraw.xcdatamodel; sourceTree = "<group>"; };
@@ -251,6 +258,8 @@
 				26F39F6E16FC4433001A6EF9 /* AlbumViewController.m */,
 				2666F1BC170C2C0A00E21BA4 /* ListViewController.h */,
 				2666F1BD170C2C0A00E21BA4 /* ListViewController.m */,
+				261CBF281712A1C600F59321 /* SettingViewController.h */,
+				261CBF291712A1C700F59321 /* SettingViewController.m */,
 				26F39F7416FC45CB001A6EF9 /* thrid */,
 				26F39F6616FC4083001A6EF9 /* Resources */,
 				26F39F4A16FC3DEF001A6EF9 /* Supporting Files */,
@@ -273,6 +282,8 @@
 			isa = PBXGroup;
 			children = (
 				2652C6B81709947B00054D45 /* page_number@2x.png */,
+				261CBF2617127A7E00F59321 /* list_bg@2x.png */,
+				261CBF241712728F00F59321 /* cell_shadow@2x.png */,
 				2666F1C2170C424000E21BA4 /* hide_button@2x.png */,
 				2666F1B5170C08BE00E21BA4 /* Museo500-Regular.otf */,
 				2666F1B3170C012100E21BA4 /* circle_button_bg@2x.png */,
@@ -382,6 +393,8 @@
 				2666F1B4170C012100E21BA4 /* circle_button_bg@2x.png in Resources */,
 				2666F1B6170C08BE00E21BA4 /* Museo500-Regular.otf in Resources */,
 				2666F1C3170C424000E21BA4 /* hide_button@2x.png in Resources */,
+				261CBF251712728F00F59321 /* cell_shadow@2x.png in Resources */,
+				261CBF2717127A7E00F59321 /* list_bg@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,6 +439,7 @@
 				2666F1BE170C2C0A00E21BA4 /* ListViewController.m in Sources */,
 				2666F1C1170C30D700E21BA4 /* ModelDownload.m in Sources */,
 				261CBF221711404800F59321 /* ThumbnailUIButton.m in Sources */,
+				261CBF2A1712A1C700F59321 /* SettingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
