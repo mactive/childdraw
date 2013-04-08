@@ -11,6 +11,8 @@
 
 
 #define M_APPLEID 626129422
+#define WXAPPID @"wx4b9a37d1d5fc4db2"
+
 
 #define CUSTOM_NAV_HEIGHT 40.0f
 #define ZIPPREFIX @"http://babylearn.b0.upaiyun.com/"
@@ -41,6 +43,7 @@ alpha:(a)]
 
 #define DOWNLOADFINISH @"DownloadFinish"
 #define DOWNLOADING @"Downloading"
+#define DOWNLOADFAILED @"DownloadFailed"
 // font
 #define BIGCUSTOMFONT [UIFont fontWithName:@"Museo" size:40.0f]
 #define CUSTOMFONT [UIFont fontWithName:@"Museo" size:16.0f]

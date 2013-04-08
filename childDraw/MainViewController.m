@@ -18,6 +18,8 @@
 #import "ListViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
+#import "WXApi.h"
+
 
 #import "DDLog.h"
 // Log levels: off, error, warn, info, verbose
@@ -27,7 +29,7 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
 
-@interface MainViewController ()<PassValueDelegate>
+@interface MainViewController ()<PassValueDelegate,WXApiDelegate>
 {
     SystemSoundID completeSound;
 }
@@ -145,6 +147,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [self.mainView setHidden:YES];
         [self.downloadView setAlpha:1];
         [self.downloadView setHidden:NO];
+        self.dlNumber.text = T(@":)");
+
+    }else if ([value isEqualToString:DOWNLOADFAILED])
+    {
+        [self.mainView setHidden:YES];
+        [self.downloadView setAlpha:1];
+        [self.downloadView setHidden:NO];
+        self.dlNumber.text = T(@":(");
+        self.dlTitle.text = T(@"Failed");
     }
 }
 
@@ -252,7 +263,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.enterButton setTitle:@"Enter" forState:UIControlStateNormal];
     
     [self.enterButton setFrame:CGRectMake(60, 280, 200, 40)];
-    [self.enterButton addTarget:self action:@selector(enterAction) forControlEvents:UIControlEventTouchUpInside];
+    [self.enterButton addTarget:self action:@selector(sendImageContent) forControlEvents:UIControlEventTouchUpInside];
     
     // or animview
     self.transButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -368,6 +379,36 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 }
 
+- (void) sendImageContent
+{
+    WXMediaMessage *message = [WXMediaMessage message];
+    [message setThumbImage:[UIImage imageNamed:@"icon.png"]];
+    WXImageObject *ext = [WXImageObject object];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"icon" ofType:@"jpg"];
+    ext.imageData = [NSData dataWithContentsOfFile:filePath] ;
+    message.mediaObject = ext;
+    
+    SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
+    req.bText = NO;
+    req.message = message;
+    req.scene = WXSceneTimeline;  //选择发送到朋友圈，默认值为WXSceneSession，发送到会话
+    [WXApi sendReq:req];
+}
+
+
+
+- (void)onReq:(BaseReq *)req
+{
+    NSLog(@"===============%@",req);
+}
+-(void) onResp:(BaseResp*)resp
+{
+    if([resp isKindOfClass:[SendMessageToWXResp class]])
+    {
+        NSString *strMsg = [NSString stringWithFormat:@"发送消息结果:%d", resp.errCode];
+        DDLogVerbose(@"%@",strMsg);
+    }
+}
 
 -(void)playSound {
     

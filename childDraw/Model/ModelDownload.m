@@ -150,6 +150,8 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
         theZipfile.isDownload = NUM_BOOL(NO);
         theZipfile.isZiped = NUM_BOOL(NO);
         DDLogError(@"Error: %@", error);
+        [self.delegate passStringValue:DOWNLOADFAILED andIndex:0];
+
     }];
     
     [operation start];

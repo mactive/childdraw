@@ -18,6 +18,7 @@
 #import "SSZipArchive.h"
 #import "DDTTYLogger.h"
 
+
 #import "DDLog.h"
 // Log levels: off, error, warn, info, verbose
 #if DEBUG
@@ -91,7 +92,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _defaultGetCount  = 1;
     [self downloadLastFiles:_defaultGetCount];
     
-    
+    [WXApi registerApp:WXAPPID];
     
     return YES;
 }
@@ -302,11 +303,23 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
 }
 
+//////////////////////////////////
+#pragma mark - wechat rewrite
+//////////////////////////////////
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    return  [WXApi handleOpenURL:url delegate:self];
+}
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    return  [WXApi handleOpenURL:url delegate:self];
+}
 
 //////////////////////////////////
 #pragma mark - getIPAddress
 //////////////////////////////////
-
+/*
 - (void)getIPAddress
 {
     InitAddresses();
@@ -334,5 +347,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
     }
 }
+*/
 
 @end
