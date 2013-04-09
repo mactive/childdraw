@@ -70,9 +70,10 @@
         count = count + 1;
     }
     self.title = [NSString stringWithFormat:@"%d/%d",self.scrollView.page+1,count];
-    
-
 }
+
+// refresh
+
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     if ([scrollView isEqual:self.scrollView]) {

@@ -17,6 +17,7 @@
 #import "Zipfile.h"
 #import "SSZipArchive.h"
 #import "DDTTYLogger.h"
+#import "ServerDataTransformer.h"
 
 
 #import "DDLog.h"
@@ -89,7 +90,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     // actions
     [self getConfig];
     
-    _defaultGetCount  = 1;
+    _defaultGetCount  = 7;
     [self downloadLastFiles:_defaultGetCount];
     
 //    [WXApi registerApp:WXAPPID];
@@ -131,14 +132,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(void)getTheLastPlanet:(NSArray *)data
 {
     NSArray* sorted = [data sortedArrayUsingComparator:(NSComparator)^(NSDictionary *item1, NSDictionary *item2) {
-        NSString *score1 = [[item1 objectForKey:@"key"] stringValue];
-        NSString *score2 = [[item2 objectForKey:@"key"] stringValue];
+        NSString *score1 = [ServerDataTransformer getStringObjFromServerJSON:item1 byName:@"key"];
+        NSString *score2 = [ServerDataTransformer getStringObjFromServerJSON:item2 byName:@"key"];
         return [score1 compare:score2 options:NSNumericSearch];
     }];
     
-    NSNumber * tmp = [(NSDictionary *)[sorted lastObject] objectForKey:@"key"];
+    NSNumber * tmp = [ServerDataTransformer getNumberObjFromServerJSON:[sorted lastObject] byName:@"key"];
     self.lastPlanet = tmp.stringValue;
-    self.lastPlanetTitle = [(NSDictionary *)[sorted lastObject] objectForKey:@"title"];
+    self.lastPlanetTitle = [ServerDataTransformer getStringObjFromServerJSON:[sorted lastObject] byName:@"title"];
 }
 
 - (void)downloadLastFiles:(NSInteger)count

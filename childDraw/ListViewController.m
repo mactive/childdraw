@@ -17,6 +17,8 @@
 #import "SettingViewController.h"
 #import "MBProgressHUD.h"
 #import "AppDelegate.h"
+#import "ServerDataTransformer.h"
+
 #import "DDLog.h"
 
 // Log levels: off, error, warn, info, verbose
@@ -148,7 +150,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             if (self.isLOADMORE) {
                 for (int i=0; i < [tempArray count]; i++) {
                     NSDictionary *dict = [tempArray objectAtIndex:i];
-                    Zipfile *aZipfile = [[ModelHelper sharedInstance]findZipfileWithFileName:[[dict objectForKey:@"key"] stringValue]];
+                    Zipfile *aZipfile = [[ModelHelper sharedInstance]findZipfileWithFileName:[ServerDataTransformer getStringObjFromServerJSON:dict byName:@"key"]];
                     if (aZipfile == nil) {
                         aZipfile = (Zipfile *)[[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
                         [[ModelHelper sharedInstance]populateZipfile:aZipfile withServerJSONData:dict];
@@ -161,7 +163,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             else{
                 for (int i=0; i < [tempArray count]; i++) {
                     NSDictionary *dict = [tempArray objectAtIndex:i];
-                    Zipfile *aZipfile = [[ModelHelper sharedInstance]findZipfileWithFileName:[[dict objectForKey:@"key"] stringValue]];
+                    Zipfile *aZipfile = [[ModelHelper sharedInstance]findZipfileWithFileName:[ServerDataTransformer getStringObjFromServerJSON:dict byName:@"key"]];
                     if (aZipfile == nil) {
                         aZipfile = (Zipfile *)[[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
                         [[ModelHelper sharedInstance]populateZipfile:aZipfile withServerJSONData:dict];

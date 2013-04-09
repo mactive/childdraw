@@ -11,6 +11,7 @@
 #import "DDLog.h"
 #import "AFImageRequestOperation.h"
 #import "AppNetworkAPIClient.h"
+#import "ServerDataTransformer.h"
 // Log levels: off, error, warn, info, verbose
 #if DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
@@ -71,13 +72,13 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 
 - (void)populateZipfile:(Zipfile *)zipfile withServerJSONData:(id)json
 {
-    zipfile.fileName        = [(NSNumber*)[json objectForKey:@"key"] stringValue];
+    zipfile.fileName        = [ServerDataTransformer getStringObjFromServerJSON:json byName:@"key"];
     zipfile.downloadTime    = [NSDate date];
     zipfile.isDownload      = [NSNumber numberWithBool:NO];
     zipfile.isZiped         = [NSNumber numberWithBool:NO];
     zipfile.picCount        = @"0";
     zipfile.aniCount        = @"8";
-    zipfile.title           = [json objectForKey:@"title"];
+    zipfile.title           = [ServerDataTransformer getStringObjFromServerJSON:json byName:@"title"];
 }
 
 

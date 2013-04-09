@@ -14,6 +14,7 @@
 #import "Zipfile.h"
 #import "SSZipArchive.h"
 #import "AppDelegate.h"
+#import "ServerDataTransformer.h"
 
 #import "DDLog.h"
 // Log levels: off, error, warn, info, verbose
@@ -50,8 +51,8 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     if (StringHasValue(self.filename)) {
         keyString = self.filename;
     }else if (obj != nil){
-        if(StringHasValue([[obj objectForKey:@"key"] stringValue])){
-            keyString = [[obj objectForKey:@"key"] stringValue];
+        if(StringHasValue([ServerDataTransformer getStringObjFromServerJSON:obj byName:@"key"])){
+            keyString = [ServerDataTransformer getStringObjFromServerJSON:obj byName:@"key"];
         }
     }
     
@@ -140,6 +141,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
         
         DDLogVerbose(@"Successfully downloaded file to %@ %@", path,urlString);
         theZipfile.isDownload = NUM_BOOL(YES);
+#warning unzip is
         [self unzipFileName:theZipfile.fileName WithPath:path];
         theZipfile.isZiped = NUM_BOOL(YES);
         if ([self.lastPlanet isEqualToString:theZipfile.fileName]) {
