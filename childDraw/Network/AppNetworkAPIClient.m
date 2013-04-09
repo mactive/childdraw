@@ -17,8 +17,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
 
 // default 
-static NSString * const kAppNetworkAPIBaseURLString = @"http://192.168.1.104:8004/";
-//static NSString * const kAppNetworkAPIBaseURLString = @"http://c.wingedstone.com:8004/";
+//static NSString * const kAppNetworkAPIBaseURLString = @"http://192.168.1.104:8004/";
+static NSString * const kAppNetworkAPIBaseURLString = @"http://c.wingedstone.com:8004/";
 
 @interface AppNetworkAPIClient ()
 {

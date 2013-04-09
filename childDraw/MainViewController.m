@@ -378,10 +378,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 -(void)playSound {
+
     
     NSURL *audioURL = [NSURL fileURLWithPath:self.audioPath];
     AudioServicesCreateSystemSoundID((__bridge CFURLRef)audioURL, &completeSound);
+    AudioServicesDisposeSystemSoundID(completeSound);
     AudioServicesPlaySystemSound (completeSound);
+    
 }
 
 
