@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "MainViewController.h"
-#import "WXApi.h"
+//#import "WXApi.h"
 
 @class ListViewController;
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate,WXApiDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) MainViewController *mainViewController;

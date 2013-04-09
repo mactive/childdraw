@@ -92,7 +92,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _defaultGetCount  = 1;
     [self downloadLastFiles:_defaultGetCount];
     
-    [WXApi registerApp:WXAPPID];
+//    [WXApi registerApp:WXAPPID];
     
     return YES;
 }
@@ -306,7 +306,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 //////////////////////////////////
 #pragma mark - wechat rewrite
 //////////////////////////////////
-
+/*
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
     return  [WXApi handleOpenURL:url delegate:self];
@@ -315,6 +315,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     return  [WXApi handleOpenURL:url delegate:self];
 }
+*/
 
 //////////////////////////////////
 #pragma mark - getIPAddress
