@@ -208,8 +208,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.animationArray = [self makeAnimationArrayWithCount:self.aniCount andPath:path];
 
     self.audioPath = [path stringByAppendingPathComponent:@"/sound.wav"];
-    DDLogVerbose(@"path %@ %@ ",path, self.planetString);
-    
+//    DDLogVerbose(@"path %@ %@ ",path, self.planetString);
+    NSURL *audioURL = [NSURL fileURLWithPath:self.audioPath];
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef)audioURL, &completeSound);
 }
 
 /* 生成数组 make album array */
@@ -256,10 +257,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.mainView  = [[UIView alloc]initWithFrame:CGRectMake(10, 40, TOTAL_WIDTH, self.view.frame.size.height)];
     self.mainView.backgroundColor = [UIColor clearColor];
     
-    self.enterButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.enterButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.enterButton setTitle:@"Enter" forState:UIControlStateNormal];
-    
-    [self.enterButton setFrame:CGRectMake(60, 280, 200, 40)];
+    [self.enterButton setFrame:CGRectMake(56, 280, 188, 43)];
+    [self.enterButton setBackgroundImage:[UIImage imageNamed:@"button_bg.png"] forState:UIControlStateNormal];
+    [self.enterButton setBackgroundImage:[UIImage imageNamed:@"button_highlight_bg.png"] forState:UIControlStateHighlighted];
+    [self.enterButton setImage:[UIImage imageNamed:@"footpoint.png"] forState:UIControlStateNormal];
+    [self.enterButton setImageEdgeInsets:UIEdgeInsetsMake(0, -20, 0, 0)];
+    [self.enterButton setTitle:T(@"一步一步来") forState:UIControlStateNormal];
+    [self.enterButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 10, 0, 0)];
+    [self.enterButton setTitleColor:DARKCOLOR forState:UIControlStateNormal];
     [self.enterButton addTarget:self action:@selector(enterAction) forControlEvents:UIControlEventTouchUpInside];
     
     // or animview
@@ -378,13 +385,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 -(void)playSound {
-
-    
-    NSURL *audioURL = [NSURL fileURLWithPath:self.audioPath];
-    AudioServicesCreateSystemSoundID((__bridge CFURLRef)audioURL, &completeSound);
-    AudioServicesDisposeSystemSoundID(completeSound);
     AudioServicesPlaySystemSound (completeSound);
-    
 }
 
 
