@@ -87,7 +87,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return self;
 }
 
-
 - (void)listAction
 {
     [self.navigationController.view.layer addAnimation:self.transition forKey:kCATransition];
@@ -96,12 +95,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)initViewControllers
 {
-
     [self appDelegate].listViewContorller = [[ListViewController alloc]initWithNibName:nil bundle:nil];
     [self appDelegate].listViewContorller.managedObjectContext = self.managedObjectContext;
-
 }
-
 
 - (void)viewDidLoad
 {
@@ -167,7 +163,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSString *path = [[self appDelegate].LIBRARYPATH stringByAppendingPathComponent:planet];
     [self listFileAtPath:path];
     
-    DDLogVerbose(@"Dictionary path: %@",path);
 }
 
 // 检查文件数据 
@@ -175,10 +170,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     self.picCount = 0;
     self.aniCount = 0;
-//    self.albumArray = [[NSArray alloc] init];
-//    self.animationArray = [[NSArray alloc] init];
-//    self.audioPath = @"";
-    
     
     NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:NULL];
     for (int count = 0; count < (int)[directoryContent count]; count++)
@@ -246,15 +237,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return resultArray;
 }
 
-
-
 /////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - init mainView and DownloadView
 /////////////////////////////////////////////////////////////////////////////////////
 
 - (void)initMainView
 {
-    self.mainView  = [[UIView alloc]initWithFrame:CGRectMake(10, 40, TOTAL_WIDTH, self.view.frame.size.height)];
+    self.mainView  = [[UIView alloc]initWithFrame:CGRectMake(10, 40, TOTAL_WIDTH-20, self.view.frame.size.height)];
     self.mainView.backgroundColor = [UIColor clearColor];
     
     self.enterButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -269,19 +258,21 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.enterButton setTitleColor:DARKCOLOR forState:UIControlStateNormal];
     [self.enterButton addTarget:self action:@selector(enterAction) forControlEvents:UIControlEventTouchUpInside];
     
+    self.animArea = [[UIImageView alloc] initWithFrame:CGRectMake(35, 0, 250, 250)];
+
     // or animview
     self.transButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.transButton.frame = CGRectMake(0, 0, TOTAL_WIDTH, 290);
+    self.transButton.frame = CGRectMake(0, 0, TOTAL_WIDTH-20, 250);
     [self.transButton setTitle:@"" forState:UIControlStateNormal];
     [self.transButton addTarget:self action:@selector(playSound) forControlEvents:UIControlEventTouchUpInside];
     self.transButton.alpha = 1;
+    self.transButton.backgroundColor = [UIColor clearColor];
     self.transButton.tag = 0;
     
-    self.animArea = [[UIImageView alloc] initWithFrame:CGRectMake(35, 0, 250, 250)];
 
-    [self.mainView addSubview:self.transButton];
     [self.mainView addSubview:self.animArea];
     [self.mainView addSubview:self.enterButton];
+    [self.mainView addSubview:self.transButton];
 
     [self.mainView setHidden:YES];
     [self.view addSubview:self.mainView];
@@ -309,14 +300,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.downloadView addSubview:bgView];
     [self.downloadView addSubview:self.dlNumber];
     [self.downloadView addSubview:self.dlTitle];
-    [self.view addSubview:self.downloadView];
     [self.downloadView setHidden:YES];
+    
+    [self.view addSubview:self.downloadView];
 }
 
 
 /////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - download progress
 /////////////////////////////////////////////////////////////////////////////////////
+
 - (void)downloadLastPlanet:(NSNumber *)value andTitle:(NSString *)title
 {
     if (self.downloadView.hidden) {
