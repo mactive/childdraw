@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSArray *albumArray;
 @property (nonatomic, strong) NSArray *titleArray;
 @property (nonatomic, readwrite) NSUInteger albumIndex;
+@property (nonatomic, strong) UIView *shareView;
 
 
 - (void)refreshSubView;

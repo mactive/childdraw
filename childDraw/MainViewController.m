@@ -17,6 +17,7 @@
 #import "PassValueDelegate.h"
 #import "ListViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "ShareWithPhotoView.h"
 
 #import "DDLog.h"
 // Log levels: off, error, warn, info, verbose
@@ -32,7 +33,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 @property(strong, nonatomic)UIImageView *titleImage;
-@property(strong, nonatomic)AlbumViewController *pageViewController;
+@property(strong, nonatomic)AlbumViewController *albumViewController;
 @property(strong, nonatomic)UIButton *enterButton;
 @property(strong, nonatomic)UIButton *transButton;
 @property(strong, nonatomic)CATransition* transition;
@@ -53,7 +54,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @end
 
 @implementation MainViewController
-@synthesize pageViewController;
+@synthesize albumViewController;
 @synthesize titleImage;
 @synthesize enterButton;
 @synthesize albumArray;
@@ -103,7 +104,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     [super viewDidLoad];
     
-    self.pageViewController = [[AlbumViewController alloc] init];
+    self.albumViewController = [[AlbumViewController alloc] init];
     
 	// Do any additional setup after loading the view.
     
@@ -269,7 +270,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.transButton.backgroundColor = [UIColor clearColor];
     self.transButton.tag = 0;
     
-
     [self.mainView addSubview:self.animArea];
     [self.mainView addSubview:self.enterButton];
     [self.mainView addSubview:self.transButton];
@@ -368,11 +368,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)enterAction
 {
-    self.pageViewController.albumArray = self.albumArray;
-    [self.pageViewController refreshSubView];
-    [self.pageViewController setHidesBottomBarWhenPushed:YES];
+    self.albumViewController.albumArray = self.albumArray;
+    self.albumViewController.shareView = [[ShareWithPhotoView alloc]initWithFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_WIDTH)];
+    [self.albumViewController refreshSubView];
+    [self.albumViewController setHidesBottomBarWhenPushed:YES];
     // Pass the selected object to the new view controller.
-    [self.navigationController pushViewController:self.pageViewController animated:YES];
+    [self.navigationController pushViewController:self.albumViewController animated:YES];
 
 }
 

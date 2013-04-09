@@ -27,6 +27,7 @@
 @synthesize moreButton;
 @synthesize moreActionSheet;
 @synthesize titleArray;
+@synthesize shareView;
 
 #pragma mark - View lifecycle
 
@@ -54,13 +55,7 @@
     self.scrollView.pagingEnabled = YES;
     self.scrollView.delegate = self;
 
-    for (NSUInteger index = 0; index < [self.albumArray count]; index ++) {
-        //You add your content views here
-        id obj = [self.albumArray objectAtIndex:index];
-        
-        [self.scrollView addContentSubview:[self createViewForObj:obj withIndex:index]];
-        [self.targetArray addObject:[self createViewForObj:obj withIndex:index]];
-    }
+    [self refreshSubView];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -70,7 +65,12 @@
     
     self.targetView = [self.targetArray objectAtIndex:self.scrollView.page];
     //DDLogVerbose(@"page %d %@",self.scrollView.page,self.targetView);
-    self.title = [NSString stringWithFormat:@"%d/%d",self.scrollView.page+1,[self.albumArray count]];
+    NSUInteger count = [self.albumArray count];
+    if (self.shareView != nil) {
+        count = count + 1;
+    }
+    self.title = [NSString stringWithFormat:@"%d/%d",self.scrollView.page+1,count];
+    
 
 }
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
@@ -78,7 +78,11 @@
     if ([scrollView isEqual:self.scrollView]) {
         //DDLogVerbose(@"End page %d %@",self.scrollView.page,self.targetView);
         self.targetView = [self.targetArray objectAtIndex:self.scrollView.page];
-        self.title = [NSString stringWithFormat:@"%d/%d",self.scrollView.page+1,[self.albumArray count]];
+        NSUInteger count = [self.albumArray count];
+        if (self.shareView != nil) {
+            count = count + 1;
+        }
+        self.title = [NSString stringWithFormat:@"%d/%d",self.scrollView.page+1,count];
     }
 }
 
@@ -137,6 +141,11 @@
         
         [self.scrollView addContentSubview:[self createViewForObj:obj withIndex:index]];
         [self.targetArray addObject:[self createViewForObj:obj withIndex:index]];
+    }
+    
+    if (self.shareView != nil) {
+        [self.scrollView addContentSubview:self.shareView];
+        [self.targetArray addObject:self.shareView];
     }
 }
 
