@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BBCustomBackButtonViewController.h"
 
-@interface SettingViewController : UIViewController
+@interface SettingViewController : BBCustomBackButtonViewController
 
 @end

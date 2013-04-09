@@ -17,8 +17,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
 
 // default 
-//static NSString * const kAppNetworkAPIBaseURLString = @"http://192.168.1.104:8004/";
-static NSString * const kAppNetworkAPIBaseURLString = @"http://c.wingedstone.com:8004/";
+static NSString * const kAppNetworkAPIBaseURLString = @"http://192.168.1.104:8004/";
+//static NSString * const kAppNetworkAPIBaseURLString = @"http://c.wingedstone.com:8004/";
 
 @interface AppNetworkAPIClient ()
 {
@@ -103,9 +103,10 @@ static NSString * const kAppNetworkAPIBaseURLString = @"http://c.wingedstone.com
 }
 
 // getItemsThumbnail
-- (void)getThumbnailsWithBlock:(void(^)(id, NSString *, NSError *))block
+- (void)getThumbnailsStartPosition:(NSUInteger)startPosition withBlock:(void(^)(id, NSString *, NSError *))block
 {
-    NSMutableURLRequest *itemRequest = [[AppNetworkAPIClient sharedClient] requestWithMethod:@"GET" path:GET_THUMBNAIL_PATH parameters:nil];
+    NSString *pathString = [NSString stringWithFormat:@"%@%d/",GET_THUMBNAIL_PATH,startPosition];
+    NSMutableURLRequest *itemRequest = [[AppNetworkAPIClient sharedClient] requestWithMethod:@"GET" path:pathString parameters:nil];
     
     AFJSONRequestOperation * itemOperation = [AFJSONRequestOperation JSONRequestOperationWithRequest:itemRequest success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         //

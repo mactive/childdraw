@@ -12,6 +12,7 @@
 		261CBF2717127A7E00F59321 /* list_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 261CBF2617127A7E00F59321 /* list_bg@2x.png */; };
 		261CBF2A1712A1C700F59321 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 261CBF291712A1C700F59321 /* SettingViewController.m */; };
 		261CBF2F1712B39700F59321 /* libWeChatSDK_armv7_armv7s.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 261CBF2C1712B39700F59321 /* libWeChatSDK_armv7_armv7s.a */; };
+		26502E331713E654005BFD7B /* half_cell_shadow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26502E321713E654005BFD7B /* half_cell_shadow@2x.png */; };
 		2652C6AA170969C500054D45 /* list_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2652C6A8170969C500054D45 /* list_button@2x.png */; };
 		2652C6AB170969C500054D45 /* setting_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2652C6A9170969C500054D45 /* setting_button@2x.png */; };
 		2652C6AF1709840700054D45 /* childDraw.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2652C6AD1709840700054D45 /* childDraw.xcdatamodeld */; };
@@ -68,6 +69,7 @@
 		261CBF2C1712B39700F59321 /* libWeChatSDK_armv7_armv7s.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK_armv7_armv7s.a; sourceTree = "<group>"; };
 		261CBF2D1712B39700F59321 /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
 		261CBF2E1712B39700F59321 /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
+		26502E321713E654005BFD7B /* half_cell_shadow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "half_cell_shadow@2x.png"; sourceTree = "<group>"; };
 		2652C6A8170969C500054D45 /* list_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "list_button@2x.png"; sourceTree = "<group>"; };
 		2652C6A9170969C500054D45 /* setting_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "setting_button@2x.png"; sourceTree = "<group>"; };
 		2652C6AE1709840700054D45 /* childDraw.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = childDraw.xcdatamodel; sourceTree = "<group>"; };
@@ -297,6 +299,7 @@
 			isa = PBXGroup;
 			children = (
 				2652C6B81709947B00054D45 /* page_number@2x.png */,
+				26502E321713E654005BFD7B /* half_cell_shadow@2x.png */,
 				261CBF2617127A7E00F59321 /* list_bg@2x.png */,
 				261CBF241712728F00F59321 /* cell_shadow@2x.png */,
 				2666F1C2170C424000E21BA4 /* hide_button@2x.png */,
@@ -411,6 +414,7 @@
 				2666F1C3170C424000E21BA4 /* hide_button@2x.png in Resources */,
 				261CBF251712728F00F59321 /* cell_shadow@2x.png in Resources */,
 				261CBF2717127A7E00F59321 /* list_bg@2x.png in Resources */,
+				26502E331713E654005BFD7B /* half_cell_shadow@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

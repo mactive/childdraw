@@ -11,7 +11,7 @@
 
 #define GET_CONFIG_PATH         @"/base/getconfig/"
 #define GET_ITEMS_PATH          @"/base/queryitems/"
-#define GET_THUMBNAIL_PATH      @"/base/querythumbnails/0/"
+#define GET_THUMBNAIL_PATH      @"/base/querythumbnails/"
 #define POST_DEVICE_PATH        @"/base/devicetoken/"
 #define POST_FEEDBACK_PATH      @"/base/feedback/"
 
@@ -33,5 +33,5 @@
 - (void)getItemsCount:(NSInteger)count withBlock:(void(^)(id, NSString *, NSError *))block;
 
 // get thumbnails default 20
-- (void)getThumbnailsWithBlock:(void(^)(id, NSString *, NSError *))block;
+- (void)getThumbnailsStartPosition:(NSUInteger)startPosition withBlock:(void(^)(id, NSString *, NSError *))block;
 @end

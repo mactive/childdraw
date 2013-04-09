@@ -14,6 +14,7 @@
 #import "ModelDownload.h"
 #import "MainViewController.h"
 #import "ThumbnailUIButton.h"
+#import "SettingViewController.h"
 #import "MBProgressHUD.h"
 #import "AppDelegate.h"
 #import "DDLog.h"
@@ -31,7 +32,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property(strong,nonatomic)NSArray *sourceData;
 @property(strong, nonatomic)NSMutableDictionary * sourceDict;
 @property(strong, nonatomic)UITableView * tableView;
-
+@property(strong, nonatomic)UIButton *loadMoreButton;
+@property( nonatomic, readwrite) NSUInteger startInt;
+@property(nonatomic, readwrite) BOOL isLOADMORE;
 @end
 
 @implementation ListViewController
@@ -40,6 +43,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize sourceData;
 @synthesize sourceDict;
 @synthesize tableView;
+@synthesize loadMoreButton;
+@synthesize startInt;
+@synthesize isLOADMORE;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -66,62 +72,123 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.view.backgroundColor = BGCOLOR;
     CGRect tableRect = CGRectMake(0, 0, TOTAL_WIDTH, self.view.frame.size.height -30);
     self.tableView = [[UITableView alloc] initWithFrame:tableRect style:UITableViewStylePlain];
-    
     self.tableView.backgroundColor = BGCOLOR;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     //    self.tableView.separatorColor = SEPCOLOR;
-    [self.tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];
-    
+    self.tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 60)];
     self.tableView.delegate = self;
     self.tableView.dataSource  = self;
+    
+    
+    self.loadMoreButton  = [[UIButton alloc] initWithFrame:CGRectMake(40, 10, 240, 40)];
+    [self.loadMoreButton.titleLabel setFont:[UIFont systemFontOfSize:16.0]];
+    [self.loadMoreButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [self.loadMoreButton setTitleColor:RGBCOLOR(143, 183, 225) forState:UIControlStateHighlighted];
+    [self.loadMoreButton.titleLabel setTextAlignment:UITextAlignmentCenter];
+    [self.loadMoreButton setTitle:T(@"点击加载更多") forState:UIControlStateNormal];
+    [self.loadMoreButton setBackgroundColor:[UIColor clearColor]];
+    //    [self.loadMoreButton.layer setBorderColor:[RGBCOLOR(187, 217, 247) CGColor]];
+    //    [self.loadMoreButton.layer setBorderWidth:1.0f];
+    [self.loadMoreButton.layer setCornerRadius:5.0f];
+    [self.loadMoreButton addTarget:self action:@selector(loadMoreAction) forControlEvents:UIControlEventTouchUpInside];
+    [self.loadMoreButton setHidden:YES];
+    
+    [self.tableView.tableFooterView addSubview:self.loadMoreButton];
     [self.view addSubview:self.tableView];
     
     self.sourceData = [[NSArray alloc]init];
-    [self populateData];
+    self.startInt = 0;
+    self.isLOADMORE = NO;
+    
+    ///////////// will appear
+    [self.loadMoreButton setHidden:NO];
+    [self.loadMoreButton setEnabled:YES];
+    
+    if (self.sourceData == nil || [self.sourceData count] == 0) {
+        self.startInt = 0;
+        [self populateData:self.startInt];
+    }
 
+}
+
+-(void)loadMoreAction
+{
+    self.isLOADMORE = YES;
+    [self populateData:self.startInt];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+
 }
 
 // 解析公司列表
-- (void)populateData
+- (void)populateData:(NSUInteger)start
 {
     MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     HUD.labelText = T(@"努力加载中");
     
-    [[AppNetworkAPIClient sharedClient]getThumbnailsWithBlock:^(id responseDict, NSString *thumbnailPrefix, NSError *error) {
+    [[AppNetworkAPIClient sharedClient]getThumbnailsStartPosition:start withBlock:^(id responseDict, NSString *thumbnailPrefix, NSError *error) {
         //
         if (responseDict != nil) {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
-
+            
+            NSMutableArray *allData = [[NSMutableArray alloc]initWithArray:self.sourceData];
             NSArray *tempArray = [[NSArray alloc] initWithArray:responseDict];
             NSMutableArray *tempMutableArray = [[NSMutableArray alloc]init];
-            NSEntityDescription *entity = [NSEntityDescription entityForName:@"Zipfile" inManagedObjectContext:self.managedObjectContext];
             
-            for (int i=0; i < [tempArray count]; i++) {
-                NSDictionary *dict = [tempArray objectAtIndex:i];
-                Zipfile *aZipfile = [[ModelHelper sharedInstance]findZipfileWithFileName:[[dict objectForKey:@"key"] stringValue]];
-                if (aZipfile == nil) {
-                    aZipfile = (Zipfile *)[[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
-                    [[ModelHelper sharedInstance]populateZipfile:aZipfile withServerJSONData:dict];
-//                    [[ModelDownload sharedInstance] downloadWithURL:dict];
-                }else{
-//                    [[ModelDownload sharedInstance] downloadAndUpdate:aZipfile];
+            
+            NSEntityDescription *entity = [NSEntityDescription entityForName:@"Zipfile" inManagedObjectContext:self.managedObjectContext];            
+            
+            self.startInt += [tempArray count];
+            
+            // load more
+            if (self.isLOADMORE) {
+                for (int i=0; i < [tempArray count]; i++) {
+                    NSDictionary *dict = [tempArray objectAtIndex:i];
+                    Zipfile *aZipfile = [[ModelHelper sharedInstance]findZipfileWithFileName:[[dict objectForKey:@"key"] stringValue]];
+                    if (aZipfile == nil) {
+                        aZipfile = (Zipfile *)[[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
+                        [[ModelHelper sharedInstance]populateZipfile:aZipfile withServerJSONData:dict];
+                    }
+                    [allData addObject:aZipfile];
                 }
-                [tempMutableArray addObject:aZipfile];
+                self.sourceData = [[NSArray alloc]initWithArray:allData];
+            }
+            // first data
+            else{
+                for (int i=0; i < [tempArray count]; i++) {
+                    NSDictionary *dict = [tempArray objectAtIndex:i];
+                    Zipfile *aZipfile = [[ModelHelper sharedInstance]findZipfileWithFileName:[[dict objectForKey:@"key"] stringValue]];
+                    if (aZipfile == nil) {
+                        aZipfile = (Zipfile *)[[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
+                        [[ModelHelper sharedInstance]populateZipfile:aZipfile withServerJSONData:dict];
+                    }
+                    [tempMutableArray addObject:aZipfile];
+                }
+                
+                self.sourceData = [[NSArray alloc]initWithArray:tempMutableArray];
             }
             
-            self.sourceData = [[NSArray alloc]initWithArray:tempMutableArray];
+            
+            // 数量太少不出现 load more
+            if([tempArray count] == 0) {
+                [self.loadMoreButton setTitle:T(@"没有更多了") forState:UIControlStateNormal];
+            } else {
+                [self.loadMoreButton setTitle:T(@"点击加载更多") forState:UIControlStateNormal];
+            }
+
             [self.tableView reloadData];
             
         }else{
             [MBProgressHUD hideHUDForView:self.view animated:YES];
-
-//            [ConvenienceMethods showHUDAddedTo:self.view animated:YES text:T(@"网络错误 暂时无法刷新") andHideAfterDelay:1];
         }
+        
+        [self.loadMoreButton setEnabled:YES];
+        [self.loadMoreButton setHidden:NO];
+        self.isLOADMORE = NO;
     }];
 }
 
@@ -140,6 +207,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 #define BUTTON_R_TAG    3
 #define LABEL_R_TAG     4
+#define CELL_BG_TAG     5
 
 #define BUTTON_X        13.0f
 #define BUTTON_Y        0.0f
@@ -149,9 +217,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 #define BG_Y            93.0f
 #define BG_HEIGHT       15.0f
 
-
 - (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier{
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     // left button
     UILabel *labelLeft = [[UILabel alloc]initWithFrame:CGRectMake(BUTTON_X, BUTTON_HEIGHT, BUTTON_WIDTH, LABEL_HEIGHT)];
@@ -181,6 +249,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     UIImageView *cell_bg = [[UIImageView alloc]initWithFrame:CGRectMake(0, BG_Y, TOTAL_WIDTH, BG_HEIGHT)];
     [cell_bg setImage:[UIImage imageNamed:@"cell_shadow.png"]];
+    cell_bg.tag = CELL_BG_TAG;
     
     [cell.contentView addSubview:cell_bg];
     [cell.contentView addSubview:labelLeft];
@@ -237,6 +306,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [leftButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
     [rightButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+    
+    // bgview
+    UIImageView *bgView = (UIImageView *)[cell viewWithTag:CELL_BG_TAG];
+    
+    if (count %2 == 0) {
+        [bgView setImage:[UIImage imageNamed:@"cell_shadow.png"]];
+        bgView.frame = CGRectMake(0, BG_Y, TOTAL_WIDTH, BG_HEIGHT);
+    }else{
+        [bgView setImage:[UIImage imageNamed:@"half_cell_shadow.png"]];
+        bgView.frame = CGRectMake(0, BG_Y, TOTAL_WIDTH/2, BG_HEIGHT);
+    }
 
 }
 
@@ -320,6 +400,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (AppDelegate *)appDelegate
 {
 	return (AppDelegate *)[[UIApplication sharedApplication] delegate];
+}
+
+- (void)settingAction
+{
+    SettingViewController *controller = [[SettingViewController alloc]initWithNibName:nil bundle:nil];
+    [self.navigationController pushViewController:controller animated:YES];
 }
 
 @end
