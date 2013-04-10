@@ -12,6 +12,7 @@
 
 #define M_APPLEID 626129422
 #define WXAPPID @"wx4b9a37d1d5fc4db2"
+#define FEEDBACK_EMAIL @"babydrawapp@gmail.com"
 
 
 #define CUSTOM_NAV_HEIGHT 40.0f

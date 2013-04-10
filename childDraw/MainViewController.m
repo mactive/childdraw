@@ -369,7 +369,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)enterAction
 {
     self.albumViewController.albumArray = self.albumArray;
-    self.albumViewController.shareView = [[ShareWithPhotoView alloc]initWithFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_WIDTH)];
+//    self.albumViewController.shareView = [[ShareWithPhotoView alloc]initWithFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_WIDTH)];
     [self.albumViewController refreshSubView];
     [self.albumViewController setHidesBottomBarWhenPushed:YES];
     // Pass the selected object to the new view controller.
