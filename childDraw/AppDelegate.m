@@ -110,6 +110,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)startMainSession
 {
+    // badge back to zero
+    [UIApplication sharedApplication].applicationIconBadgeNumber=0;
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
