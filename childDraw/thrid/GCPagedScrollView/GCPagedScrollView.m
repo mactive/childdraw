@@ -8,6 +8,7 @@
 
 #import "GCPagedScrollView.h"
 #import <QuartzCore/CATransaction.h>
+#import "StyledPageControl.h"
 
 NSString * const GCPagedScrollViewContentOffsetKey = @"contentOffset";
 const CGFloat GCPagedScrollViewPageControlHeight = 36.0;
@@ -15,7 +16,8 @@ const CGFloat GCPagedScrollViewPageControlHeight = 36.0;
 @interface GCPagedScrollView ()
 
 @property (nonatomic, readonly) NSMutableArray* views;
-@property (nonatomic, readonly) UIPageControl* pageControl;
+//@property (nonatomic, readonly) UIPageControl* pageControl;
+@property (nonatomic, strong) StyledPageControl *pageControl;
 
 - (void) updateViewPositionAndPageControl;
 
@@ -39,13 +41,21 @@ const CGFloat GCPagedScrollViewPageControlHeight = 36.0;
         self.scrollsToTop = NO;
         
         //Place page control
-        CGRect frame = CGRectMake(self.contentOffset.x, 0, self.frame.size.width, GCPagedScrollViewPageControlHeight);
-        UIPageControl* aPageControl = [[UIPageControl alloc] initWithFrame:frame];
+//        CGRect frame = CGRectMake(self.contentOffset.x, 0, self.frame.size.width, GCPagedScrollViewPageControlHeight);
+//        UIPageControl* aPageControl = [[UIPageControl alloc] initWithFrame:frame];
+//        [aPageControl addTarget:self action:@selector(changePage:) forControlEvents:UIControlEventValueChanged];
+//        aPageControl.defersCurrentPageDisplay = YES;
+//        aPageControl.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin);
+//        [self addSubview:aPageControl];
+        
+        StyledPageControl *aPageControl = [[StyledPageControl alloc]initWithFrame:CGRectZero];
+        [aPageControl setFrame:CGRectMake(20,(self.frame.size.height-20)/2,self.frame.size.width-40,20)];
         [aPageControl addTarget:self action:@selector(changePage:) forControlEvents:UIControlEventValueChanged];
-        aPageControl.defersCurrentPageDisplay = YES;
-        aPageControl.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin);
+        [aPageControl setPageControlStyle:PageControlStyleWithPageNumber];
+        [aPageControl setUserInteractionEnabled:NO];
         [self addSubview:aPageControl];
-        pageControl = aPageControl;  
+
+        pageControl = aPageControl;
     }
     return self;
 }

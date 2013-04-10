@@ -18,7 +18,7 @@
 #import "ListViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "ShareWithPhotoView.h"
-
+#import "MBProgressHUD.h"
 #import "DDLog.h"
 // Log levels: off, error, warn, info, verbose
 #if DEBUG
@@ -30,6 +30,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @interface MainViewController ()<PassValueDelegate>
 {
     SystemSoundID completeSound;
+    MBProgressHUD *HUD;
 }
 
 @property(strong, nonatomic)UIImageView *titleImage;
@@ -51,6 +52,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property(strong, nonatomic)UIView *downloadView;
 @property(strong, nonatomic)UILabel *dlNumber;
 @property(strong, nonatomic)UILabel *dlTitle;
+
 @end
 
 @implementation MainViewController
@@ -72,6 +74,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize downloadView;
 @synthesize dlNumber,dlTitle;
 @synthesize transition;
+@synthesize titleString;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -123,7 +126,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.transition.type = kCATransitionFade;
     self.transition.timingFunction = UIViewAnimationCurveEaseInOut;
     self.transition.subtype = kCATransitionFromLeft;
-
+    self.title = PRODUCT_NAME;
 }
 - (void)passNumberValue:(NSNumber *)value andTitle:(NSString *)title
 {
@@ -134,21 +137,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
 }
 - (void)passStringValue:(NSString *)value andIndex:(NSUInteger)index
-{
+{    
     if ([value isEqualToString:DOWNLOADFINISH]) {
         [self downloadFinish];
     }else if([value isEqualToString:DOWNLOADING]){
         [self.mainView setHidden:YES];
         [self.downloadView setAlpha:1];
         [self.downloadView setHidden:NO];
-        self.dlNumber.text = T(@":)");
 
     }else if ([value isEqualToString:DOWNLOADFAILED])
     {
         [self.mainView setHidden:YES];
         [self.downloadView setAlpha:1];
         [self.downloadView setHidden:NO];
-        self.dlNumber.text = T(@":(");
+        self.dlNumber.text = T(@"=.=!");
         self.dlTitle.text = T(@"Failed");
     }
 }
@@ -289,18 +291,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.dlTitle.font = [UIFont systemFontOfSize:14.0f];
     self.dlTitle.textColor = GRAYCOLOR;
     self.dlTitle.textAlignment = NSTextAlignmentCenter;
-    self.dlTitle.text = T(@"Waiting...");
+    self.dlTitle.text = T(@"Loading...");
     
     self.dlNumber = [[UILabel alloc]initWithFrame:bgView.frame];
     self.dlNumber.backgroundColor = [UIColor clearColor];
     self.dlNumber.font = BIGCUSTOMFONT;
     self.dlNumber.textColor = DARKCOLOR;
     self.dlNumber.textAlignment = NSTextAlignmentCenter;
+    self.dlNumber.text  = T(@">_<");
     
     [self.downloadView addSubview:bgView];
     [self.downloadView addSubview:self.dlNumber];
     [self.downloadView addSubview:self.dlTitle];
-    [self.downloadView setHidden:YES];
+//    [self.downloadView setHidden:YES];
     
     [self.view addSubview:self.downloadView];
 }
@@ -371,6 +374,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.albumViewController.shareView = [[ShareWithPhotoView alloc]initWithFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_WIDTH)];
     [self.albumViewController refreshSubView];
     [self.albumViewController setHidesBottomBarWhenPushed:YES];
+    self.albumViewController.title = self.titleString;
     // Pass the selected object to the new view controller.
     [self.navigationController pushViewController:self.albumViewController animated:YES];
 

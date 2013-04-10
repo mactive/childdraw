@@ -13,7 +13,9 @@
 #define M_APPLEID 626129422
 #define WXAPPID @"wx4b9a37d1d5fc4db2"
 #define FEEDBACK_EMAIL @"babydrawapp@gmail.com"
+#define PRODUCT_NAME @"宝宝来画画"
 
+#define IS_IPHONE_5 ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
 #define CUSTOM_NAV_HEIGHT 40.0f
 #define ZIPPREFIX @"http://babylearn.b0.upaiyun.com/"

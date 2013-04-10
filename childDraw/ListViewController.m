@@ -289,6 +289,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     leftLabel.text = leftZipfile.title;
     [leftButton setAvatar:leftZipfile.fileName];
     
+    // bgview
+    UIImageView *bgView = (UIImageView *)[cell viewWithTag:CELL_BG_TAG];
+
     
     // 偶数
     if (count %2 == 0 || (count %2 == 1 && indexPath.row < floor(count / 2))) {        
@@ -296,8 +299,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         rightLabel.text = rightZipfile.title;
         [rightButton setAvatar:rightZipfile.fileName];
         [rightButton setHidden:NO];
+        [bgView setImage:[UIImage imageNamed:@"cell_shadow.png"]];
+        bgView.frame = CGRectMake(0, BG_Y, TOTAL_WIDTH, BG_HEIGHT);
     }else{
         [rightButton setHidden:YES];
+        [bgView setImage:[UIImage imageNamed:@"half_cell_shadow.png"]];
+        bgView.frame = CGRectMake(0, BG_Y, TOTAL_WIDTH/2, BG_HEIGHT);
     }
     
     leftButton.buttonIndex = indexPath.row * BUTTON_PER_CELL;
@@ -306,16 +313,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [leftButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
     [rightButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
     
-    // bgview
-    UIImageView *bgView = (UIImageView *)[cell viewWithTag:CELL_BG_TAG];
-    
-    if (count %2 == 0) {
-        [bgView setImage:[UIImage imageNamed:@"cell_shadow.png"]];
-        bgView.frame = CGRectMake(0, BG_Y, TOTAL_WIDTH, BG_HEIGHT);
-    }else{
-        [bgView setImage:[UIImage imageNamed:@"half_cell_shadow.png"]];
-        bgView.frame = CGRectMake(0, BG_Y, TOTAL_WIDTH/2, BG_HEIGHT);
-    }
 
 }
 
@@ -327,7 +324,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     Zipfile *theZipfile = [self.sourceData objectAtIndex:sender.buttonIndex];
     
     [self appDelegate].mainViewController.planetString = theZipfile.fileName;
-    [self appDelegate].mainViewController.title = theZipfile.title;
+    [self appDelegate].mainViewController.titleString = theZipfile.title;
 
     [ModelDownload sharedInstance].lastPlanet = theZipfile.fileName;
     /* 绑定这两个 delegate */

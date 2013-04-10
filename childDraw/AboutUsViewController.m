@@ -38,27 +38,36 @@
 #define ABOUT_HEIGHT 120.0f
 
 
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    CGFloat sep;
+
+    if (IS_IPHONE_5) {
+        sep = 35.0f;
+    }else{
+        sep = 20.0f;
+    }
+    
 	// Do any additional setup after loading the view.
     self.title = T(@"关于我们");
-    self.drawImageView = [[UIImageView alloc]initWithFrame:CGRectMake((TOTAL_WIDTH - DRAW_WIDTH)/2, 10, DRAW_WIDTH, DRAW_HEIGHT)];
+    self.drawImageView = [[UIImageView alloc]initWithFrame:CGRectMake((TOTAL_WIDTH - DRAW_WIDTH)/2, sep/2, DRAW_WIDTH, DRAW_HEIGHT)];
     self.drawImageView.image = [UIImage imageNamed:@"about_draw.png"];
     
-    self.aboutLabel = [[UILabel alloc]initWithFrame:CGRectMake((TOTAL_WIDTH - ABOUT_L_WIDTH)/2, DRAW_HEIGHT +20, ABOUT_L_WIDTH, ABOUT_L_HEIGHT)];
-    self.aboutLabel.text = T(@"每天更新的简笔画，享受和孩子一起画画的时光。\n\n清新的选材，清晰的分步教学，有乐趣的互动。让我们一起绚出孩子们精彩的创意吧。");
+    self.aboutLabel = [[UILabel alloc]initWithFrame:CGRectMake((TOTAL_WIDTH - ABOUT_L_WIDTH)/2, DRAW_HEIGHT +sep, ABOUT_L_WIDTH, ABOUT_L_HEIGHT)];
+    self.aboutLabel.text = T(@"每天更新的简笔画，享受和孩子一起画画的时光 :)\n\n清新的选材，清晰的分步教学，有乐趣的互动。让我们一起秀出孩子们精彩的创意吧！");
     self.aboutLabel.textColor = DARKCOLOR;
     self.aboutLabel.font = [UIFont systemFontOfSize:12.0f];
     self.aboutLabel.numberOfLines = 0;
     self.aboutLabel.backgroundColor = [UIColor clearColor];
     
-    self.aboutImageView = [[UIImageView alloc]initWithFrame:CGRectMake((TOTAL_WIDTH - ABOUT_WIDTH)/2, DRAW_HEIGHT + ABOUT_L_HEIGHT +90, ABOUT_WIDTH, ABOUT_HEIGHT)];
+    self.aboutImageView = [[UIImageView alloc]initWithFrame:CGRectMake((TOTAL_WIDTH - ABOUT_WIDTH)/2, DRAW_HEIGHT + ABOUT_L_HEIGHT +sep*2, ABOUT_WIDTH, ABOUT_HEIGHT)];
     self.aboutImageView.image = [UIImage imageNamed:@"about_team.png"];
     
     self.enterButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.enterButton setTitle:@"Enter" forState:UIControlStateNormal];
-    [self.enterButton setFrame:CGRectMake(56, 215, 188, 43)];
+    [self.enterButton setFrame:CGRectMake(66, DRAW_HEIGHT+ABOUT_L_HEIGHT+ABOUT_HEIGHT +sep*3, 188, 43)];
     [self.enterButton setBackgroundImage:[UIImage imageNamed:@"button_bg.png"] forState:UIControlStateNormal];
     [self.enterButton setBackgroundImage:[UIImage imageNamed:@"button_highlight_bg.png"] forState:UIControlStateHighlighted];
     [self.enterButton setTitle:T(@"建议或反馈") forState:UIControlStateNormal];
@@ -69,6 +78,8 @@
     [self.view addSubview:self.aboutLabel];
     [self.view addSubview:self.aboutImageView];
     [self.view addSubview:self.enterButton];
+    
+
     
 }
 

@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-
 //Simple UIScrollView subclass that automatically handle UIPageControl and paged content
 @interface GCPagedScrollView : UIScrollView
 

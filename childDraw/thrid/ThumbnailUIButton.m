@@ -31,24 +31,24 @@
         [self.layer setBorderColor:BORDERCOLOR.CGColor];
         [self.layer setBorderWidth:1.0f];
         
-//        self.colorArray = [[NSArray alloc] initWithObjects:
-//                           RGBCOLOR(230,255,193),
-//                           RGBCOLOR(190,236,255),
-//                           RGBCOLOR(255,229,244),
-//                           RGBCOLOR(218,219,222),
-//                           RGBCOLOR(255,225,213),
-//                           RGBCOLOR(242,249,194),
-//                           RGBCOLOR(208,255,238),
-//                           RGBCOLOR(255,213,213),nil];
-        
         self.colorArray = [[NSArray alloc] initWithObjects:
-                           RGBCOLOR(231,117,117),
-                           RGBCOLOR(151,206,45),
-                           RGBCOLOR(117,198,231),
-                           RGBCOLOR(238,175,212),
-                           RGBCOLOR(231,158,130),
-                           RGBCOLOR(66,166,211),
-                           RGBCOLOR(136,143,154),nil];
+                           RGBCOLOR(230,255,193),
+                           RGBCOLOR(214,243,255),
+                           RGBCOLOR(255,229,244),
+                           RGBCOLOR(237,237,237),
+                           RGBCOLOR(249,235,229),
+                           RGBCOLOR(242,247,211),
+                           RGBCOLOR(221,255,243),
+                           RGBCOLOR(254,232,232),nil];
+        
+//        self.colorArray = [[NSArray alloc] initWithObjects:
+//                           RGBCOLOR(231,117,117),
+//                           RGBCOLOR(151,206,45),
+//                           RGBCOLOR(117,198,231),
+//                           RGBCOLOR(238,175,212),
+//                           RGBCOLOR(231,158,130),
+//                           RGBCOLOR(66,166,211),
+//                           RGBCOLOR(136,143,154),nil];
         self.backgroundColor = [UIColor whiteColor];
 
         NSUInteger randomIndex = arc4random() % [self.colorArray count];

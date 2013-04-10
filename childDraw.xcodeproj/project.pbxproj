@@ -23,6 +23,11 @@
 		26502E451715143A005BFD7B /* about_draw@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26502E421715143A005BFD7B /* about_draw@2x.png */; };
 		26502E48171514E7005BFD7B /* AboutUsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26502E47171514E6005BFD7B /* AboutUsViewController.m */; };
 		26502E4A171535D7005BFD7B /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26502E49171535D6005BFD7B /* AssetsLibrary.framework */; };
+		26502E5217156FC1005BFD7B /* pagecontrol-thumb-normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 26502E4C17156FC1005BFD7B /* pagecontrol-thumb-normal.png */; };
+		26502E5317156FC1005BFD7B /* pagecontrol-thumb-normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26502E4D17156FC1005BFD7B /* pagecontrol-thumb-normal@2x.png */; };
+		26502E5417156FC1005BFD7B /* pagecontrol-thumb-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 26502E4E17156FC1005BFD7B /* pagecontrol-thumb-selected.png */; };
+		26502E5517156FC1005BFD7B /* pagecontrol-thumb-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26502E4F17156FC1005BFD7B /* pagecontrol-thumb-selected@2x.png */; };
+		26502E5617156FC1005BFD7B /* StyledPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 26502E5117156FC1005BFD7B /* StyledPageControl.m */; };
 		2652C6AA170969C500054D45 /* list_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2652C6A8170969C500054D45 /* list_button@2x.png */; };
 		2652C6AB170969C500054D45 /* setting_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2652C6A9170969C500054D45 /* setting_button@2x.png */; };
 		2652C6AF1709840700054D45 /* childDraw.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2652C6AD1709840700054D45 /* childDraw.xcdatamodeld */; };
@@ -93,6 +98,13 @@
 		26502E46171514E6005BFD7B /* AboutUsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutUsViewController.h; sourceTree = "<group>"; };
 		26502E47171514E6005BFD7B /* AboutUsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutUsViewController.m; sourceTree = "<group>"; };
 		26502E49171535D6005BFD7B /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		26502E4C17156FC1005BFD7B /* pagecontrol-thumb-normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pagecontrol-thumb-normal.png"; sourceTree = "<group>"; };
+		26502E4D17156FC1005BFD7B /* pagecontrol-thumb-normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pagecontrol-thumb-normal@2x.png"; sourceTree = "<group>"; };
+		26502E4E17156FC1005BFD7B /* pagecontrol-thumb-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pagecontrol-thumb-selected.png"; sourceTree = "<group>"; };
+		26502E4F17156FC1005BFD7B /* pagecontrol-thumb-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pagecontrol-thumb-selected@2x.png"; sourceTree = "<group>"; };
+		26502E5017156FC1005BFD7B /* StyledPageControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyledPageControl.h; sourceTree = "<group>"; };
+		26502E5117156FC1005BFD7B /* StyledPageControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyledPageControl.m; sourceTree = "<group>"; };
+		26502E571715791C005BFD7B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		2652C6A8170969C500054D45 /* list_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "list_button@2x.png"; sourceTree = "<group>"; };
 		2652C6A9170969C500054D45 /* setting_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "setting_button@2x.png"; sourceTree = "<group>"; };
 		2652C6AE1709840700054D45 /* childDraw.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = childDraw.xcdatamodel; sourceTree = "<group>"; };
@@ -188,6 +200,19 @@
 				261CBF2E1712B39700F59321 /* WXApiObject.h */,
 			);
 			path = whchat;
+			sourceTree = "<group>";
+		};
+		26502E4B17156FC1005BFD7B /* StypePagecontrol */ = {
+			isa = PBXGroup;
+			children = (
+				26502E4C17156FC1005BFD7B /* pagecontrol-thumb-normal.png */,
+				26502E4D17156FC1005BFD7B /* pagecontrol-thumb-normal@2x.png */,
+				26502E4E17156FC1005BFD7B /* pagecontrol-thumb-selected.png */,
+				26502E4F17156FC1005BFD7B /* pagecontrol-thumb-selected@2x.png */,
+				26502E5017156FC1005BFD7B /* StyledPageControl.h */,
+				26502E5117156FC1005BFD7B /* StyledPageControl.m */,
+			);
+			path = StypePagecontrol;
 			sourceTree = "<group>";
 		};
 		2652C6AC170983E800054D45 /* Model */ = {
@@ -364,6 +389,7 @@
 		26F39F7416FC45CB001A6EF9 /* thrid */ = {
 			isa = PBXGroup;
 			children = (
+				26502E4B17156FC1005BFD7B /* StypePagecontrol */,
 				261CBF2B1712B39700F59321 /* whchat */,
 				261CBF201711404800F59321 /* ThumbnailUIButton.h */,
 				261CBF211711404800F59321 /* ThumbnailUIButton.m */,
@@ -413,6 +439,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				"zh-Hans",
 			);
 			mainGroup = 26F39F3716FC3DEF001A6EF9;
 			productRefGroup = 26F39F4116FC3DEF001A6EF9 /* Products */;
@@ -458,6 +485,10 @@
 				26502E431715143A005BFD7B /* us_button@2x.png in Resources */,
 				26502E441715143A005BFD7B /* about_team.png in Resources */,
 				26502E451715143A005BFD7B /* about_draw@2x.png in Resources */,
+				26502E5217156FC1005BFD7B /* pagecontrol-thumb-normal.png in Resources */,
+				26502E5317156FC1005BFD7B /* pagecontrol-thumb-normal@2x.png in Resources */,
+				26502E5417156FC1005BFD7B /* pagecontrol-thumb-selected.png in Resources */,
+				26502E5517156FC1005BFD7B /* pagecontrol-thumb-selected@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,6 +537,7 @@
 				26502E3C1713FCAD005BFD7B /* ShareWithPhotoView.m in Sources */,
 				26502E3F171416AE005BFD7B /* ServerDataTransformer.m in Sources */,
 				26502E48171514E7005BFD7B /* AboutUsViewController.m in Sources */,
+				26502E5617156FC1005BFD7B /* StyledPageControl.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -516,6 +548,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				26F39F4D16FC3DEF001A6EF9 /* en */,
+				26502E571715791C005BFD7B /* zh-Hans */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

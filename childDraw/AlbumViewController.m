@@ -67,14 +67,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.scrollView.pagingEnabled = YES;
     self.scrollView.delegate = self;
     
-    self.shareView.delegate = self;
-    
     [self refreshSubView];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+
     [self.scrollView setPage:self.albumIndex];
     
     self.targetView = [self.targetArray objectAtIndex:self.scrollView.page];
@@ -83,23 +82,25 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (self.shareView != nil) {
         count = count + 1;
     }
-    self.title = [NSString stringWithFormat:@"%d/%d",self.scrollView.page+1,count];
+    
+    self.shareView.delegate = self;
+
 }
 
 // refresh
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    if ([scrollView isEqual:self.scrollView]) {
-        //DDLogVerbose(@"End page %d %@",self.scrollView.page,self.targetView);
-        self.targetView = [self.targetArray objectAtIndex:self.scrollView.page];
-        NSUInteger count = [self.albumArray count];
-        if (self.shareView != nil) {
-            count = count + 1;
-        }
-        self.title = [NSString stringWithFormat:@"%d/%d",self.scrollView.page+1,count];
-    }
-}
+//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+//{
+//    if ([scrollView isEqual:self.scrollView]) {
+//        //DDLogVerbose(@"End page %d %@",self.scrollView.page,self.targetView);
+//        self.targetView = [self.targetArray objectAtIndex:self.scrollView.page];
+//        NSUInteger count = [self.albumArray count];
+//        if (self.shareView != nil) {
+//            count = count + 1;
+//        }
+//        self.title = [NSString stringWithFormat:@"%d/%d",self.scrollView.page+1,count];
+//    }
+//}
 
 
 #pragma mark -
@@ -156,7 +157,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     if ([value isEqualToString:PHOTOACTION] && index == 1) {
         //
-        
         [self takePhotoFromCamera];
     }
 }
@@ -214,7 +214,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.pickerController = [[UIImagePickerController alloc] init];
     self.pickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
 	self.pickerController.delegate = self;
-	self.pickerController.allowsEditing = NO;
+	self.pickerController.allowsEditing = YES;
     
     [self presentModalViewController:self.pickerController animated:YES];
 }
@@ -226,15 +226,16 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     
 	UIImage *originalImage = [info objectForKey:UIImagePickerControllerOriginalImage];
-    UIImage *screenImage = [originalImage imageByScalingToSize:CGSizeMake(320, 480)];
+    UIImage *screenImage = [originalImage imageByScalingToSize:CGSizeMake(320, 320)];
     NSData *imageData = UIImageJPEGRepresentation(screenImage, JPEG_QUALITY);
     DDLogVerbose(@"Imagedata size %i", [imageData length]);
     UIImage *image = [UIImage imageWithData:imageData];
     
     // HUD show
-    MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:picker.view animated:YES];
+    MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     HUD.removeFromSuperViewOnHide = YES;
     HUD.labelText = T(@"已经保存至本地");
+    HUD.mode = MBProgressHUDModeText;
     
     if (picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
         // Save Video to Photo Album
@@ -242,16 +243,31 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         [library writeImageDataToSavedPhotosAlbum:imageData
                                          metadata:nil
                                   completionBlock:^(NSURL *assetURL, NSError *error){}];
-        [HUD hide:YES afterDelay:1];
+        [HUD hide:YES afterDelay:2];
         [picker dismissModalViewControllerAnimated:YES];
-        [self.scrollView setPage:[self.albumArray count]+1];
-        [self.shareView afterPhoto:image];
+        [self finishPhoto:image];
 
     }else if(picker.sourceType == UIImagePickerControllerSourceTypePhotoLibrary){
 //        self.selectedImageView.image = image;
 //        self.uploadImage = image;
 //        [picker.view addSubview:self.selectedView];
     }
+}
+
+- (void)finishPhoto:(UIImage *)image
+{
+    NSUInteger count = [self.albumArray count];
+    
+    [self.scrollView setPage:count];
+    self.targetView = [self.targetArray objectAtIndex:count];
+    
+    [self.shareView afterPhoto:image];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self.shareView removePhoto];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker

@@ -90,7 +90,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     // actions
     [self getConfig];
     
-    _defaultGetCount  = 7;
+    _defaultGetCount  = 1;
     [self downloadLastFiles:_defaultGetCount];
     
 //    [WXApi registerApp:WXAPPID];
@@ -117,7 +117,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     self.mainViewController = [[MainViewController alloc]initWithNibName:nil bundle:nil];
     UINavigationController *mainController = [[UINavigationController alloc] initWithRootViewController:self.mainViewController];
-    self.mainViewController.title = StringHasValue(self.lastPlanetTitle) ? self.lastPlanetTitle : T(@"一起来画画") ;
     self.mainViewController.managedObjectContext = _managedObjectContext;
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -162,6 +161,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             [self getTheLastPlanet:sourceData];
             self.mainViewController.planetString = self.lastPlanet;
+            self.mainViewController.titleString = self.lastPlanetTitle;
 
 //            self.lastPlanet = @"1364803267";
             [ModelDownload sharedInstance].lastPlanet = self.lastPlanet;
@@ -255,6 +255,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    [self startIntroSession];
+    [self downloadLastFiles:1];
 }
 
 - (void)saveContext

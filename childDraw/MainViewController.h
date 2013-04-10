@@ -12,6 +12,8 @@
 @interface MainViewController : UIViewController
 
 @property(strong, nonatomic)NSString *planetString;
+@property(strong, nonatomic)NSString *titleString;
+
 @property(strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 - (void)downloadLastPlanet:(NSNumber *)value andTitle:(NSString *)title;

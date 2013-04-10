@@ -13,4 +13,5 @@
 
 @property(nonatomic,assign) NSObject<PassValueDelegate> *delegate;
 - (void)afterPhoto:(UIImage *)image;
+- (void)removePhoto;
 @end
