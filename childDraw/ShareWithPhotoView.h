@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PassValueDelegate.h"
 
 @interface ShareWithPhotoView : UIView
 
+@property(nonatomic,assign) NSObject<PassValueDelegate> *delegate;
+- (void)afterPhoto:(UIImage *)image;
 @end

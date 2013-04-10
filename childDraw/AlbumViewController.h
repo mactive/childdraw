@@ -9,14 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "GCPagedScrollView.h"
 #import "BBCustomBackButtonViewController.h"
+#import "PassValueDelegate.h"
+#import "ShareWithPhotoView.h"
 
-@interface AlbumViewController : BBCustomBackButtonViewController
+@interface AlbumViewController : BBCustomBackButtonViewController<PassValueDelegate>
 
 @property (nonatomic, readonly) GCPagedScrollView* scrollView;
 @property (nonatomic, strong) NSArray *albumArray;
 @property (nonatomic, strong) NSArray *titleArray;
 @property (nonatomic, readwrite) NSUInteger albumIndex;
-@property (nonatomic, strong) UIView *shareView;
+@property (nonatomic, strong) ShareWithPhotoView *shareView;
 
 
 - (void)refreshSubView;

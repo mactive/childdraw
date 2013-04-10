@@ -337,11 +337,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self moveYOffest:0 andDelay:0.3 andAlpha:1 withView:self.mainView];
     
     
-    DDLogVerbose(@"Main View %@",self.planetString);
+//    DDLogVerbose(@"Main View %@",self.planetString);
     // that is overall seconds. hence: frames divided by about 30 or 20.
     [self makeArrayWithString:self.planetString];
     
-    DDLogVerbose(@"%@",self.animArea.animationImages);
     [self.animArea setAnimationImages:self.animationArray];
     self.animArea.animationRepeatCount = 0;
     self.animArea.animationDuration = 1.2;
@@ -369,7 +368,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)enterAction
 {
     self.albumViewController.albumArray = self.albumArray;
-//    self.albumViewController.shareView = [[ShareWithPhotoView alloc]initWithFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_WIDTH)];
+    self.albumViewController.shareView = [[ShareWithPhotoView alloc]initWithFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_WIDTH)];
     [self.albumViewController refreshSubView];
     [self.albumViewController setHidesBottomBarWhenPushed:YES];
     // Pass the selected object to the new view controller.

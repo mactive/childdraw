@@ -41,10 +41,13 @@ alpha:(a)]
 
 #define TOTAL_WIDTH 320.0f
 #define BIG_BUTTON_WIDTH 128.0f
+#define JPEG_QUALITY 0.6
+
 
 #define DOWNLOADFINISH @"DownloadFinish"
 #define DOWNLOADING @"Downloading"
 #define DOWNLOADFAILED @"DownloadFailed"
+#define PHOTOACTION @"PhotoForShare"
 // font
 #define BIGCUSTOMFONT [UIFont fontWithName:@"Museo" size:40.0f]
 #define CUSTOMFONT [UIFont fontWithName:@"Museo" size:16.0f]
