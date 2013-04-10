@@ -14,7 +14,7 @@
 #import "ModelDownload.h"
 #import "MainViewController.h"
 #import "ThumbnailUIButton.h"
-#import "SettingViewController.h"
+#import "AboutUsViewController.h"
 #import "MBProgressHUD.h"
 #import "AppDelegate.h"
 #import "ServerDataTransformer.h"
@@ -57,7 +57,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         // Custom initialization
 
         self.settingButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 29)];
-        [self.settingButton setBackgroundImage:[UIImage imageNamed: @"setting_button.png"] forState:UIControlStateNormal];
+        [self.settingButton setBackgroundImage:[UIImage imageNamed:@"us_button.png"] forState:UIControlStateNormal];
         [self.settingButton addTarget:self action:@selector(settingAction) forControlEvents:UIControlEventTouchUpInside];
         
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.settingButton];
@@ -291,14 +291,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     
     // 偶数
-    if (count %2 == 0 || (count %2 == 1 && indexPath.row < floor(count / 2))) {
-        NSLog(@"%d %d show",indexPath.row, count);
-        
+    if (count %2 == 0 || (count %2 == 1 && indexPath.row < floor(count / 2))) {        
         Zipfile *rightZipfile = [self.sourceData objectAtIndex:[self rightIndex:indexPath]];
         rightLabel.text = rightZipfile.title;
         [rightButton setAvatar:rightZipfile.fileName];
         [rightButton setHidden:NO];
-        
     }else{
         [rightButton setHidden:YES];
     }
@@ -406,7 +403,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)settingAction
 {
-    SettingViewController *controller = [[SettingViewController alloc]initWithNibName:nil bundle:nil];
+    AboutUsViewController *controller = [[AboutUsViewController alloc]initWithNibName:nil bundle:nil];
     [self.navigationController pushViewController:controller animated:YES];
 }
 
