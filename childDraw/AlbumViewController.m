@@ -225,7 +225,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     
-	UIImage *originalImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+	UIImage *originalImage = [info objectForKey:UIImagePickerControllerEditedImage];
     UIImage *screenImage = [originalImage imageByScalingToSize:CGSizeMake(320, 320)];
     NSData *imageData = UIImageJPEGRepresentation(screenImage, JPEG_QUALITY);
     DDLogVerbose(@"Imagedata size %i", [imageData length]);
