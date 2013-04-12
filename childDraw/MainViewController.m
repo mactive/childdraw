@@ -14,6 +14,7 @@
 #import "AppDelegate.h"
 #import "Zipfile.h"
 #import "ModelHelper.h"
+#import "ModelDownload.h"
 #import "PassValueDelegate.h"
 #import "ListViewController.h"
 #import <QuartzCore/QuartzCore.h>
@@ -52,6 +53,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property(strong, nonatomic)UIView *downloadView;
 @property(strong, nonatomic)UILabel *dlNumber;
 @property(strong, nonatomic)UILabel *dlTitle;
+
+@property(readwrite, nonatomic)CGFloat offsetViewY;
 
 @end
 
@@ -114,6 +117,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.albumArray = [[NSArray alloc]init];
     self.animationArray = [[NSArray alloc]init];
     
+    if (IS_IPHONE_5) {
+        self.offsetViewY = 100.0f;
+    }else{
+        self.offsetViewY = 50.0f;
+    }
     
     // download view
     [self initMainView];
@@ -127,6 +135,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.transition.timingFunction = UIViewAnimationCurveEaseInOut;
     self.transition.subtype = kCATransitionFromLeft;
     self.title = PRODUCT_NAME;
+    
 }
 - (void)passNumberValue:(NSNumber *)value andTitle:(NSString *)title
 {
@@ -175,6 +184,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.aniCount = 0;
     
     NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:NULL];
+    
+    if ([directoryContent count] == 0) {
+        self.theZipfile.isDownload  = [NSNumber numberWithBool:NO];
+        self.theZipfile.isZiped     = [NSNumber numberWithBool:NO];
+        [[ModelDownload sharedInstance]downloadAndUpdate:self.theZipfile];
+        return;
+    }
+    
     for (int count = 0; count < (int)[directoryContent count]; count++)
     {
         NSString *name = [directoryContent objectAtIndex:count];
@@ -190,7 +207,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         if (aRange.location == 0) {
             self.aniCount = self.aniCount + 1;
         }
-//        DDLogVerbose(@"pic %d, ani %d",self.picCount, self.aniCount);
+        DDLogVerbose(@"pic %d, ani %d",self.picCount, self.aniCount);
 
     }
     
@@ -246,12 +263,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)initMainView
 {
-    self.mainView  = [[UIView alloc]initWithFrame:CGRectMake(10, 40, TOTAL_WIDTH-20, self.view.frame.size.height)];
+    self.mainView  = [[UIView alloc]initWithFrame:CGRectMake(10, self.offsetViewY, TOTAL_WIDTH-20, self.view.frame.size.height)];
     self.mainView.backgroundColor = [UIColor clearColor];
     
     self.enterButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.enterButton setTitle:@"Enter" forState:UIControlStateNormal];
-    [self.enterButton setFrame:CGRectMake(56, 280, 188, 43)];
+    [self.enterButton setFrame:CGRectMake(56, 230
+                                          + self.offsetViewY, 188, 43)];
     [self.enterButton setBackgroundImage:[UIImage imageNamed:@"button_bg.png"] forState:UIControlStateNormal];
     [self.enterButton setBackgroundImage:[UIImage imageNamed:@"button_highlight_bg.png"] forState:UIControlStateHighlighted];
     [self.enterButton setImage:[UIImage imageNamed:@"footpoint.png"] forState:UIControlStateNormal];
@@ -282,7 +300,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)initDownloadView
 {
-    self.downloadView  = [[UIView alloc]initWithFrame:CGRectMake((TOTAL_WIDTH-BIG_BUTTON_WIDTH)/2 , 50, BIG_BUTTON_WIDTH, BIG_BUTTON_WIDTH+50)];
+    self.downloadView  = [[UIView alloc]initWithFrame:CGRectMake((TOTAL_WIDTH-BIG_BUTTON_WIDTH)/2 , self.offsetViewY, BIG_BUTTON_WIDTH, BIG_BUTTON_WIDTH+50)];
     UIImageView *bgView = [[UIImageView alloc]initWithFrame:CGRectMake(0 , 50, BIG_BUTTON_WIDTH, BIG_BUTTON_WIDTH)];
     [bgView setImage:[UIImage imageNamed:@"circle_button_bg.png"]];
     
