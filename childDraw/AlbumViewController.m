@@ -84,6 +84,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     self.shareView.delegate = self;
+    
+    [XFox logEvent:EVENT_READING_TIMER withParameters:nil timed:YES];
 
 }
 
@@ -268,6 +270,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     [super viewWillDisappear:animated];
     [self.shareView removePhoto];
+    [XFox endTimedEvent:EVENT_READING_TIMER withParameters:nil];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker

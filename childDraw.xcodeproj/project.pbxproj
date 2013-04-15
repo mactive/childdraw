@@ -48,6 +48,9 @@
 		2666F1C1170C30D700E21BA4 /* ModelDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = 2666F1C0170C30D700E21BA4 /* ModelDownload.m */; };
 		2666F1C3170C424000E21BA4 /* hide_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2666F1C2170C424000E21BA4 /* hide_button@2x.png */; };
 		266921AA1704246400E6D771 /* GCPagedScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 266921A91704246400E6D771 /* GCPagedScrollView.m */; };
+		2672CF41171BF34800E5E251 /* CuteData.m in Sources */ = {isa = PBXBuildFile; fileRef = 2672CF3D171BF34800E5E251 /* CuteData.m */; };
+		2672CF42171BF34800E5E251 /* PageViewLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 2672CF40171BF34800E5E251 /* PageViewLogger.m */; };
+		2672CF44171C040B00E5E251 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2672CF43171C040B00E5E251 /* SystemConfiguration.framework */; };
 		26E5A8781704289D00BEBE65 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26E5A8751704289D00BEBE65 /* Default-568h@2x.png */; };
 		26E5A8791704289D00BEBE65 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 26E5A8761704289D00BEBE65 /* Default.png */; };
 		26E5A87A1704289D00BEBE65 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26E5A8771704289D00BEBE65 /* Default@2x.png */; };
@@ -132,6 +135,12 @@
 		2666F1C2170C424000E21BA4 /* hide_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hide_button@2x.png"; sourceTree = "<group>"; };
 		266921A81704246400E6D771 /* GCPagedScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCPagedScrollView.h; sourceTree = "<group>"; };
 		266921A91704246400E6D771 /* GCPagedScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPagedScrollView.m; sourceTree = "<group>"; };
+		2672CF3C171BF34800E5E251 /* CuteData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CuteData.h; sourceTree = "<group>"; };
+		2672CF3D171BF34800E5E251 /* CuteData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CuteData.m; sourceTree = "<group>"; };
+		2672CF3E171BF34800E5E251 /* LogEventConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogEventConstants.h; sourceTree = "<group>"; };
+		2672CF3F171BF34800E5E251 /* PageViewLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageViewLogger.h; sourceTree = "<group>"; };
+		2672CF40171BF34800E5E251 /* PageViewLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PageViewLogger.m; sourceTree = "<group>"; };
+		2672CF43171C040B00E5E251 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		26E5A8751704289D00BEBE65 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		26E5A8761704289D00BEBE65 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		26E5A8771704289D00BEBE65 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
@@ -176,6 +185,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2672CF44171C040B00E5E251 /* SystemConfiguration.framework in Frameworks */,
 				26502E4A171535D7005BFD7B /* AssetsLibrary.framework in Frameworks */,
 				2652C6B4170987F900054D45 /* CoreData.framework in Frameworks */,
 				26F39FA316FC4842001A6EF9 /* CFNetwork.framework in Frameworks */,
@@ -247,6 +257,18 @@
 			path = GCPagedScrollView;
 			sourceTree = "<group>";
 		};
+		2672CF3B171BF34800E5E251 /* CuteData */ = {
+			isa = PBXGroup;
+			children = (
+				2672CF3C171BF34800E5E251 /* CuteData.h */,
+				2672CF3D171BF34800E5E251 /* CuteData.m */,
+				2672CF3E171BF34800E5E251 /* LogEventConstants.h */,
+				2672CF3F171BF34800E5E251 /* PageViewLogger.h */,
+				2672CF40171BF34800E5E251 /* PageViewLogger.m */,
+			);
+			path = CuteData;
+			sourceTree = "<group>";
+		};
 		26E5A8891705490000BEBE65 /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -295,6 +317,7 @@
 		26F39F4216FC3DEF001A6EF9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2672CF43171C040B00E5E251 /* SystemConfiguration.framework */,
 				26502E49171535D6005BFD7B /* AssetsLibrary.framework */,
 				2652C6B3170987F900054D45 /* CoreData.framework */,
 				26F39FA216FC4842001A6EF9 /* CFNetwork.framework */,
@@ -311,6 +334,7 @@
 		26F39F4916FC3DEF001A6EF9 /* childDraw */ = {
 			isa = PBXGroup;
 			children = (
+				2672CF3B171BF34800E5E251 /* CuteData */,
 				2652C6AC170983E800054D45 /* Model */,
 				26E5A88A1705492300BEBE65 /* Category */,
 				26E5A8891705490000BEBE65 /* Network */,
@@ -538,6 +562,8 @@
 				26502E3F171416AE005BFD7B /* ServerDataTransformer.m in Sources */,
 				26502E48171514E7005BFD7B /* AboutUsViewController.m in Sources */,
 				26502E5617156FC1005BFD7B /* StyledPageControl.m in Sources */,
+				2672CF41171BF34800E5E251 /* CuteData.m in Sources */,
+				2672CF42171BF34800E5E251 /* PageViewLogger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -584,8 +610,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "66A67D19-2880-46D4-A89A-3A21599DA1E0";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "66A67D19-2880-46D4-A89A-3A21599DA1E0";
+				PROVISIONING_PROFILE = "4C205F91-CFEB-4FDA-969B-00EC97CC2A94";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4C205F91-CFEB-4FDA-969B-00EC97CC2A94";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -611,8 +637,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "66A67D19-2880-46D4-A89A-3A21599DA1E0";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "66A67D19-2880-46D4-A89A-3A21599DA1E0";
+				PROVISIONING_PROFILE = "4C205F91-CFEB-4FDA-969B-00EC97CC2A94";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4C205F91-CFEB-4FDA-969B-00EC97CC2A94";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

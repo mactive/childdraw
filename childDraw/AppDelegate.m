@@ -18,6 +18,8 @@
 #import "SSZipArchive.h"
 #import "DDTTYLogger.h"
 #import "ServerDataTransformer.h"
+#import "IPAddress.h"
+#import "MBProgressHUD.h"
 
 
 #import "DDLog.h"
@@ -58,7 +60,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [DDLog addLogger:[DDTTYLogger sharedInstance]];
     self.systemVersion = [[UIDevice currentDevice].systemVersion floatValue];
     application.statusBarHidden = NO;
+    
+    // start log session
+    [XFox startSession:@"childdraw"];
+    [XFox setAppVersion:@"0.2"];
 
+    // Init UIRemote ALert
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+     (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     
     // Global UINavigationBar style
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:NO];
@@ -122,6 +131,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     UINavigationController *mainController = [[UINavigationController alloc] initWithRootViewController:self.mainViewController];
     self.mainViewController.managedObjectContext = _managedObjectContext;
     
+    [XFox logAllPageViews:mainController];
+    [self getIPAddress];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = BGCOLOR;
     [self.window addSubview:self.mainViewController.view];
@@ -180,6 +192,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
         }else{
             DDLogWarn(@"Not get nothing");
+            if (error.code == 0) {
+                MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.mainViewController.view animated:YES];
+                HUD.removeFromSuperViewOnHide = YES;
+                HUD.labelText = T(@"好像没有连接呢");
+                HUD.detailsLabelText = T(@"请检查您的网络连接");
+                HUD.mode = MBProgressHUDModeCustomView;
+
+                [HUD hide:YES afterDelay:2];
+            }
         }
      
     }];
@@ -253,13 +274,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     [self saveContext];
+    [XFox logEvent:EVENT_ENTER_BACKGROUND];
+
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     [self startIntroSession];
-    [self downloadLastFiles:1];
+    [self downloadLastFiles:_defaultGetCount];
+    [XFox logEvent:EVENT_ENTER_FOREGROUND];
+
 }
 
 - (void)saveContext
@@ -285,9 +310,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 //    [self saveContext];
 }
 
-//////////////////////////////////
+////////////////////////////////////////////////////////////////////
 #pragma mark - didRegisterForRemoteNotificationsWithDeviceToken
-//////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     NSString *deviceTokenStr = [NSString stringWithFormat:@"%@",deviceToken];
@@ -326,7 +352,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 //////////////////////////////////
 #pragma mark - getIPAddress
 //////////////////////////////////
-/*
+
 - (void)getIPAddress
 {
     InitAddresses();
@@ -350,10 +376,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         //decided what adapter you want details for
         if (strncmp(if_names[i], "en", 2) == 0)
         {
-            NSLog(@"Adapter en has a IP of %s %s", hw_addrs[i], ip_names[i]);
+            NSLog(@"Adapter en has a IP of %s %s", hw_addrs[i], ip_names[i]);           
+
+            [XFox setGUID:[NSString stringWithUTF8String:hw_addrs[i]]];
+
         }
     }
 }
-*/
 
 @end

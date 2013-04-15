@@ -207,8 +207,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         if (aRange.location == 0) {
             self.aniCount = self.aniCount + 1;
         }
-        DDLogVerbose(@"pic %d, ani %d",self.picCount, self.aniCount);
-
+//        DDLogVerbose(@"pic %d, ani %d",self.picCount, self.aniCount);
     }
     
     // count 

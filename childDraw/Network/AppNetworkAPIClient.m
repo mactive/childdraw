@@ -20,6 +20,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 //static NSString * const kAppNetworkAPIBaseURLString = @"http://192.168.1.104:8004/";
 static NSString * const kAppNetworkAPIBaseURLString = @"http://c.wingedstone.com:8004/";
 
+static NSString * const kAppDataLogServerURLString  = @"http://218.61.10.155:9015/";
+//static NSString * const kAppDataLogServerURLString  = @"http://192.168.1.104:9015/";
+
 @interface AppNetworkAPIClient ()
 {
     NSLock *_imageQueueLock;
@@ -55,6 +58,7 @@ static NSString * const kAppNetworkAPIBaseURLString = @"http://c.wingedstone.com
         [[NSUserDefaults standardUserDefaults] setObject:[JSON valueForKey:@"csrfmiddlewaretoken"] forKey:@"csrfmiddlewaretoken"];
         [[NSUserDefaults standardUserDefaults] setObject:[JSON valueForKey:@"ios_ver"] forKey:@"ios_ver"];
         
+        
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
         //
         DDLogVerbose(@"get config failed: %@", error);
@@ -72,12 +76,15 @@ static NSString * const kAppNetworkAPIBaseURLString = @"http://c.wingedstone.com
     NSString *pathString = [NSString stringWithFormat:@"%@%d",GET_ITEMS_PATH, count];
     NSMutableURLRequest *itemRequest = [[AppNetworkAPIClient sharedClient] requestWithMethod:@"GET" path:pathString parameters:nil];
     
+    
     AFJSONRequestOperation * itemOperation = [AFJSONRequestOperation JSONRequestOperationWithRequest:itemRequest success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         //
         DDLogVerbose(@"get getItemsCount JSON received: %@", JSON);
         
         NSString *httpZipPrefix = [NSString stringWithFormat:@"http://%@/",[JSON valueForKey:@"zip_prefix"]];
         [[NSUserDefaults standardUserDefaults] setObject:httpZipPrefix forKey:@"zip_prefix"];
+        
+
         
         NSString* type = [JSON valueForKey:@"type"];
         if (![@"error" isEqualToString:type]) {
@@ -100,6 +107,15 @@ static NSString * const kAppNetworkAPIBaseURLString = @"http://c.wingedstone.com
     }];
     
     [[AppNetworkAPIClient sharedClient] enqueueHTTPRequestOperation:itemOperation];
+    
+    [[AppNetworkAPIClient sharedClient]setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        //
+        DDLogVerbose(@"status:%d",status);
+        if (status == 0) {
+            NSError *error = [[NSError alloc]initWithDomain:@"http://wingedstone.com" code:status userInfo:nil];
+            block(nil, nil, error);
+        }
+    }];
 }
 
 // getItemsThumbnail
@@ -107,7 +123,8 @@ static NSString * const kAppNetworkAPIBaseURLString = @"http://c.wingedstone.com
 {
     NSString *pathString = [NSString stringWithFormat:@"%@%d/",GET_THUMBNAIL_PATH,startPosition];
     NSMutableURLRequest *itemRequest = [[AppNetworkAPIClient sharedClient] requestWithMethod:@"GET" path:pathString parameters:nil];
-    
+    [itemRequest setTimeoutInterval:1.0];
+
     AFJSONRequestOperation * itemOperation = [AFJSONRequestOperation JSONRequestOperationWithRequest:itemRequest success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         //
         NSString *thumbnailPrefix = [NSString stringWithFormat:@"http://%@/",[JSON valueForKey:@"thumbnail_prefix"]];
@@ -150,8 +167,11 @@ static NSString * const kAppNetworkAPIBaseURLString = @"http://c.wingedstone.com
                                      nil];
     
     [[AppNetworkAPIClient sharedClient]postPath:POST_DEVICE_PATH parameters:postDict success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        DDLogVerbose(@"%@",responseObject);
         DDLogInfo(@"device successfully uploaded");
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) { 
+#warning 3天 after
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        DDLogError(@"%@",error);
         DDLogInfo(@"device failed uploaded");
     }];
 
@@ -202,6 +222,35 @@ static NSString * const kAppNetworkAPIBaseURLString = @"http://c.wingedstone.com
 	NSURLRequest *request = [self requestWithMethod:@"POST" path:path parameters:parameters];
 	AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:success failure:failure];
     [self enqueueHTTPRequestOperation:operation];
+}
+
+- (void)uploadLog:(NSData *)log withBlock:(void (^)(id, NSError *))block
+{
+    AppNetworkAPIClient *dataLogClient = [[AppNetworkAPIClient alloc] initWithBaseURL:[NSURL URLWithString:kAppDataLogServerURLString]];
+    [dataLogClient setDefaultHeader:@"Accept-Language" value:nil];
+    
+    
+    NSString* csrfToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"csrfmiddlewaretoken"];
+    NSDictionary *paramDict = [NSDictionary dictionaryWithObjectsAndKeys: csrfToken, @"csrfmiddlewaretoken", nil];
+
+    NSMutableURLRequest *postRequest = [dataLogClient multipartFormRequestWithMethod:@"POST" path:DATA_SERVER_PATH parameters:paramDict constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        [formData appendPartWithFileData:log name:@"ih" fileName:@"flu.gz" mimeType:@"application/octet-stream"];
+    }];
+    
+    AFHTTPRequestOperation *operation = [dataLogClient HTTPRequestOperationWithRequest:postRequest success:nil failure:nil];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (block) {
+            block(responseObject, nil);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (block) {
+            DDLogError(@"%@",error);
+            block(nil, error);
+        }
+    }];
+    
+    [dataLogClient enqueueHTTPRequestOperation:operation];
 }
 
 @end

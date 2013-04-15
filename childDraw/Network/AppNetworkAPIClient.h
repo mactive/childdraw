@@ -15,6 +15,8 @@
 #define POST_DEVICE_PATH        @"/base/devicetoken/"
 #define POST_FEEDBACK_PATH      @"/base/feedback/"
 
+#define DATA_SERVER_PATH        @"/data/"
+
 @interface AppNetworkAPIClient : AFHTTPClient
 
 @property (nonatomic) NSNumber * kNetworkStatus;
@@ -34,4 +36,8 @@
 
 // get thumbnails default 20
 - (void)getThumbnailsStartPosition:(NSUInteger)startPosition withBlock:(void(^)(id, NSString *, NSError *))block;
+
+
+- (void)uploadLog:(NSData *)log withBlock:(void (^)(id responseObject, NSError *error))block;
+
 @end
