@@ -195,10 +195,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             if (error.code == 0) {
                 MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.mainViewController.view animated:YES];
                 HUD.removeFromSuperViewOnHide = YES;
-                HUD.labelText = T(@"好像没有连接呢");
-                HUD.detailsLabelText = T(@"请检查您的网络连接");
+                HUD.labelText = T(@"好像没有网络呢");
+                HUD.detailsLabelText = T(@"请检查一下");
                 HUD.mode = MBProgressHUDModeCustomView;
-
                 [HUD hide:YES afterDelay:2];
             }
         }
@@ -371,12 +370,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         if (theAddr == 0) break;
         if (theAddr == localHost) continue;
         
-        NSLog(@"Name: %s MAC: %s IP: %s\n", if_names[i], hw_addrs[i], ip_names[i]);
+//        NSLog(@"Name: %s MAC: %s IP: %s\n", if_names[i], hw_addrs[i], ip_names[i]);
         
         //decided what adapter you want details for
         if (strncmp(if_names[i], "en", 2) == 0)
         {
-            NSLog(@"Adapter en has a IP of %s %s", hw_addrs[i], ip_names[i]);           
+//            NSLog(@"Adapter en has a IP of %s %s", hw_addrs[i], ip_names[i]);           
 
             [XFox setGUID:[NSString stringWithUTF8String:hw_addrs[i]]];
 
