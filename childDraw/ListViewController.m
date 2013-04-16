@@ -122,7 +122,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
 
 }
 
@@ -174,7 +173,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 self.sourceData = [[NSArray alloc]initWithArray:tempMutableArray];
             }
             
-            
             // 数量太少不出现 load more
             if([tempArray count] == 0) {
                 [self.loadMoreButton setTitle:T(@"没有更多了") forState:UIControlStateNormal];
@@ -184,8 +182,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
             [self.tableView reloadData];
             
-        }else{
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
+        }
+        if (error != nil) {
+//            [MBProgressHUD hideHUDForView:self.view animated:YES];
+//            
+//            MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//            HUD.removeFromSuperViewOnHide = YES;
+            HUD.mode = MBProgressHUDModeCustomView;
+            HUD.labelText = T(@"亲,连不上网啦! ");
+            HUD.detailsLabelText = T(@"检查一下吧");
+            [HUD hide:YES afterDelay:2];
         }
         
         [self.loadMoreButton setEnabled:YES];

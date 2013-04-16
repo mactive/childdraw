@@ -19,4 +19,7 @@
 @property (strong, nonatomic) NSString *LIBRARYPATH;
 @property (strong, nonatomic) ListViewController *listViewContorller;
 
+- (void)downloadLastFiles:(NSInteger)count;
+
+
 @end

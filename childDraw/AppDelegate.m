@@ -186,20 +186,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [sourceData enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 // 交给 delegate 去做
                 [[ModelDownload sharedInstance] downloadWithURL:obj];
-#warning mocsave // MOCSave(moc);
             }];
-            
             
         }else{
             DDLogWarn(@"Not get nothing");
-            if (error.code == 0) {
                 MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.mainViewController.view animated:YES];
                 HUD.removeFromSuperViewOnHide = YES;
-                HUD.labelText = T(@"好像没有网络呢");
-                HUD.detailsLabelText = T(@"请检查一下");
+                HUD.labelText = T(@"亲,连不上网啦!");
+                HUD.detailsLabelText = T(@"检查一下吧");
                 HUD.mode = MBProgressHUDModeCustomView;
                 [HUD hide:YES afterDelay:2];
-            }
+//            }
         }
      
     }];
@@ -280,7 +277,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-    [self startIntroSession];
+    _defaultGetCount  = 1;
     [self downloadLastFiles:_defaultGetCount];
     [XFox logEvent:EVENT_ENTER_FOREGROUND];
 

@@ -308,7 +308,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.dlTitle.font = [UIFont systemFontOfSize:14.0f];
     self.dlTitle.textColor = GRAYCOLOR;
     self.dlTitle.textAlignment = NSTextAlignmentCenter;
-    self.dlTitle.text = T(@"Loading...");
+    self.dlTitle.text = T(@"Waiting...");
     
     self.dlNumber = [[UILabel alloc]initWithFrame:bgView.frame];
     self.dlNumber.backgroundColor = [UIColor clearColor];

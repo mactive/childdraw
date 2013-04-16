@@ -335,10 +335,10 @@ NSString* XFoxAgentVersion = @"0.1";
     NSData *encryptedData = [self AES256EncryptData:zippedData WithKey:AESKEY];
     
     [[AppNetworkAPIClient sharedClient] uploadLog:encryptedData withBlock:^(id responseObject, NSError *error) {
-        if (responseObject) {
+//        if (responseObject) {
             DDLogVerbose(@"%@",responseObject);
             [fox clearLogs];
-        }
+//        }
     }];
 }
 

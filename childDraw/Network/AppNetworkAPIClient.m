@@ -75,7 +75,7 @@ static NSString * const kAppDataLogServerURLString  = @"http://218.61.10.155:901
 {
     NSString *pathString = [NSString stringWithFormat:@"%@%d",GET_ITEMS_PATH, count];
     NSMutableURLRequest *itemRequest = [[AppNetworkAPIClient sharedClient] requestWithMethod:@"GET" path:pathString parameters:nil];
-    
+    [itemRequest setTimeoutInterval:2.0];
     
     AFJSONRequestOperation * itemOperation = [AFJSONRequestOperation JSONRequestOperationWithRequest:itemRequest success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         //
@@ -108,14 +108,15 @@ static NSString * const kAppDataLogServerURLString  = @"http://218.61.10.155:901
     
     [[AppNetworkAPIClient sharedClient] enqueueHTTPRequestOperation:itemOperation];
     
-    [[AppNetworkAPIClient sharedClient]setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
-        //
-        DDLogVerbose(@"status:%d",status);
-        if (status == 0) {
-            NSError *error = [[NSError alloc]initWithDomain:@"http://wingedstone.com" code:status userInfo:nil];
-            block(nil, nil, error);
-        }
-    }];
+//    [[AppNetworkAPIClient sharedClient] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+//        //
+//        DDLogVerbose(@"status:%d",status);
+//        if (status == 0) {
+//            NSError *error = [[NSError alloc]initWithDomain:@"http://c.wingedstone.com" code:status userInfo:nil];
+//            block(nil, nil, error);
+//        }
+//    }];
+    
 }
 
 // getItemsThumbnail
@@ -123,7 +124,7 @@ static NSString * const kAppDataLogServerURLString  = @"http://218.61.10.155:901
 {
     NSString *pathString = [NSString stringWithFormat:@"%@%d/",GET_THUMBNAIL_PATH,startPosition];
     NSMutableURLRequest *itemRequest = [[AppNetworkAPIClient sharedClient] requestWithMethod:@"GET" path:pathString parameters:nil];
-    [itemRequest setTimeoutInterval:1.0];
+    [itemRequest setTimeoutInterval:2.0];
 
     AFJSONRequestOperation * itemOperation = [AFJSONRequestOperation JSONRequestOperationWithRequest:itemRequest success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         //
@@ -152,6 +153,15 @@ static NSString * const kAppDataLogServerURLString  = @"http://218.61.10.155:901
     }];
     
     [[AppNetworkAPIClient sharedClient] enqueueHTTPRequestOperation:itemOperation];
+    
+//    [[AppNetworkAPIClient sharedClient] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+//        //
+//        DDLogVerbose(@"status:%d",status);
+//        if (status == 0) {
+//            NSError *error = [[NSError alloc]initWithDomain:@"http://c.wingedstone.com" code:status userInfo:nil];
+//            block(nil, nil, error);
+//        }
+//    }];
 }
 
 
