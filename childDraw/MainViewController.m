@@ -141,7 +141,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
 //    DDLogVerbose(@"*****%f %@",value.floatValue,title);
     if ([title isEqualToString:self.planetString]) {
-        self.dlTitle.text = T(@"Downloading...");
+        self.dlTitle.text = T(@"下载中...");
         self.dlNumber.text = [NSString stringWithFormat:@"%.0f%%",value.floatValue*100];
     }
 }
@@ -160,7 +160,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [self.downloadView setAlpha:1];
         [self.downloadView setHidden:NO];
         self.dlNumber.text = T(@"=.=!");
-        self.dlTitle.text = T(@"Failed");
+        self.dlTitle.text = T(@"失败!");
     }
 }
 
@@ -308,7 +308,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.dlTitle.font = [UIFont systemFontOfSize:14.0f];
     self.dlTitle.textColor = GRAYCOLOR;
     self.dlTitle.textAlignment = NSTextAlignmentCenter;
-    self.dlTitle.text = T(@"Waiting...");
+    self.dlTitle.text = T(@"等待中...");
     
     self.dlNumber = [[UILabel alloc]initWithFrame:bgView.frame];
     self.dlNumber.backgroundColor = [UIColor clearColor];
@@ -337,7 +337,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     if ([title isEqualToString:self.planetString]) {
-        self.dlTitle.text = T(@"Downloading...");
+        self.dlTitle.text = T(@"下载中...");
         self.dlNumber.text = [NSString stringWithFormat:@"%.0f%%",value.floatValue*100];
     }
 }
@@ -350,6 +350,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     [self moveYOffest:20 andDelay:0 andAlpha:0 withView:self.downloadView];
     [self.downloadView setHidden:YES];
+    self.dlNumber.text = T(@"0%");
     [self moveYOffest:-20 andDelay:1 andAlpha:0 withView:self.downloadView];
     
     [self.mainView setHidden:NO];
@@ -392,6 +393,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.albumViewController refreshSubView];
     [self.albumViewController setHidesBottomBarWhenPushed:YES];
     self.albumViewController.title = self.titleString;
+    self.albumViewController.keyString = self.planetString;
     // Pass the selected object to the new view controller.
     [self.navigationController pushViewController:self.albumViewController animated:YES];
 

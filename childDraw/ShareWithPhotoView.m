@@ -13,12 +13,14 @@
 @property(strong, nonatomic)UIImageView *cricleView;
 @property(strong, nonatomic)UIButton *photoButton;
 @property(strong, nonatomic)UILabel *noticeLabel;
+@property(strong, nonatomic)UIButton *shareButton;
 @end
 
 @implementation ShareWithPhotoView
 @synthesize cricleView;
 @synthesize delegate;
 @synthesize photoButton;
+@synthesize shareButton;
 
 #define PHOTO_WIDTH 128
 - (id)initWithFrame:(CGRect)frame
@@ -42,10 +44,22 @@
         self.noticeLabel.text= T(@"快拍下孩子的创意吧，下一个版本就会有分享功能哟。");
         self.noticeLabel.textAlignment = UITextAlignmentCenter;
         self.noticeLabel.numberOfLines = 0;
+        self.noticeLabel.textColor = GRAYCOLOR;
+        
+        self.shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.shareButton setFrame:CGRectMake(66, 260, 188, 43)];
+        [self.shareButton setBackgroundImage:[UIImage imageNamed:@"button_bg.png"] forState:UIControlStateNormal];
+        [self.shareButton setBackgroundImage:[UIImage imageNamed:@"button_highlight_bg.png"] forState:UIControlStateHighlighted];
+        [self.shareButton setTitle:T(@"分享到微信") forState:UIControlStateNormal];
+        [self.shareButton setTitleColor:DARKCOLOR forState:UIControlStateNormal];
+        [self.shareButton addTarget:self action:@selector(shareAction) forControlEvents:UIControlEventTouchUpInside];
+        [self.shareButton setEnabled:NO];
+        
         
         [self addSubview:self.noticeLabel];
         [self addSubview:self.photoButton];
         [self addSubview:self.cricleView];
+        [self addSubview:self.shareButton];
 
     }
     return self;
@@ -56,11 +70,21 @@
     [self.delegate passStringValue:PHOTOACTION andIndex:1];
 }
 
-- (void)afterPhoto:(UIImage *)image
+
+- (void)shareAction
+{
+    [self.delegate passStringValue:SHAREACTION andIndex:1];
+}
+
+- (void)photoSuccess:(UIImage *)image
 {
     [self.cricleView setFrame:CGRectMake(104, 63, 120, 120)];
     [self.cricleView setImage:image];
-    self.noticeLabel.text = T(@"你可以分享哟");
+    
+
+    self.noticeLabel.text = T(@"你可以分享拉");
+    [self.shareButton setEnabled:YES];
+
 }
 
 - (void)removePhoto

@@ -12,6 +12,6 @@
 @interface ShareWithPhotoView : UIView
 
 @property(nonatomic,assign) NSObject<PassValueDelegate> *delegate;
-- (void)afterPhoto:(UIImage *)image;
+- (void)photoSuccess:(UIImage *)image;
 - (void)removePhoto;
 @end

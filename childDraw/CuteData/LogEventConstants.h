@@ -13,17 +13,13 @@
 #define EVENT_ADD_FRIEND    @"E_add_friend"
 #define EVENT_DEL_FRIEND    @"E_del_friend"
 #define EVENT_LOGIN_TIMER   @"E_login_timer"
-#define EVENT_LOCATION_OFF  @"E_location_off"
-#define EVENT_GET_NEARBY_USER   @"E_get_nearby_user"
 #define EVENT_ENTER_BACKGROUND  @"E_enter_background"
 #define EVENT_ENTER_FOREGROUND  @"E_enter_foreground"
-#define EVENT_FRIEND_REQUEST    @"E_friend_request"
-#define EVENT_ADD_WEIBO     @"E_add_weibo"
-#define EVENT_DEL_WEIBO     @"E_del_weibo"
-#define EVENT_CUR_LOCATION     @"E_current_location"
 
-#define EVENT_READING_TIMER   @"E_step_reading_timer"
-
+#define EVENT_READING_TIMER             @"E_step_reading_timer"
+#define EVENT_READING_FINISH_TIMER      @"E_step_finish_timer"
+#define EVENT_PHOTO                     @"E_photo_picture"
+#define EVENT_SHARE                     @"E_share_weixin"
 
 //define reading time and read click
 #define EVENT_CHANNEL_TIMER     @"E_reading_timer"

@@ -12,6 +12,7 @@
 
 #define M_APPLEID 626129422
 #define WXAPPID @"wx4b9a37d1d5fc4db2"
+#define WXAPPKEY @"16b848bbf25d583b87a070205942b565"
 #define FEEDBACK_EMAIL @"babydrawapp@gmail.com"
 #define PRODUCT_NAME @"宝宝来画画"
 
@@ -50,6 +51,7 @@ alpha:(a)]
 #define DOWNLOADING @"Downloading"
 #define DOWNLOADFAILED @"DownloadFailed"
 #define PHOTOACTION @"PhotoForShare"
+#define SHAREACTION @"ShareForWeixin"
 // font
 #define BIGCUSTOMFONT [UIFont fontWithName:@"Museo" size:40.0f]
 #define CUSTOMFONT [UIFont fontWithName:@"Museo" size:16.0f]

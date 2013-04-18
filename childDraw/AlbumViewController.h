@@ -19,6 +19,8 @@
 @property (nonatomic, strong) NSArray *titleArray;
 @property (nonatomic, readwrite) NSUInteger albumIndex;
 @property (nonatomic, strong) ShareWithPhotoView *shareView;
+@property (nonatomic, strong) NSString *keyString;
+
 
 
 - (void)refreshSubView;

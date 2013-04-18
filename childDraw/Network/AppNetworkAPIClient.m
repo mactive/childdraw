@@ -57,7 +57,9 @@ static NSString * const kAppDataLogServerURLString  = @"http://218.61.10.155:901
         DDLogVerbose(@"get config JSON received: %@", JSON);
         [[NSUserDefaults standardUserDefaults] setObject:[JSON valueForKey:@"csrfmiddlewaretoken"] forKey:@"csrfmiddlewaretoken"];
         [[NSUserDefaults standardUserDefaults] setObject:[JSON valueForKey:@"ios_ver"] forKey:@"ios_ver"];
-        
+        if (block) {
+            block(JSON, nil);
+        }
         
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
         //

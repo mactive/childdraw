@@ -102,7 +102,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _defaultGetCount  = 1;
     [self downloadLastFiles:_defaultGetCount];
     
-//    [WXApi registerApp:WXAPPID];
+    [WXApi registerApp:WXAPPID];
     
     return YES;
 }
@@ -277,6 +277,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    sleep(1);
     _defaultGetCount  = 1;
     [self downloadLastFiles:_defaultGetCount];
     [XFox logEvent:EVENT_ENTER_FOREGROUND];
@@ -334,7 +335,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 //////////////////////////////////
 #pragma mark - wechat rewrite
 //////////////////////////////////
-/*
+
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
     return  [WXApi handleOpenURL:url delegate:self];
@@ -343,7 +344,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     return  [WXApi handleOpenURL:url delegate:self];
 }
-*/
 
 //////////////////////////////////
 #pragma mark - getIPAddress
@@ -372,8 +372,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         //decided what adapter you want details for
         if (strncmp(if_names[i], "en", 2) == 0)
         {
-//            NSLog(@"Adapter en has a IP of %s %s", hw_addrs[i], ip_names[i]);           
-
+//        NSLog(@"Adapter en has a IP of %s %s", hw_addrs[i], ip_names[i]);
             [XFox setGUID:[NSString stringWithUTF8String:hw_addrs[i]]];
 
         }

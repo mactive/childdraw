@@ -129,12 +129,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)populateData:(NSUInteger)start
 {
     MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    HUD.mode = MBProgressHUDModeCustomView;
     HUD.labelText = T(@"努力加载中");
+    HUD.detailsLabelText = T(@"每天都更新呦");
     
     [[AppNetworkAPIClient sharedClient]getThumbnailsStartPosition:start withBlock:^(id responseDict, NSString *thumbnailPrefix, NSError *error) {
         //
         if (responseDict != nil) {
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            [HUD hide:YES afterDelay:0.5];
+//            [MBProgressHUD hideHUDForView:self.view animated:YES];
             
             NSMutableArray *allData = [[NSMutableArray alloc]initWithArray:self.sourceData];
             NSArray *tempArray = [[NSArray alloc] initWithArray:responseDict];
@@ -176,6 +179,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             // 数量太少不出现 load more
             if([tempArray count] == 0) {
                 [self.loadMoreButton setTitle:T(@"没有更多了") forState:UIControlStateNormal];
+                
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+
+                MBProgressHUD* HUD2 = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                HUD2.removeFromSuperViewOnHide = YES;
+                HUD2.mode = MBProgressHUDModeText;
+                HUD2.labelText = T(@"没有更多了");
+                [HUD2 hide:YES afterDelay:2];
+                
             } else {
                 [self.loadMoreButton setTitle:T(@"点击加载更多") forState:UIControlStateNormal];
             }

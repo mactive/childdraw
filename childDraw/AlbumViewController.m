@@ -11,6 +11,7 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <QuartzCore/QuartzCore.h>
 #import "MBProgressHUD.h"
+#import "WXApi.h"
 
 #import "DDLog.h"
 // Log levels: off, error, warn, info, verbose
@@ -22,14 +23,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 
-@interface AlbumViewController ()<UIScrollViewAccessibilityDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface AlbumViewController ()<UIScrollViewAccessibilityDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate,WXApiDelegate>
 
 - (UIView*) createViewForObj:(id)obj;
 @property(strong, nonatomic)UIView *targetView;
-@property(strong, nonatomic)UIButton *moreButton;
 @property(strong, nonatomic)NSMutableArray *targetArray;
 @property(strong, nonatomic)UIActionSheet *photoActionSheet;
+@property(strong, nonatomic)UIActionSheet *shareActionSheet;
 @property(nonatomic, strong)UIImagePickerController *pickerController;
+@property(nonatomic, strong)UIImage *photoImage;
 @end
 
 @implementation AlbumViewController
@@ -37,11 +39,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize albumIndex;
 @synthesize targetView;
 @synthesize targetArray;
-@synthesize moreButton;
-@synthesize photoActionSheet;
+@synthesize photoActionSheet,shareActionSheet;
 @synthesize titleArray;
 @synthesize shareView;
 @synthesize pickerController;
+@synthesize keyString;
+@synthesize photoImage;
 
 
 #define kCameraSource       UIImagePickerControllerSourceTypeCamera
@@ -85,24 +88,33 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     self.shareView.delegate = self;
     
-    [XFox logEvent:EVENT_READING_TIMER withParameters:nil timed:YES];
+    [XFox logEvent:EVENT_READING_TIMER
+    withParameters:[NSDictionary dictionaryWithObjectsAndKeys:self.keyString,@"key", nil]
+             timed:YES];
 
+    [XFox logEvent:EVENT_READING_FINISH_TIMER
+    withParameters:[NSDictionary dictionaryWithObjectsAndKeys:self.keyString,@"key", nil]
+             timed:YES];
 }
 
 // refresh
 
-//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-//{
-//    if ([scrollView isEqual:self.scrollView]) {
-//        //DDLogVerbose(@"End page %d %@",self.scrollView.page,self.targetView);
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    if ([scrollView isEqual:self.scrollView]) {
+        //DDLogVerbose(@"End page %d %@",self.scrollView.page,self.targetView);
 //        self.targetView = [self.targetArray objectAtIndex:self.scrollView.page];
-//        NSUInteger count = [self.albumArray count];
+        NSUInteger count = [self.albumArray count];
 //        if (self.shareView != nil) {
 //            count = count + 1;
 //        }
 //        self.title = [NSString stringWithFormat:@"%d/%d",self.scrollView.page+1,count];
-//    }
-//}
+        if (self.scrollView.page == count) {
+            [XFox endTimedEvent:EVENT_READING_FINISH_TIMER
+                 withParameters:[NSDictionary dictionaryWithObjectsAndKeys:self.keyString,@"key", nil]];
+        }
+    }
+}
 
 
 #pragma mark -
@@ -151,6 +163,59 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
 }
 
+
+- (void) sendImageContent:(UIImage *)image withOption:(NSUInteger)option
+{
+    WXMediaMessage *message = [WXMediaMessage message];
+    [message setThumbImage:image];
+    [message setTitle:PRODUCT_NAME];
+    
+    WXImageObject *ext = [WXImageObject object];
+    ext.imageData = UIImagePNGRepresentation(image);;
+    message.mediaObject = ext;
+    
+    SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
+    req.bText = NO;
+    req.message = message;
+    if (option == 0) {
+        req.scene = WXSceneTimeline;
+    }else if (option == 1){
+        req.scene = WXSceneSession;
+    }
+    
+    //选择发送到朋友圈，默认值为WXSceneSession，发送到会话
+    
+    [WXApi sendReq:req];
+}
+
+- (void) sendImageContentImage
+{
+    if ([WXApi isWXAppInstalled]  && [WXApi isWXAppSupportApi]) {
+        WXMediaMessage *message = [WXMediaMessage message];
+        [message setThumbImage:[UIImage imageNamed:@"icon.png"]];
+        WXImageObject *ext = [WXImageObject object];
+        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"icon" ofType:@"pn7  itg"];
+        ext.imageData = [NSData dataWithContentsOfFile:filePath] ;
+        message.mediaObject = ext;
+        SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
+        req.bText = NO;
+        req.message = message;
+        //req.scene = WXSceneTimeline;  //选择发送到朋友圈，默认值为WXSceneSession，发送到会话
+        [WXApi sendReq:req];
+    }
+
+}
+
+- (void)onReq:(BaseReq *)req
+{
+    if([req isKindOfClass:[SendMessageToWXResp class]])
+    {
+        NSString *strMsg = [NSString stringWithFormat:@"发送消息结果:%d", req.type];
+    }
+}
+
+
+
 //////////////////////////////////////////////////////////////////////
 // photo action sheet
 //////////////////////////////////////////////////////////////////////
@@ -159,10 +224,41 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     if ([value isEqualToString:PHOTOACTION] && index == 1) {
         //
-        [self takePhotoFromCamera];
+//        [self takePhotoFromCamera];
+        [self sendImageContentImage];
+
+        [XFox logEvent:EVENT_PHOTO];
+    }
+    
+    if ([value isEqualToString:SHAREACTION] && index == 1) {
+        //
+        [self shareButtonAction];
+        [XFox logEvent:EVENT_SHARE];
     }
 }
 
+- (void)shareButtonAction
+{
+    self.shareActionSheet = [[UIActionSheet alloc]
+                             initWithTitle:T(@"分享到")
+                             delegate:self
+                             cancelButtonTitle:T(@"取消")
+                             destructiveButtonTitle:nil
+                             otherButtonTitles:T(@"朋友圈"), T(@"会话"),nil];
+    self.shareActionSheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;
+    [self.shareActionSheet showFromRect:self.view.bounds inView:self.view animated:YES];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (actionSheet == self.shareActionSheet) {
+        
+        [self sendImageContent:self.photoImage withOption:buttonIndex];
+        
+    }
+    
+}
+/*
 - (void)photoButtonAction
 {
     self.photoActionSheet = [[UIActionSheet alloc]
@@ -187,7 +283,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
 }
-
+*/
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -247,7 +343,8 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
                                   completionBlock:^(NSURL *assetURL, NSError *error){}];
         [HUD hide:YES afterDelay:2];
         [picker dismissModalViewControllerAnimated:YES];
-        [self finishPhoto:image];
+        self.photoImage = image;
+        [self finishPhoto:self.photoImage];
 
     }else if(picker.sourceType == UIImagePickerControllerSourceTypePhotoLibrary){
 //        self.selectedImageView.image = image;
@@ -258,13 +355,17 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 
 - (void)finishPhoto:(UIImage *)image
 {
+
     NSUInteger count = [self.albumArray count];
-    
     [self.scrollView setPage:count];
     self.targetView = [self.targetArray objectAtIndex:count];
+    [self.shareView photoSuccess:image];
     
-    [self.shareView afterPhoto:image];
+    
+//    [self sendImageContent:image];
 }
+
+
 
 - (void)viewWillDisappear:(BOOL)animated
 {
