@@ -12,6 +12,9 @@
 @interface ShareWithPhotoView : UIView
 
 @property(nonatomic,assign) NSObject<PassValueDelegate> *delegate;
+@property(strong, nonatomic)UILabel *noticeLabel;
+@property(strong, nonatomic)UIButton *photoButton;
+
 - (void)photoSuccess:(UIImage *)image;
 - (void)removePhoto;
 @end

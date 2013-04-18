@@ -193,17 +193,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
 }
 
--(void) onSentTextMessage:(BOOL) bSent
-{
-    // 通过微信发送消息后， 返回本App
-    NSString *strTitle = [NSString stringWithFormat:@"发送结果"];
-    NSString *strMsg = [NSString stringWithFormat:@"发送文本消息结果:%u", bSent];
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-    [alert show];
-}
-
-
 //////////////////////////////////////////////////////////////////////
 // photo action sheet
 //////////////////////////////////////////////////////////////////////
@@ -213,19 +202,20 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if ([value isEqualToString:PHOTOACTION] && index == 1) {
         //
         [self takePhotoFromCamera];
-
+        self.albumIndex = [self.albumArray count];
         [XFox logEvent:EVENT_PHOTO];
     }
     
     if ([value isEqualToString:SHAREACTION] && index == 1) {
         //
         [self shareButtonAction];
-        [XFox logEvent:EVENT_SHARE];
     }
 }
 
 - (void)shareButtonAction
 {
+    [self.shareView.photoButton setEnabled:YES];
+
     self.shareActionSheet = [[UIActionSheet alloc]
                              initWithTitle:T(@"分享到")
                              delegate:self
@@ -239,9 +229,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (actionSheet == self.shareActionSheet) {
-        
-        [self sendImageContent:self.photoImage withOption:buttonIndex];
-        
+        if (buttonIndex == 0 || buttonIndex == 1) {
+            [self sendImageContent:self.photoImage withOption:buttonIndex];
+        }
+    
     }
     
 }
@@ -348,6 +339,8 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     self.targetView = [self.targetArray objectAtIndex:count];
     [self.shareView photoSuccess:image];
     
+    [self.shareView.photoButton setEnabled:NO];
+    
 }
 
 
@@ -356,17 +349,11 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     NSUInteger count = [self.albumArray count];
 
     if (first) {
-        [self.scrollView setPage:0];
-        self.targetView = [self.targetArray objectAtIndex:0];
+        self.albumIndex = 0;
     }else if (last){
-        [self.scrollView setPage:count];
-        self.targetView = [self.targetArray objectAtIndex:count];
-        
-        MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.shareView animated:YES];
-        HUD.removeFromSuperViewOnHide = YES;
-        HUD.labelText = T(@"微信分享成功!");
-        HUD.mode = MBProgressHUDModeText;
-        [HUD hide:YES afterDelay:1];
+        self.albumIndex = count;
+        [XFox logEvent:EVENT_SHARE];
+        self.shareView.noticeLabel.text = T(@"谢谢您的分享.您可以再次拍照");
     }
 }
 

@@ -401,11 +401,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.albumViewController.title = self.titleString;
     self.albumViewController.keyString = self.planetString;
     // Pass the selected object to the new view controller.
-    
+
     [self.albumViewController jumpToFirst:first orLast:last];
 
-    
     [self.navigationController pushViewController:self.albumViewController animated:YES];
+
 
 }
 

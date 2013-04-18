@@ -11,8 +11,6 @@
 
 @interface ShareWithPhotoView()
 @property(strong, nonatomic)UIImageView *cricleView;
-@property(strong, nonatomic)UIButton *photoButton;
-@property(strong, nonatomic)UILabel *noticeLabel;
 @property(strong, nonatomic)UIButton *shareButton;
 @end
 
@@ -43,7 +41,7 @@
         self.noticeLabel.backgroundColor = [UIColor clearColor];
         self.noticeLabel.text= T(@"快拍下孩子的创意吧，下一个版本就会有分享功能哟。");
         self.noticeLabel.textAlignment = UITextAlignmentCenter;
-        self.noticeLabel.font = [UIFont systemFontOfSize:12.0f];
+        self.noticeLabel.font = [UIFont systemFontOfSize:14.0f];
         self.noticeLabel.numberOfLines = 0;
         self.noticeLabel.textColor = GRAYCOLOR;
         
