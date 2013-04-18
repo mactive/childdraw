@@ -41,6 +41,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property(nonatomic,strong)NSMutableArray *downArray;
 @property(nonatomic, strong)NSString *lastPlanet; // 最新的package
 @property(nonatomic, strong)NSString *lastPlanetTitle; // 最新的package
+@property(assign, nonatomic)BOOL isShareSucceed;
 
 @end
 
@@ -53,6 +54,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize lastPlanet;
 @synthesize lastPlanetTitle;
 @synthesize listViewContorller;
+@synthesize isShareSucceed;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -277,7 +279,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-    sleep(1);
+//    sleep(1);
     _defaultGetCount  = 1;
     [self downloadLastFiles:_defaultGetCount];
     [XFox logEvent:EVENT_ENTER_FOREGROUND];
@@ -340,9 +342,46 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     return  [WXApi handleOpenURL:url delegate:self];
 }
+
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
+    NSString *urlString = url.absoluteString;
+    NSRange range = [urlString rangeOfString:WXAPPID];
+    
+    if (range.length > 0 ) {
+        //
+        self.isShareSucceed = YES;
+    }else{
+        self.isShareSucceed = NO;
+    }
+    [NSTimer scheduledTimerWithTimeInterval:1.0
+                                     target:self
+                                   selector:@selector(showShareSucceed)
+                                   userInfo:nil
+                                    repeats:NO];
+    
     return  [WXApi handleOpenURL:url delegate:self];
+}
+
+- (void)showShareSucceed
+{
+    if (self.isShareSucceed) {
+        [self.mainViewController enterFirst:NO orLast:YES];
+    }
+}
+
+- (void)onResp:(BaseResp *)resp
+{
+    if([resp isKindOfClass:[SendMessageToWXResp class]])
+    {
+        NSString *strMsg = [NSString stringWithFormat:@"发送消息结果:%d", resp.errCode];
+        if (resp.errCode == 0) {
+            // jump 分享成功
+            self.isShareSucceed = YES;
+        }else{
+            self.isShareSucceed = NO;
+        }
+    }
 }
 
 //////////////////////////////////

@@ -18,4 +18,6 @@
 
 - (void)downloadLastPlanet:(NSNumber *)value andTitle:(NSString *)title;
 - (void)downloadFinish;
+
+- (void)enterFirst:(BOOL)first orLast:(BOOL)last;
 @end

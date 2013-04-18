@@ -89,11 +89,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.shareView.delegate = self;
     
     [XFox logEvent:EVENT_READING_TIMER
-    withParameters:[NSDictionary dictionaryWithObjectsAndKeys:self.keyString,@"key", nil]
+    withParameters:[NSDictionary dictionaryWithObjectsAndKeys:self.keyString,@"key",self.title,@"title", nil]
              timed:YES];
 
     [XFox logEvent:EVENT_READING_FINISH_TIMER
-    withParameters:[NSDictionary dictionaryWithObjectsAndKeys:self.keyString,@"key", nil]
+    withParameters:[NSDictionary dictionaryWithObjectsAndKeys:self.keyString,@"key",self.title,@"title", nil]
              timed:YES];
 }
 
@@ -110,8 +110,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 //        }
 //        self.title = [NSString stringWithFormat:@"%d/%d",self.scrollView.page+1,count];
         if (self.scrollView.page == count) {
-            [XFox endTimedEvent:EVENT_READING_FINISH_TIMER
-                 withParameters:[NSDictionary dictionaryWithObjectsAndKeys:self.keyString,@"key", nil]];
+            [XFox endTimedEvent:EVENT_READING_FINISH_TIMER withParameters:nil];
         }
     }
 }
@@ -166,54 +165,43 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void) sendImageContent:(UIImage *)image withOption:(NSUInteger)option
 {
-    WXMediaMessage *message = [WXMediaMessage message];
-    [message setThumbImage:image];
-    [message setTitle:PRODUCT_NAME];
-    
-    WXImageObject *ext = [WXImageObject object];
-    ext.imageData = UIImagePNGRepresentation(image);;
-    message.mediaObject = ext;
-    
-    SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
-    req.bText = NO;
-    req.message = message;
-    if (option == 0) {
-        req.scene = WXSceneTimeline;
-    }else if (option == 1){
-        req.scene = WXSceneSession;
-    }
-    
-    //选择发送到朋友圈，默认值为WXSceneSession，发送到会话
-    
-    [WXApi sendReq:req];
-}
-
-- (void) sendImageContentImage
-{
     if ([WXApi isWXAppInstalled]  && [WXApi isWXAppSupportApi]) {
+
         WXMediaMessage *message = [WXMediaMessage message];
-        [message setThumbImage:[UIImage imageNamed:@"icon.png"]];
+        
+        UIImage *thumbnailImage = [image imageByScalingToSize:CGSizeMake(120, 120)];
+        
+        [message setThumbImage:thumbnailImage];
+        [message setTitle:PRODUCT_NAME];
+        
         WXImageObject *ext = [WXImageObject object];
-        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"icon" ofType:@"pn7  itg"];
-        ext.imageData = [NSData dataWithContentsOfFile:filePath] ;
+        ext.imageData = UIImageJPEGRepresentation(image, 0.7);;
         message.mediaObject = ext;
+        
         SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
         req.bText = NO;
         req.message = message;
-        //req.scene = WXSceneTimeline;  //选择发送到朋友圈，默认值为WXSceneSession，发送到会话
+        if (option == 0) {
+            req.scene = WXSceneTimeline;
+        }else if (option == 1){
+            req.scene = WXSceneSession;
+        }
+        
+        //选择发送到朋友圈，默认值为WXSceneSession，发送到会话
+        
         [WXApi sendReq:req];
     }
-
 }
 
-- (void)onReq:(BaseReq *)req
+-(void) onSentTextMessage:(BOOL) bSent
 {
-    if([req isKindOfClass:[SendMessageToWXResp class]])
-    {
-        NSString *strMsg = [NSString stringWithFormat:@"发送消息结果:%d", req.type];
-    }
+    // 通过微信发送消息后， 返回本App
+    NSString *strTitle = [NSString stringWithFormat:@"发送结果"];
+    NSString *strMsg = [NSString stringWithFormat:@"发送文本消息结果:%u", bSent];
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    [alert show];
 }
-
 
 
 //////////////////////////////////////////////////////////////////////
@@ -224,8 +212,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     if ([value isEqualToString:PHOTOACTION] && index == 1) {
         //
-//        [self takePhotoFromCamera];
-        [self sendImageContentImage];
+        [self takePhotoFromCamera];
 
         [XFox logEvent:EVENT_PHOTO];
     }
@@ -341,7 +328,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         [library writeImageDataToSavedPhotosAlbum:imageData
                                          metadata:nil
                                   completionBlock:^(NSURL *assetURL, NSError *error){}];
-        [HUD hide:YES afterDelay:2];
+        [HUD hide:YES afterDelay:1];
         [picker dismissModalViewControllerAnimated:YES];
         self.photoImage = image;
         [self finishPhoto:self.photoImage];
@@ -361,10 +348,27 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     self.targetView = [self.targetArray objectAtIndex:count];
     [self.shareView photoSuccess:image];
     
-    
-//    [self sendImageContent:image];
 }
 
+
+- (void)jumpToFirst:(BOOL)first orLast:(BOOL)last
+{
+    NSUInteger count = [self.albumArray count];
+
+    if (first) {
+        [self.scrollView setPage:0];
+        self.targetView = [self.targetArray objectAtIndex:0];
+    }else if (last){
+        [self.scrollView setPage:count];
+        self.targetView = [self.targetArray objectAtIndex:count];
+        
+        MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.shareView animated:YES];
+        HUD.removeFromSuperViewOnHide = YES;
+        HUD.labelText = T(@"微信分享成功!");
+        HUD.mode = MBProgressHUDModeText;
+        [HUD hide:YES afterDelay:1];
+    }
+}
 
 
 - (void)viewWillDisappear:(BOOL)animated

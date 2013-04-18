@@ -43,6 +43,7 @@
         self.noticeLabel.backgroundColor = [UIColor clearColor];
         self.noticeLabel.text= T(@"快拍下孩子的创意吧，下一个版本就会有分享功能哟。");
         self.noticeLabel.textAlignment = UITextAlignmentCenter;
+        self.noticeLabel.font = [UIFont systemFontOfSize:12.0f];
         self.noticeLabel.numberOfLines = 0;
         self.noticeLabel.textColor = GRAYCOLOR;
         

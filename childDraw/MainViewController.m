@@ -385,8 +385,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 
+///////////////////////
 
 - (void)enterAction
+{
+    [self enterFirst:YES orLast:NO];
+}
+
+- (void)enterFirst:(BOOL)first orLast:(BOOL)last
 {
     self.albumViewController.albumArray = self.albumArray;
     self.albumViewController.shareView = [[ShareWithPhotoView alloc]initWithFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_WIDTH)];
@@ -395,6 +401,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.albumViewController.title = self.titleString;
     self.albumViewController.keyString = self.planetString;
     // Pass the selected object to the new view controller.
+    
+    [self.albumViewController jumpToFirst:first orLast:last];
+
+    
     [self.navigationController pushViewController:self.albumViewController animated:YES];
 
 }

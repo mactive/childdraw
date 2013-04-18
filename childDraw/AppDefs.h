@@ -12,7 +12,10 @@
 
 #define M_APPLEID 626129422
 #define WXAPPID @"wx4b9a37d1d5fc4db2"
-#define WXAPPKEY @"16b848bbf25d583b87a070205942b565"
+//#define WXAPPID @"wxd930ea5d5a258f4f"
+
+//#define WXAPPKEY @"16b848bbf25d583b87a070205942b565"
+
 #define FEEDBACK_EMAIL @"babydrawapp@gmail.com"
 #define PRODUCT_NAME @"宝宝来画画"
 
