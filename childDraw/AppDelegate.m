@@ -354,6 +354,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }else{
         self.isShareSucceed = NO;
     }
+    
     [NSTimer scheduledTimerWithTimeInterval:1.0
                                      target:self
                                    selector:@selector(showShareSucceed)
@@ -374,7 +375,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     if([resp isKindOfClass:[SendMessageToWXResp class]])
     {
-        NSString *strMsg = [NSString stringWithFormat:@"发送消息结果:%d", resp.errCode];
         if (resp.errCode == 0) {
             // jump 分享成功
             self.isShareSucceed = YES;

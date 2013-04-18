@@ -89,11 +89,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.shareView.delegate = self;
     
     [XFox logEvent:EVENT_READING_TIMER
-    withParameters:[NSDictionary dictionaryWithObjectsAndKeys:self.keyString,@"key",self.title,@"title", nil]
+    withParameters:[NSDictionary dictionaryWithObjectsAndKeys:self.keyString,@"key", nil]
              timed:YES];
 
     [XFox logEvent:EVENT_READING_FINISH_TIMER
-    withParameters:[NSDictionary dictionaryWithObjectsAndKeys:self.keyString,@"key",self.title,@"title", nil]
+    withParameters:[NSDictionary dictionaryWithObjectsAndKeys:self.keyString,@"key", nil]
              timed:YES];
 }
 
@@ -190,6 +190,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         //选择发送到朋友圈，默认值为WXSceneSession，发送到会话
         
         [WXApi sendReq:req];
+    }else{
+        self.shareView.noticeLabel.text = T(@"呀,还没有安装微信, 或者版本过低.");
     }
 }
 
