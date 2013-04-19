@@ -223,10 +223,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                              delegate:self
                              cancelButtonTitle:T(@"取消")
                              destructiveButtonTitle:nil
-                             otherButtonTitles:T(@"朋友圈"), T(@"会话"),nil];
+                             otherButtonTitles:T(@"微信朋友圈"), T(@"微信好友"),nil];
     self.shareActionSheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;
     [self.shareActionSheet showFromRect:self.view.bounds inView:self.view animated:YES];
 }
+
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -234,10 +235,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         if (buttonIndex == 0 || buttonIndex == 1) {
             [self sendImageContent:self.photoImage withOption:buttonIndex];
         }
-    
     }
     
 }
+
 /*
 - (void)photoButtonAction
 {

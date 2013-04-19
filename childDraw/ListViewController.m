@@ -317,10 +317,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         rightLabel.text = rightZipfile.title;
         [rightButton setAvatar:rightZipfile.fileName];
         [rightButton setHidden:NO];
+        [rightLabel setHidden:NO];
         [bgView setImage:[UIImage imageNamed:@"cell_shadow.png"]];
         bgView.frame = CGRectMake(0, BG_Y, TOTAL_WIDTH, BG_HEIGHT);
     }else{
         [rightButton setHidden:YES];
+        [rightLabel setHidden:YES];
         [bgView setImage:[UIImage imageNamed:@"half_cell_shadow.png"]];
         bgView.frame = CGRectMake(0, BG_Y, TOTAL_WIDTH/2, BG_HEIGHT);
     }

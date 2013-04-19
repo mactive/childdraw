@@ -8,7 +8,6 @@
 
 #import "AppDelegate.h"
 #import "MainViewController.h"
-#import "UINavigationBar+customNavigation.h"
 #import "AppNetworkAPIClient.h"
 #import "AFHTTPRequestOperation.h"
 #import "IPAddress.h"
@@ -78,9 +77,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:121/255 green:123/255 blue:126/255 alpha:1.0] ];
     [[UIBarButtonItem appearance] setTintColor:RGBACOLOR(55, 61, 70, 1)];
     
-    if (self.systemVersion > 6.0) {
-        [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
-    }
+//    if (self.systemVersion > 6.0) {
+//        [[UINavigationBar appearance] setShadowImage:[[UIImage alloc] init]];
+//    }
     
     // Set up Core Data stack.
     NSPersistentStoreCoordinator *persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[[NSManagedObjectModel alloc] initWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"childDraw" withExtension:@"momd"]]];

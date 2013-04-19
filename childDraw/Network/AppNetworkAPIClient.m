@@ -75,7 +75,7 @@ static NSString * const kAppDataLogServerURLString  = @"http://218.61.10.155:901
 // getItemsCount
 - (void)getItemsCount:(NSInteger)count withBlock:(void(^)(id, NSString *, NSError *))block
 {
-    NSString *pathString = [NSString stringWithFormat:@"%@%d",GET_ITEMS_PATH, count];
+    NSString *pathString = [NSString stringWithFormat:@"%@%d/",GET_ITEMS_PATH, count];
     NSMutableURLRequest *itemRequest = [[AppNetworkAPIClient sharedClient] requestWithMethod:@"GET" path:pathString parameters:nil];
     [itemRequest setTimeoutInterval:2.0];
     
