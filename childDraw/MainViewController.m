@@ -118,7 +118,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.animationArray = [[NSArray alloc]init];
     
     if (IS_IPHONE_5) {
-        self.offsetViewY = 90.0f;
+        self.offsetViewY = 70.0f;
     }else{
         self.offsetViewY = 30.0f;
     }

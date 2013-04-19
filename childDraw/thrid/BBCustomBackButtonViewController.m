@@ -122,7 +122,7 @@
 
 - (void)addCustomBackButton
 {
-    NSString *title = self.title ? self.title : NSLocalizedString(@"Back", nil);
+    NSString *title = self.title ? self.title : NSLocalizedString(@"返回", nil);
     if (_backButtonTitle != nil) title = _backButtonTitle;
     [self addCustomBackButtonWithTitle:title];
 }
