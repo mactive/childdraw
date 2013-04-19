@@ -57,7 +57,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         // Custom initialization
 
         self.settingButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 29)];
-        [self.settingButton setBackgroundImage:[UIImage imageNamed:@"us_button.png"] forState:UIControlStateNormal];
+        [self.settingButton setBackgroundImage:[UIImage imageNamed:@"barbutton_castle.png"] forState:UIControlStateNormal];
         [self.settingButton addTarget:self action:@selector(settingAction) forControlEvents:UIControlEventTouchUpInside];
         
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.settingButton];
@@ -72,7 +72,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.title = T(@"全部列表");
     
     self.view.backgroundColor = BGCOLOR;
-    CGRect tableRect = CGRectMake(0, 0, TOTAL_WIDTH, self.view.frame.size.height -30);
+    CGRect tableRect = CGRectMake(0, 0, TOTAL_WIDTH, self.view.frame.size.height -44);
     self.tableView = [[UITableView alloc] initWithFrame:tableRect style:UITableViewStylePlain];
     self.tableView.backgroundColor = BGCOLOR;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -186,7 +186,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 HUD2.removeFromSuperViewOnHide = YES;
                 HUD2.mode = MBProgressHUDModeText;
                 HUD2.labelText = T(@"没有更多了");
-                [HUD2 hide:YES afterDelay:2];
+                [HUD2 hide:YES afterDelay:1];
                 
             } else {
                 [self.loadMoreButton setTitle:T(@"点击加载更多") forState:UIControlStateNormal];
@@ -203,7 +203,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             HUD.mode = MBProgressHUDModeCustomView;
             HUD.labelText = T(@"亲,连不上网啦! ");
             HUD.detailsLabelText = T(@"检查一下吧");
-            [HUD hide:YES afterDelay:2];
+            [HUD hide:YES afterDelay:1];
         }
         
         [self.loadMoreButton setEnabled:YES];
@@ -219,7 +219,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     // Dispose of any resources that can be recreated.
 }
 
-#define CELL_HEIGHT     125.0f
+#define CELL_HEIGHT     135.0f
 #define BUTTON_PER_CELL 2
 
 #define BUTTON_L_TAG    1
@@ -229,12 +229,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 #define LABEL_R_TAG     4
 #define CELL_BG_TAG     5
 
-#define BUTTON_X        13.0f
-#define BUTTON_Y        0.0f
+#define BUTTON_X        16.5f
+#define BUTTON_Y        10.0f
 #define BUTTON_WIDTH    135.0f
 #define BUTTON_HEIGHT   95.0f
 #define LABEL_HEIGHT    24.0f
-#define BG_Y            93.0f
+#define BG_Y            103.0f
 #define BG_HEIGHT       15.0f
 
 - (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier{
@@ -242,7 +242,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     // left button
-    UILabel *labelLeft = [[UILabel alloc]initWithFrame:CGRectMake(BUTTON_X, BUTTON_HEIGHT, BUTTON_WIDTH, LABEL_HEIGHT)];
+    UILabel *labelLeft = [[UILabel alloc]initWithFrame:CGRectMake(BUTTON_X, BUTTON_HEIGHT+BUTTON_Y, BUTTON_WIDTH, LABEL_HEIGHT)];
     labelLeft.textAlignment = NSTextAlignmentCenter;
     labelLeft.font = [UIFont boldSystemFontOfSize:14];
     labelLeft.textColor = BLUECOLOR;
@@ -255,7 +255,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     buttonLeft.tag = BUTTON_L_TAG;
 
     // right button
-    UILabel *labelRight = [[UILabel alloc]initWithFrame:CGRectMake(BUTTON_X*2+BUTTON_WIDTH, BUTTON_HEIGHT, BUTTON_WIDTH, LABEL_HEIGHT)];
+    UILabel *labelRight = [[UILabel alloc]initWithFrame:CGRectMake(BUTTON_X*2+BUTTON_WIDTH, BUTTON_HEIGHT+BUTTON_Y, BUTTON_WIDTH, LABEL_HEIGHT)];
     labelRight.textAlignment = NSTextAlignmentCenter;
     labelRight.font = [UIFont boldSystemFontOfSize:14];
     labelRight.textColor = BLUECOLOR;

@@ -86,7 +86,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         // Custom initialization
         
         self.listButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 29)];
-        [self.listButton setBackgroundImage:[UIImage imageNamed: @"list_button.png"] forState:UIControlStateNormal];
+        [self.listButton setBackgroundImage:[UIImage imageNamed: @"barbutton_cell.png"] forState:UIControlStateNormal];
         [self.listButton addTarget:self action:@selector(listAction) forControlEvents:UIControlEventTouchUpInside];
         
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.listButton];
@@ -118,9 +118,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.animationArray = [[NSArray alloc]init];
     
     if (IS_IPHONE_5) {
-        self.offsetViewY = 100.0f;
+        self.offsetViewY = 90.0f;
     }else{
-        self.offsetViewY = 50.0f;
+        self.offsetViewY = 30.0f;
     }
     
     // download view
@@ -262,12 +262,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)initMainView
 {
-    self.mainView  = [[UIView alloc]initWithFrame:CGRectMake(10, self.offsetViewY, TOTAL_WIDTH-20, self.view.frame.size.height)];
+    self.mainView  = [[UIView alloc]initWithFrame:CGRectMake(0, self.offsetViewY, TOTAL_WIDTH, self.view.frame.size.height)];
     self.mainView.backgroundColor = [UIColor clearColor];
     
     self.enterButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.enterButton setTitle:@"Enter" forState:UIControlStateNormal];
-    [self.enterButton setFrame:CGRectMake(56, 230
+    [self.enterButton setFrame:CGRectMake(66, 250
                                           + self.offsetViewY, 188, 43)];
     [self.enterButton setBackgroundImage:[UIImage imageNamed:@"button_bg.png"] forState:UIControlStateNormal];
     [self.enterButton setBackgroundImage:[UIImage imageNamed:@"button_highlight_bg.png"] forState:UIControlStateHighlighted];
@@ -278,7 +278,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.enterButton setTitleColor:DARKCOLOR forState:UIControlStateNormal];
     [self.enterButton addTarget:self action:@selector(enterAction) forControlEvents:UIControlEventTouchUpInside];
     
-    self.animArea = [[UIImageView alloc] initWithFrame:CGRectMake(35, 0, 250, 250)];
+    self.animArea = [[UIImageView alloc] initWithFrame:CGRectMake(10, 0, 300, 300)];
 
     // or animview
     self.transButton = [UIButton buttonWithType:UIButtonTypeCustom];

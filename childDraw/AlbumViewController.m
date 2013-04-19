@@ -128,7 +128,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 #pragma mark Helper methods
 
 - (UIView *)createViewForObj:(id)obj withIndex:(NSInteger)index{
-    UIView* view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width - 20,
+    UIView* view = [[UIView alloc] initWithFrame:CGRectMake(10, 0, self.view.frame.size.width - 20,
                                                             self.view.frame.size.height - 50)];
     
     view.backgroundColor = BGCOLOR;

@@ -196,7 +196,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 HUD.labelText = T(@"亲,连不上网啦!");
                 HUD.detailsLabelText = T(@"检查一下吧");
                 HUD.mode = MBProgressHUDModeCustomView;
-                [HUD hide:YES afterDelay:2];
+                [HUD hide:YES afterDelay:1];
 //            }
         }
      

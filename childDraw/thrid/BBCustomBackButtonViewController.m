@@ -17,8 +17,6 @@
 #define kBackButtonMarginRight      7.0f
 // padding added to back button
 #define kBackButtonPadding          10.0f
-// 导航部分高度
-#define CUSTOM_BUTTON_HEIGHT        30.0f 
 
 
 @implementation BBCustomBackButtonViewController
@@ -30,14 +28,14 @@
 {
     [_backButton release];
     [_backButtonTitle release];
-
+    
     [super dealloc];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     NSArray *viewControllers = [[self navigationController] viewControllers];
     // only add back if not first controller
     if ([viewControllers objectAtIndex:0] != self)
@@ -60,7 +58,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
+    
     NSArray *viewControllers = self.navigationController.viewControllers;
     // only animate if being animated (avoids animating when changing tabs, for example)
     // make sure it's not being re-revealed after dismissing a modal view.
@@ -73,7 +71,7 @@
         frame.size.width = self.backButton.frame.size.width;
         frame.origin.x = offset;
         self.backButton.frame = frame;
-
+        
         // animate the back button
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:kBackButtonAnimationSpeed];
@@ -81,21 +79,21 @@
         self.backButton.frame = frame;
         [UIView commitAnimations];
     }
-
+    
     _wasPushed = NO;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-
+    
     NSArray *viewControllers = self.navigationController.viewControllers;
-
+    
     // If view is disappearing but still in stack, we can assume a modal is hiding it.
     if (animated && [viewControllers objectAtIndex:viewControllers.count - 1] != self)
     {
         CGFloat offset = 0.0f;
-
+        
         // This segment care of Sbrocket.
         // @see http://stackoverflow.com/a/1816682/53653
         if (viewControllers.count > 1 && [viewControllers objectAtIndex:viewControllers.count - 2] == self)
@@ -110,11 +108,11 @@
             offset = kBackButtonAnimationOffset;
             _wasPushed = NO;
         }
-
+        
         CGRect frame = kBackButtonFrame;
         frame.origin.x = offset;
         frame.size.width = self.backButton.frame.size.width;
-
+        
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:kBackButtonAnimationSpeed];
         self.backButton.frame = frame;
@@ -133,33 +131,32 @@
 // @see http://stackoverflow.com/a/7068222/53653
 - (void)addCustomBackButtonWithTitle:(NSString *)title
 {
-    UIImageView *backArraw = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"back_button.png"]];
-    [backArraw setFrame:CGRectMake(15, (CUSTOM_BUTTON_HEIGHT-15)/2-2, 15, 15)];
-    //    image = [[UIImage imageNamed:@"back_button.png"]
-//                        resizableImageWithCapInsets:UIEdgeInsetsMake(14, 16, 14, 20) ];
-
+    UIImage *image = [[UIImage alloc]init];
+    image = [[UIImage imageNamed:@"back-button.png"]
+             resizableImageWithCapInsets:UIEdgeInsetsMake(14, 16, 14, 20) ];
     UIFont *font = [UIFont boldSystemFontOfSize:12.0f];
+    
     CGSize textSize = [title sizeWithFont:font];
-    CGSize buttonSize = CGSizeMake(textSize.width + kBackButtonPadding * 2, CUSTOM_BUTTON_HEIGHT);
-
+    CGSize buttonSize = CGSizeMake(textSize.width + kBackButtonPadding * 2, image.size.height);
+    
     UIButton *button = [[[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, buttonSize.width, buttonSize.height)] autorelease];
-    
-//    [button setTitle:title forState:UIControlStateNormal];
-//    [button setTitleColor:BLUECOLOR forState:UIControlStateNormal];
-//    [button.titleLabel setFont:font];
-//    [button.titleLabel setShadowOffset:CGSizeMake(0, -1)];
-    
-    [button addSubview:backArraw];
     [button addTarget:self action:@selector(didTouchBackButton:) forControlEvents:UIControlEventTouchUpInside];
-//    [button setBackgroundColor:[UIColor redColor]];
+    [button setBackgroundImage:image forState:UIControlStateNormal];
+    [button setTitle:title forState:UIControlStateNormal];
+    
+    [button.titleLabel setFont:font];
+    [button.titleLabel setShadowOffset:CGSizeMake(0, -1)];
+    
     // defaults are bright to show demo
     // override in viewDidLoad by accessing self.backButton
-
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [button setTitleShadowColor:[UIColor colorWithRed:0.0f/255.0f green:0.0f/255.0f blue:0.0f/255.0f alpha:0.6f] forState:UIControlStateNormal];
+    
     CGFloat margin = floorf((button.frame.size.height - textSize.height) / 2);
     CGFloat marginRight = kBackButtonMarginRight;
     CGFloat marginLeft = button.frame.size.width - textSize.width - marginRight;
     [button setTitleEdgeInsets:UIEdgeInsetsMake(margin, marginLeft, margin, marginRight)];
-
+    
     self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:button] autorelease];
     [self.navigationItem.leftBarButtonItem setWidth:buttonSize.width];
     self.backButton = button;

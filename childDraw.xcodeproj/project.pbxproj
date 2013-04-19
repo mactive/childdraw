@@ -68,7 +68,6 @@
 		26E5A87D1704291A00BEBE65 /* BBCustomBackButtonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26E5A87C1704291A00BEBE65 /* BBCustomBackButtonViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		26E5A88217042B2A00BEBE65 /* navigationBar_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26E5A88117042B2A00BEBE65 /* navigationBar_bg@2x.png */; };
 		26E5A888170431E000BEBE65 /* back_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26E5A887170431E000BEBE65 /* back_button@2x.png */; };
-		26E5A88D1705492300BEBE65 /* UINavigationBar+customNavigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 26E5A88C1705492300BEBE65 /* UINavigationBar+customNavigation.m */; };
 		26E5A8901705497600BEBE65 /* AppNetworkAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 26E5A88F1705497600BEBE65 /* AppNetworkAPIClient.m */; };
 		26E5A89417056EDA00BEBE65 /* IPAddress.c in Sources */ = {isa = PBXBuildFile; fileRef = 26E5A89317056EDA00BEBE65 /* IPAddress.c */; };
 		26F39F4416FC3DEF001A6EF9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26F39F4316FC3DEF001A6EF9 /* UIKit.framework */; };
@@ -170,8 +169,6 @@
 		26E5A87C1704291A00BEBE65 /* BBCustomBackButtonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBCustomBackButtonViewController.m; sourceTree = "<group>"; };
 		26E5A88117042B2A00BEBE65 /* navigationBar_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigationBar_bg@2x.png"; sourceTree = "<group>"; };
 		26E5A887170431E000BEBE65 /* back_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_button@2x.png"; sourceTree = "<group>"; };
-		26E5A88B1705492300BEBE65 /* UINavigationBar+customNavigation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+customNavigation.h"; sourceTree = "<group>"; };
-		26E5A88C1705492300BEBE65 /* UINavigationBar+customNavigation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationBar+customNavigation.m"; sourceTree = "<group>"; };
 		26E5A88E1705497600BEBE65 /* AppNetworkAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppNetworkAPIClient.h; sourceTree = "<group>"; };
 		26E5A88F1705497600BEBE65 /* AppNetworkAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppNetworkAPIClient.m; sourceTree = "<group>"; };
 		26E5A89217056EBC00BEBE65 /* IPAddress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IPAddress.h; sourceTree = "<group>"; };
@@ -300,15 +297,6 @@
 			path = Network;
 			sourceTree = "<group>";
 		};
-		26E5A88A1705492300BEBE65 /* Category */ = {
-			isa = PBXGroup;
-			children = (
-				26E5A88B1705492300BEBE65 /* UINavigationBar+customNavigation.h */,
-				26E5A88C1705492300BEBE65 /* UINavigationBar+customNavigation.m */,
-			);
-			path = Category;
-			sourceTree = "<group>";
-		};
 		26E5A89117056EA600BEBE65 /* IPAddress */ = {
 			isa = PBXGroup;
 			children = (
@@ -358,7 +346,6 @@
 			children = (
 				2672CF3B171BF34800E5E251 /* CuteData */,
 				2652C6AC170983E800054D45 /* Model */,
-				26E5A88A1705492300BEBE65 /* Category */,
 				26E5A8891705490000BEBE65 /* Network */,
 				2652C6C9170AAED700054D45 /* FirstDownloadIntro */,
 				26F39F9C16FC46BB001A6EF9 /* AppDefs.h */,
@@ -591,7 +578,6 @@
 				26F39F7A16FC45CB001A6EF9 /* UIImage+ProportionalFill.m in Sources */,
 				266921AA1704246400E6D771 /* GCPagedScrollView.m in Sources */,
 				26E5A87D1704291A00BEBE65 /* BBCustomBackButtonViewController.m in Sources */,
-				26E5A88D1705492300BEBE65 /* UINavigationBar+customNavigation.m in Sources */,
 				26E5A8901705497600BEBE65 /* AppNetworkAPIClient.m in Sources */,
 				26E5A89417056EDA00BEBE65 /* IPAddress.c in Sources */,
 				2652C6AF1709840700054D45 /* childDraw.xcdatamodeld in Sources */,
