@@ -272,7 +272,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     [self saveContext];
     [XFox logEvent:EVENT_ENTER_BACKGROUND];
-
+    [XFox endTimedEvent:EVENT_READING_TIMER withParameters:nil];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
