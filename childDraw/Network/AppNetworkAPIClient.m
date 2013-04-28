@@ -77,7 +77,7 @@ static NSString * const kAppDataLogServerURLString  = @"http://218.61.10.155:901
 {
     NSString *pathString = [NSString stringWithFormat:@"%@%d/",GET_ITEMS_PATH, count];
     NSMutableURLRequest *itemRequest = [[AppNetworkAPIClient sharedClient] requestWithMethod:@"GET" path:pathString parameters:nil];
-    [itemRequest setTimeoutInterval:2.0];
+//    [itemRequest setTimeoutInterval:2.0];
     
     AFJSONRequestOperation * itemOperation = [AFJSONRequestOperation JSONRequestOperationWithRequest:itemRequest success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         //
@@ -86,7 +86,6 @@ static NSString * const kAppDataLogServerURLString  = @"http://218.61.10.155:901
         NSString *httpZipPrefix = [NSString stringWithFormat:@"http://%@/",[JSON valueForKey:@"zip_prefix"]];
         [[NSUserDefaults standardUserDefaults] setObject:httpZipPrefix forKey:@"zip_prefix"];
         
-
         
         NSString* type = [JSON valueForKey:@"type"];
         if (![@"error" isEqualToString:type]) {
