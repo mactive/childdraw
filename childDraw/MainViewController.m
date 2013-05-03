@@ -21,6 +21,7 @@
 #import "ShareWithPhotoView.h"
 #import "MBProgressHUD.h"
 #import "DDLog.h"
+
 // Log levels: off, error, warn, info, verbose
 #if DEBUG
 static const int ddLogLevel = LOG_LEVEL_VERBOSE;
@@ -96,8 +97,24 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)listAction
 {
-    [self.navigationController.view.layer addAnimation:self.transition forKey:kCATransition];
-    [self.navigationController pushViewController:[self appDelegate].listViewContorller animated:NO];
+    // overlay shadow
+//    [[self appDelegate].listViewContorller.view.layer setShadowColor:[UIColor redColor].CGColor];
+//    [[self appDelegate].listViewContorller.view.layer setShadowOffset:CGSizeMake(100, 100)];
+//    [[self appDelegate].listViewContorller.view.layer setShadowOpacity:1];
+    
+//    [self.navigationController.view.layer setShadowColor:[UIColor blackColor].CGColor];
+//    [self.navigationController.view.layer setShadowOffset:CGSizeMake(0, 4)];
+//    [self.navigationController.view.layer setShadowOpacity:0.6f];
+    
+    [self moveYOffest:100 andDelay:0 andAlpha:1 withView:self.view];
+
+//    [self.navigationController.view.layer addAnimation:self.transition forKey:kCATransition];
+//    [self.navigationController pushViewController:[self appDelegate].listViewContorller animated:NO];
+    
+    
+//    [self.navigationController.view.layer setShadowColor:nil];
+//    [self.navigationController.view.layer setShadowOffset:CGSizeZero];
+//    [self.navigationController.view.layer setShadowOpacity:0];
 }
 
 - (void)initViewControllers
@@ -130,10 +147,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     // transition animation
     self.transition = [CATransition animation];
-    self.transition.duration = 0.1;
-    self.transition.type = kCATransitionFade;
+    self.transition.duration = 1.8;
+    self.transition.type = kCATransitionMoveIn;
     self.transition.timingFunction = UIViewAnimationCurveEaseInOut;
-    self.transition.subtype = kCATransitionFromLeft;
+    self.transition.subtype = kCATransitionFromBottom;
+    
     self.title = PRODUCT_NAME;
     
 }
