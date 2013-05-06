@@ -8,6 +8,7 @@
 
 #import "MainViewController.h"
 #import "AlbumViewController.h"
+#import "SlideListViewController.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "JSONKit/JSONKit.h"
 #import "AppNetworkAPIClient.h"
@@ -91,31 +92,30 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [self.listButton addTarget:self action:@selector(listAction) forControlEvents:UIControlEventTouchUpInside];
         
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.listButton];
+        
+        // right test view
+        UIButton *rightButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 29)];
+        [rightButton setBackgroundImage:[UIImage imageNamed: @"barbutton_mainmenu.png"] forState:UIControlStateNormal];
+        [rightButton addTarget:self action:@selector(rightAction) forControlEvents:UIControlEventTouchUpInside];
+        
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:rightButton];
+        
     }
     return self;
 }
 
 - (void)listAction
 {
-    // overlay shadow
-//    [[self appDelegate].listViewContorller.view.layer setShadowColor:[UIColor redColor].CGColor];
-//    [[self appDelegate].listViewContorller.view.layer setShadowOffset:CGSizeMake(100, 100)];
-//    [[self appDelegate].listViewContorller.view.layer setShadowOpacity:1];
-    
-//    [self.navigationController.view.layer setShadowColor:[UIColor blackColor].CGColor];
-//    [self.navigationController.view.layer setShadowOffset:CGSizeMake(0, 4)];
-//    [self.navigationController.view.layer setShadowOpacity:0.6f];
-    
-    [self moveYOffest:100 andDelay:0 andAlpha:1 withView:self.view];
-
-//    [self.navigationController.view.layer addAnimation:self.transition forKey:kCATransition];
-//    [self.navigationController pushViewController:[self appDelegate].listViewContorller animated:NO];
-    
-    
-//    [self.navigationController.view.layer setShadowColor:nil];
-//    [self.navigationController.view.layer setShadowOffset:CGSizeZero];
-//    [self.navigationController.view.layer setShadowOpacity:0];
+    [self.navigationController.view.layer addAnimation:self.transition forKey:kCATransition];
+    [self.navigationController pushViewController:[self appDelegate].listViewContorller animated:NO];
 }
+
+- (void)rightAction
+{
+    SlideListViewController *controller = [[SlideListViewController alloc]initWithNibName:nil bundle:nil];
+    [self.navigationController pushViewController:controller animated:NO];
+}
+
 
 - (void)initViewControllers
 {

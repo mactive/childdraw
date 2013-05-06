@@ -66,7 +66,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.scrollView.minimumZoomScale = 1; //最小到0.3倍
     self.scrollView.maximumZoomScale = 3.0; //最大到3倍
     self.scrollView.clipsToBounds = YES;
-    self.scrollView.scrollEnabled = YES;
+    self.scrollView.scrollEnabled = NO;
     self.scrollView.pagingEnabled = YES;
     self.scrollView.delegate = self;
     
