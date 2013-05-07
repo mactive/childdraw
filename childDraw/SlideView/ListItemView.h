@@ -10,4 +10,8 @@
 
 @interface ListItemView : UIView
 
+@property(readwrite, nonatomic)NSUInteger buttonIndex;
+
+- (void)setAvatar:(NSString *)filename;
+
 @end

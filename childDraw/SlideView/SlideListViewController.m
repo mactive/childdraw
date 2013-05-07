@@ -13,9 +13,8 @@
 #import "AppDelegate.h"
 #import "ServerDataTransformer.h"
 #import "ModelHelper.h"
-#import "UIImageView+AFNetworking.h"
 #import "Zipfile.h"
-
+#import "ListItemView.h"
 #import "DDLog.h"
 
 // Log levels: off, error, warn, info, verbose
@@ -46,8 +45,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize managedObjectContext;
 
 
-const CGFloat _itemWidth = 220.0f;
+const CGFloat _itemWidth = 256.0f;
 const CGFloat _itemOffset = 20.0f;
+const CGFloat _itemHeight = 350.0f;
 
 
 
@@ -65,7 +65,7 @@ const CGFloat _itemOffset = 20.0f;
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    CGRect viewRect = CGRectMake(0, 50, 320, 320);
+    CGRect viewRect = CGRectMake(0, 50, TOTAL_WIDTH, _itemHeight);
     self.scrollView = [[MCPagedScrollView alloc] initWithFrame:viewRect];
     
     self.scrollView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
@@ -230,45 +230,13 @@ const CGFloat _itemOffset = 20.0f;
 
 
 - (UIView *)createViewForObj:(id)obj withIndex:(NSInteger)index{
-    UIView* view = [[UIView alloc] initWithFrame:CGRectMake( (TOTAL_WIDTH-_itemWidth)/2 , 0, _itemWidth,
-                                                            TOTAL_WIDTH)];
+    CGRect frame = CGRectMake( (TOTAL_WIDTH-_itemWidth)/2 , 0, _itemWidth, TOTAL_WIDTH);
     
     Zipfile *theFile = (Zipfile *)[self.sourceData objectAtIndex:index];
-
-    view.backgroundColor = BGCOLOR;
-    UIImageView* imageView = [[UIImageView alloc]initWithFrame:view.bounds];
-    imageView.tag = 1001;
-    imageView.contentMode = UIViewContentModeScaleAspectFill;
-
-    NSString *prefix = [[NSUserDefaults standardUserDefaults] objectForKey:@"thumbnail_prefix"];
-    NSString *url = [NSString stringWithFormat:@"%@%@.png",prefix,theFile.fileName];
-    NSLog(@"URL %@",url);
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-    [imageView setImageWithURLRequest:request
-                           placeholderImage:nil
-                                    success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                        
-                                        [imageView setImage:image];
-                                        
-                                        
-                                    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                                        //
-                                        [imageView setImage:[UIImage imageNamed:@"icon.png"]];
-                                    }];
-
     
-   
+    ListItemView *view = [[ListItemView alloc]initWithFrame:frame];
+    [view setAvatar:theFile.fileName];
     
-    
-    UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 300, view.frame.size.width, 20)];
-    titleLabel.font = [UIFont systemFontOfSize:12.0f];
-    titleLabel.text = theFile.title;
-    titleLabel.textAlignment = NSTextAlignmentCenter;
-    titleLabel.backgroundColor = [UIColor clearColor];
-    
-    [imageView setContentMode:UIViewContentModeScaleAspectFit];
-    [view addSubview:imageView];
-    [view addSubview:titleLabel];
     return view;
 }
 
