@@ -11,7 +11,6 @@
 @interface SlideListViewController : UIViewController
 
 @property (nonatomic, strong) MCPagedScrollView* scrollView;
-@property (nonatomic, strong) NSArray *albumArray;
-@property (nonatomic, assign) NSUInteger albumIndex;
+@property(strong, nonatomic)NSManagedObjectContext *managedObjectContext;
 
 @end

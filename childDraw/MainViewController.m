@@ -113,6 +113,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)rightAction
 {
     SlideListViewController *controller = [[SlideListViewController alloc]initWithNibName:nil bundle:nil];
+    controller.managedObjectContext = self.managedObjectContext;
     [self.navigationController pushViewController:controller animated:NO];
 }
 

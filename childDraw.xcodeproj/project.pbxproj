@@ -44,8 +44,9 @@
 		2652C6C41709947B00054D45 /* next_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2652C6BD1709947B00054D45 /* next_button@2x.png */; };
 		2652C6C51709947B00054D45 /* click_me@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2652C6BE1709947B00054D45 /* click_me@2x.png */; };
 		2652C6C8170AAE6900054D45 /* FirstDownloadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2652C6C7170AAE6900054D45 /* FirstDownloadViewController.m */; };
-		26604F9A173757B20010CE9E /* SlideListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26604F99173757B20010CE9E /* SlideListViewController.m */; };
 		26604F9E17377BF80010CE9E /* MCPagedScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 26604F9D17377BF80010CE9E /* MCPagedScrollView.m */; };
+		26604FA91738C48E0010CE9E /* ListItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 26604FA61738C48E0010CE9E /* ListItemView.m */; };
+		26604FAA1738C48E0010CE9E /* SlideListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26604FA81738C48E0010CE9E /* SlideListViewController.m */; };
 		2666F1B4170C012100E21BA4 /* circle_button_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2666F1B3170C012100E21BA4 /* circle_button_bg@2x.png */; };
 		2666F1B6170C08BE00E21BA4 /* Museo500-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2666F1B5170C08BE00E21BA4 /* Museo500-Regular.otf */; };
 		2666F1BE170C2C0A00E21BA4 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2666F1BD170C2C0A00E21BA4 /* ListViewController.m */; };
@@ -139,10 +140,12 @@
 		2652C6BE1709947B00054D45 /* click_me@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "click_me@2x.png"; sourceTree = "<group>"; };
 		2652C6C6170AAE6900054D45 /* FirstDownloadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstDownloadViewController.h; sourceTree = "<group>"; };
 		2652C6C7170AAE6900054D45 /* FirstDownloadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstDownloadViewController.m; sourceTree = "<group>"; };
-		26604F98173757B20010CE9E /* SlideListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideListViewController.h; sourceTree = "<group>"; };
-		26604F99173757B20010CE9E /* SlideListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlideListViewController.m; sourceTree = "<group>"; };
 		26604F9C17377BF80010CE9E /* MCPagedScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCPagedScrollView.h; sourceTree = "<group>"; };
 		26604F9D17377BF80010CE9E /* MCPagedScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCPagedScrollView.m; sourceTree = "<group>"; };
+		26604FA51738C48E0010CE9E /* ListItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListItemView.h; sourceTree = "<group>"; };
+		26604FA61738C48E0010CE9E /* ListItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListItemView.m; sourceTree = "<group>"; };
+		26604FA71738C48E0010CE9E /* SlideListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideListViewController.h; sourceTree = "<group>"; };
+		26604FA81738C48E0010CE9E /* SlideListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlideListViewController.m; sourceTree = "<group>"; };
 		2666F1B3170C012100E21BA4 /* circle_button_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "circle_button_bg@2x.png"; sourceTree = "<group>"; };
 		2666F1B5170C08BE00E21BA4 /* Museo500-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Museo500-Regular.otf"; sourceTree = "<group>"; };
 		2666F1B7170C0E9B00E21BA4 /* PassValueDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PassValueDelegate.h; sourceTree = "<group>"; };
@@ -282,6 +285,17 @@
 			path = MCPagedScrollView;
 			sourceTree = "<group>";
 		};
+		26604FA41738C48E0010CE9E /* SlideView */ = {
+			isa = PBXGroup;
+			children = (
+				26604FA51738C48E0010CE9E /* ListItemView.h */,
+				26604FA61738C48E0010CE9E /* ListItemView.m */,
+				26604FA71738C48E0010CE9E /* SlideListViewController.h */,
+				26604FA81738C48E0010CE9E /* SlideListViewController.m */,
+			);
+			path = SlideView;
+			sourceTree = "<group>";
+		};
 		266921A71704246400E6D771 /* GCPagedScrollView */ = {
 			isa = PBXGroup;
 			children = (
@@ -381,8 +395,7 @@
 				26502E47171514E6005BFD7B /* AboutUsViewController.m */,
 				26502E3A1713FCAC005BFD7B /* ShareWithPhotoView.h */,
 				26502E3B1713FCAD005BFD7B /* ShareWithPhotoView.m */,
-				26604F98173757B20010CE9E /* SlideListViewController.h */,
-				26604F99173757B20010CE9E /* SlideListViewController.m */,
+				26604FA41738C48E0010CE9E /* SlideView */,
 				26F39F7416FC45CB001A6EF9 /* thrid */,
 				26F39F6616FC4083001A6EF9 /* Resources */,
 				26F39F4A16FC3DEF001A6EF9 /* Supporting Files */,
@@ -612,8 +625,9 @@
 				26502E5617156FC1005BFD7B /* StyledPageControl.m in Sources */,
 				2672CF41171BF34800E5E251 /* CuteData.m in Sources */,
 				2672CF42171BF34800E5E251 /* PageViewLogger.m in Sources */,
-				26604F9A173757B20010CE9E /* SlideListViewController.m in Sources */,
 				26604F9E17377BF80010CE9E /* MCPagedScrollView.m in Sources */,
+				26604FA91738C48E0010CE9E /* ListItemView.m in Sources */,
+				26604FAA1738C48E0010CE9E /* SlideListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -32,7 +32,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 @property(strong, nonatomic)UIButton *settingButton;
 @property(strong,nonatomic)NSArray *sourceData;
-@property(strong, nonatomic)NSMutableDictionary * sourceDict;
 @property(strong, nonatomic)UITableView * tableView;
 @property(strong, nonatomic)UIButton *loadMoreButton;
 @property( nonatomic, readwrite) NSUInteger startInt;
@@ -43,7 +42,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize settingButton;
 @synthesize managedObjectContext;
 @synthesize sourceData;
-@synthesize sourceDict;
 @synthesize tableView;
 @synthesize loadMoreButton;
 @synthesize startInt;
