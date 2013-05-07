@@ -239,6 +239,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             }
             
             [self refreshSubView];
+            [self.scrollView setPage:start];
             
         }
         if (error != nil) {
