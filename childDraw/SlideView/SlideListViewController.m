@@ -89,8 +89,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.scrollView.itemWidth = BG_WIDTH;
     self.scrollView.itemOffset = BG_OFFSET;
     
-    self.sourceData = [[NSArray alloc]init];
     [self.view addSubview:self.scrollView];
+
+    
+    self.sourceData = [[NSArray alloc]init];
+    self.startInt = 0;
+    self.isLOADMORE = NO;
     
     
     // toucha    
@@ -123,6 +127,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         DDLogVerbose(@"<<< left");
         if (self.scrollView.page >= 0 && self.scrollView.page < [self.sourceData count]-1) {
             [self.scrollView setPage:self.scrollView.page + 1 animated:YES];
+        }else{
+            // load more
+            self.isLOADMORE = YES;
+            [self populateData:self.startInt];
         }
     }
     if (paramSender.direction & UISwipeGestureRecognizerDirectionRight) {
@@ -232,7 +240,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
             [self refreshSubView];
             
-            
         }
         if (error != nil) {
             HUD.mode = MBProgressHUDModeCustomView;
@@ -241,8 +248,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [HUD hide:YES afterDelay:1];
         }
         
-//        [self.loadMoreButton setEnabled:YES];
-//        [self.loadMoreButton setHidden:NO];
         self.isLOADMORE = NO;
     }];
 }
