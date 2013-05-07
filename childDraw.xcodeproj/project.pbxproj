@@ -57,6 +57,7 @@
 		26604FBB1738C7600010CE9E /* bottom_full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26604FB21738C7600010CE9E /* bottom_full@2x.png */; };
 		26604FBC1738C7600010CE9E /* keyline_full@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26604FB31738C7600010CE9E /* keyline_full@2x.png */; };
 		26604FBE1738CB580010CE9E /* default_item@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26604FBD1738CB580010CE9E /* default_item@2x.png */; };
+		26604FC2173911380010CE9E /* NSDate-Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 26604FC1173911380010CE9E /* NSDate-Utilities.m */; };
 		2666F1B4170C012100E21BA4 /* circle_button_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2666F1B3170C012100E21BA4 /* circle_button_bg@2x.png */; };
 		2666F1B6170C08BE00E21BA4 /* Museo500-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2666F1B5170C08BE00E21BA4 /* Museo500-Regular.otf */; };
 		2666F1BE170C2C0A00E21BA4 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2666F1BD170C2C0A00E21BA4 /* ListViewController.m */; };
@@ -166,6 +167,8 @@
 		26604FB21738C7600010CE9E /* bottom_full@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bottom_full@2x.png"; sourceTree = "<group>"; };
 		26604FB31738C7600010CE9E /* keyline_full@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "keyline_full@2x.png"; sourceTree = "<group>"; };
 		26604FBD1738CB580010CE9E /* default_item@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_item@2x.png"; sourceTree = "<group>"; };
+		26604FC0173911380010CE9E /* NSDate-Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate-Utilities.h"; sourceTree = "<group>"; };
+		26604FC1173911380010CE9E /* NSDate-Utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate-Utilities.m"; sourceTree = "<group>"; };
 		2666F1B3170C012100E21BA4 /* circle_button_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "circle_button_bg@2x.png"; sourceTree = "<group>"; };
 		2666F1B5170C08BE00E21BA4 /* Museo500-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Museo500-Regular.otf"; sourceTree = "<group>"; };
 		2666F1B7170C0E9B00E21BA4 /* PassValueDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PassValueDelegate.h; sourceTree = "<group>"; };
@@ -314,6 +317,15 @@
 				26604FA81738C48E0010CE9E /* SlideListViewController.m */,
 			);
 			path = SlideView;
+			sourceTree = "<group>";
+		};
+		26604FBF173911380010CE9E /* NSDateCategory */ = {
+			isa = PBXGroup;
+			children = (
+				26604FC0173911380010CE9E /* NSDate-Utilities.h */,
+				26604FC1173911380010CE9E /* NSDate-Utilities.m */,
+			);
+			path = NSDateCategory;
 			sourceTree = "<group>";
 		};
 		266921A71704246400E6D771 /* GCPagedScrollView */ = {
@@ -493,6 +505,7 @@
 		26F39F7416FC45CB001A6EF9 /* thrid */ = {
 			isa = PBXGroup;
 			children = (
+				26604FBF173911380010CE9E /* NSDateCategory */,
 				26604F9B17377BF80010CE9E /* MCPagedScrollView */,
 				26502E4B17156FC1005BFD7B /* StypePagecontrol */,
 				261CBF2B1712B39700F59321 /* whchat */,
@@ -668,6 +681,7 @@
 				26604F9E17377BF80010CE9E /* MCPagedScrollView.m in Sources */,
 				26604FA91738C48E0010CE9E /* ListItemView.m in Sources */,
 				26604FAA1738C48E0010CE9E /* SlideListViewController.m in Sources */,
+				26604FC2173911380010CE9E /* NSDate-Utilities.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

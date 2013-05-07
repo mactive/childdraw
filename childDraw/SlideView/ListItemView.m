@@ -9,18 +9,24 @@
 #import "ListItemView.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIImageView+AFNetworking.h"
+#import "NSDate-Utilities.h"
 
 @interface ListItemView()
 @property(nonatomic, strong)UIImageView *imageView;
 @property(nonatomic, strong)UIImageView *bgView;
+@property(nonatomic, strong)UILabel *timeLabel;
 @end
 
 
 @implementation ListItemView
 @synthesize imageView;
 @synthesize bgView;
+@synthesize timeLabel;
 
 #define ITEM_WIDTH  225.0f
+#define TIME_HEIGHT  20.0f
+#define TIME_WIDTH  80.0f
+
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -35,8 +41,16 @@
                           CGRectMake((frame.size.width - ITEM_WIDTH)/2, (frame.size.height-ITEM_WIDTH)/2, ITEM_WIDTH, ITEM_WIDTH)];
         self.imageView.contentMode = UIViewContentModeScaleAspectFill;
 
+        self.timeLabel = [[UILabel alloc]initWithFrame:CGRectMake(frame.size.width-TIME_WIDTH, BG_HEIGHT, TIME_WIDTH, TIME_HEIGHT)];
+        self.timeLabel.backgroundColor = [UIColor clearColor];
+        self.timeLabel.textAlignment = NSTextAlignmentCenter;
+        self.timeLabel.textColor = BLUECOLOR;
+        self.timeLabel.font = LITTLECUSTOMFONT;
+
         [self addSubview:self.bgView];
         [self addSubview:self.imageView];
+        [self addSubview:self.timeLabel];
+
     }
     return self;
 }
@@ -57,6 +71,13 @@
                                    failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
                                        [self.imageView setImage:[UIImage imageNamed:@"default_item.png"]];
                                    }];
+    [self setTime:filename];
+}
+
+- (void)setTime:(NSString *)filename
+{
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:(filename.floatValue)];
+    self.timeLabel.text = [NSString stringWithFormat:@"%d-%d-%d",date.year,date.month, date.day];
 }
 
 - (void)willMoveToSuperview:(UIView *)newSuperview

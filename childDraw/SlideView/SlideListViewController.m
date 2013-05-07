@@ -75,7 +75,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [bgView setImage:[UIImage imageNamed:@"4s_bg.png"]];
     [self.view addSubview:bgView];
     
-    CGRect viewRect = CGRectMake(0, CONTROL_HEIGHT, TOTAL_WIDTH, BG_HEIGHT);
+    CGRect viewRect = CGRectMake(0, CONTROL_HEIGHT, TOTAL_WIDTH, BG_HEIGHT+20);
     self.scrollView = [[MCPagedScrollView alloc] initWithFrame:viewRect];
     self.scrollView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
     self.scrollView.backgroundColor = [UIColor clearColor];
