@@ -44,24 +44,21 @@ const CGFloat MCPagedScrollViewPageControlHeight = 36.0;
         self.showsHorizontalScrollIndicator = NO;
         self.scrollsToTop = NO;
         
+        NSLog(@"%f %f %f %f",frame.origin.x, frame.origin.y,frame.size.width,frame.size.height);
+        
         StyledPageControl *aPageControl = [[StyledPageControl alloc]initWithFrame:CGRectZero];
         [aPageControl setFrame:CGRectMake(20,(self.frame.size.height-20)/2,self.frame.size.width-40,20)];
         [aPageControl addTarget:self action:@selector(changePage:) forControlEvents:UIControlEventValueChanged];
         [aPageControl setPageControlStyle:PageControlStyleWithPageNumber];
         [aPageControl setUserInteractionEnabled:NO];
-        [self addSubview:aPageControl];
+//        [self addSubview:aPageControl];
 
-        pageControl = aPageControl;
+        self.pageControl = aPageControl;
+        
     }
     return self;
 }
 
-//- (void) setPagingEnabled:(BOOL) pagingEnabled {
-//    if (pagingEnabled) [super setPagingEnabled:pagingEnabled];
-//    else {
-//        [NSException raise:@"Disabling pagingEnabled" format:@"Paging enabled should not be disabled in MCPagedScrollView"];
-//    }
-//}
 
 #pragma mark -
 #pragma mark Add/Remove content
@@ -117,7 +114,7 @@ const CGFloat MCPagedScrollViewPageControlHeight = 36.0;
         UIView* view = (UIView*) obj;
         
         CGFloat X = A + idx * itemWidth + itemWidth / 2 + itemOffset *idx;
-        view.center = CGPointMake( X, (self.frame.size.height - MCPagedScrollViewPageControlHeight) / 2);
+        view.center = CGPointMake( X, BG_HEIGHT / 2);
         
     }];
     
@@ -148,10 +145,10 @@ const CGFloat MCPagedScrollViewPageControlHeight = 36.0;
 #pragma mark -
 #pragma mark Getters/Setters
 
-- (void) setFrame:(CGRect) newFrame {
-    [super setFrame:newFrame];
-    [self updateViewPositionAndPageControl];
-}
+//- (void) setFrame:(CGRect) newFrame {
+//    [super setFrame:newFrame];
+//    [self updateViewPositionAndPageControl];
+//}
 
 - (void) changePage:(UIPageControl*) aPageControl {
     [self setPage:aPageControl.currentPage animated:YES];

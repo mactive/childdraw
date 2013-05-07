@@ -20,24 +20,23 @@
 @synthesize imageView;
 @synthesize bgView;
 
-#define itemWidth 225.0f
-#define bgHeight  332.0f
+#define ITEM_WIDTH  225.0f
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        self.bgView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, frame.size.width, bgHeight)];
+        self.bgView = [[UIImageView alloc]initWithFrame:frame];
+//        NSLog(@"%f %f %f %f",frame.origin.x, frame.origin.y,frame.size.width,frame.size.height);
         [self.bgView setImage:[UIImage imageNamed:@"item_bg.png"]];
         
         self.imageView = [[UIImageView alloc]initWithFrame:
-                          CGRectMake((frame.size.width - itemWidth)/2, (bgHeight-itemWidth)/2, itemWidth, itemWidth)];
+                          CGRectMake((frame.size.width - ITEM_WIDTH)/2, (frame.size.height-ITEM_WIDTH)/2, ITEM_WIDTH, ITEM_WIDTH)];
         self.imageView.contentMode = UIViewContentModeScaleAspectFill;
 
         [self addSubview:self.bgView];
         [self addSubview:self.imageView];
-
     }
     return self;
 }
@@ -51,12 +50,13 @@
     
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
     [self.imageView setImageWithURLRequest:request
-                           placeholderImage:nil
-                                    success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                        [self.imageView setImage:image];
-                                    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                                        [self.imageView setImage:[UIImage imageNamed:@"default_item.png"] ];
-                                    }];
+                          placeholderImage:nil
+                                   success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                       [self.imageView setImage:image];
+                                   }
+                                   failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                       [self.imageView setImage:[UIImage imageNamed:@"default_item.png"]];
+                                   }];
 }
 
 - (void)willMoveToSuperview:(UIView *)newSuperview

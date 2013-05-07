@@ -49,6 +49,11 @@ alpha:(a)]
 #define BIG_BUTTON_WIDTH 128.0f
 #define JPEG_QUALITY 0.6
 
+#define BG_WIDTH    256.0f
+#define BG_HEIGHT   332.0f
+#define BG_OFFSET   10.0f
+
+
 
 #define DOWNLOADFINISH @"DownloadFinish"
 #define DOWNLOADING @"Downloading"
@@ -111,6 +116,14 @@ MOCCount(_managedObjectContext, [NSFetchRequest fetchRequestWithEntityName:entit
 
 NS_INLINE BOOL StringHasValue(NSString * str) {
     return (str != nil) && (![str isEqualToString:@""]);
+}
+
+NS_INLINE CGFloat TOTAL_HEIGHT() {
+    if(IS_IPHONE_5){
+        return 548.0f;
+    }else{
+        return 460.0f;
+    }
 }
 
 

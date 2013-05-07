@@ -13,6 +13,7 @@
 #import "AppDelegate.h"
 #import "ServerDataTransformer.h"
 #import "ModelHelper.h"
+#import "ModelDownload.h"
 #import "Zipfile.h"
 #import "ListItemView.h"
 #import "DDLog.h"
@@ -25,9 +26,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
 
 @interface SlideListViewController ()
+// control view
+@property(nonatomic, strong)UIView *controlView;
+@property(nonatomic, strong)UIButton *aboutUSButton;
+@property(nonatomic, strong)UIButton *setttingButton;
+
+// swipeView
 @property(nonatomic, strong)UIView *swipeView;
 @property(nonatomic, strong)UISwipeGestureRecognizer *leftSwipe;
 @property(nonatomic, strong)UISwipeGestureRecognizer *rightSwipe;
+@property(nonatomic, strong)UITapGestureRecognizer *clickTap;
 
 @property(nonatomic, strong) NSArray *sourceData;
 @property(nonatomic, assign) NSUInteger albumIndex;
@@ -39,18 +47,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize scrollView;
 @synthesize sourceData;
 @synthesize swipeView;
-@synthesize leftSwipe,rightSwipe;
+@synthesize leftSwipe,rightSwipe,clickTap;
 @synthesize startInt;
 @synthesize isLOADMORE;
 @synthesize managedObjectContext;
 
-
-const CGFloat _itemWidth = 256.0f;
-const CGFloat _itemOffset = 20.0f;
-const CGFloat _itemHeight = 350.0f;
-
-
-
+#define CONTROL_HEIGHT 66
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -61,16 +63,22 @@ const CGFloat _itemHeight = 350.0f;
     return self;
 }
 
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    CGRect viewRect = CGRectMake(0, 50, TOTAL_WIDTH, _itemHeight);
+    
+    [self.view setFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_HEIGHT())];
+    
+    UIImageView *bgView = [[UIImageView alloc]initWithFrame:self.view.frame];
+    [bgView setImage:[UIImage imageNamed:@"4s_bg.png"]];
+    [self.view addSubview:bgView];
+    
+    CGRect viewRect = CGRectMake(0, CONTROL_HEIGHT, TOTAL_WIDTH, BG_HEIGHT);
     self.scrollView = [[MCPagedScrollView alloc] initWithFrame:viewRect];
-    
     self.scrollView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
-    
-    self.scrollView.backgroundColor = BLUECOLOR;
+    self.scrollView.backgroundColor = [UIColor clearColor];
     
     self.scrollView.minimumZoomScale = 1; //最小到0.3倍
     self.scrollView.maximumZoomScale = 1; //最大到3倍
@@ -78,12 +86,11 @@ const CGFloat _itemHeight = 350.0f;
     self.scrollView.scrollEnabled = NO;
     self.scrollView.pagingEnabled = NO;
     
-    self.scrollView.itemWidth = _itemWidth;
-    self.scrollView.itemOffset = _itemOffset;
+    self.scrollView.itemWidth = BG_WIDTH;
+    self.scrollView.itemOffset = BG_OFFSET;
     
     self.sourceData = [[NSArray alloc]init];
     [self.view addSubview:self.scrollView];
-    self.view.backgroundColor = [UIColor whiteColor];
     
     
     // toucha    
@@ -100,6 +107,14 @@ const CGFloat _itemHeight = 350.0f;
     self.rightSwipe.direction = (UISwipeGestureRecognizerDirectionRight);
     self.rightSwipe.numberOfTouchesRequired = 1;
     [self.swipeView addGestureRecognizer:self.rightSwipe];
+    
+    self.clickTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(actionTap:)];
+    self.clickTap.numberOfTapsRequired = 1;
+    self.clickTap.numberOfTouchesRequired = 1;
+    [self.swipeView addGestureRecognizer:self.clickTap];
+    
+    [self initControlView];
+    [self initBottomView];
 }
 
 - (void)actionSwipe:(UISwipeGestureRecognizer *)paramSender
@@ -118,15 +133,35 @@ const CGFloat _itemHeight = 350.0f;
     }
 }
 
+- (void)actionTap:(UISwipeGestureRecognizer *)paramSender
+{
+    
+    NSLog(@"sender.buttonIndex %d",self.scrollView.page);
+    [self.navigationController setNavigationBarHidden:NO];
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    
+    Zipfile *theZipfile = [self.sourceData objectAtIndex:self.scrollView.page];
+    
+    [self appDelegate].mainViewController.planetString = theZipfile.fileName;
+    [self appDelegate].mainViewController.titleString = theZipfile.title;
+    
+    [ModelDownload sharedInstance].lastPlanet = theZipfile.fileName;
+    /* 绑定这两个 delegate */
+    [ModelDownload sharedInstance].delegate = (id)[self appDelegate].mainViewController;
+    [[ModelDownload sharedInstance] downloadAndUpdate:theZipfile];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+
+    [self.navigationController setNavigationBarHidden:YES];
     
     if (self.sourceData == nil || [self.sourceData count] == 0) {
         self.startInt = 0;
         [self populateData:self.startInt];
     }
-//    [self refreshSubView];
+    
 }
 
 // 解析公司列表
@@ -212,9 +247,6 @@ const CGFloat _itemHeight = 350.0f;
     }];
 }
 
-
-
-
 - (void)refreshSubView
 {
     [self.scrollView removeAllContentSubviews];
@@ -227,10 +259,8 @@ const CGFloat _itemHeight = 350.0f;
     }
 }
 
-
-
 - (UIView *)createViewForObj:(id)obj withIndex:(NSInteger)index{
-    CGRect frame = CGRectMake( (TOTAL_WIDTH-_itemWidth)/2 , 0, _itemWidth, TOTAL_WIDTH);
+    CGRect frame = CGRectMake(0, 0, BG_WIDTH, BG_HEIGHT);
     
     Zipfile *theFile = (Zipfile *)[self.sourceData objectAtIndex:index];
     
@@ -246,5 +276,75 @@ const CGFloat _itemHeight = 350.0f;
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark controlview
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#define B_WIDTH 60
+#define B_HEIGHT 30
+#define X_OFFSET 10
+#define Y_OFFSET 5
+
+- (void)initControlView
+{
+    self.controlView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, TOTAL_WIDTH, CONTROL_HEIGHT)];
+    
+    self.aboutUSButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.aboutUSButton setFrame:CGRectMake(X_OFFSET, Y_OFFSET, B_WIDTH, B_HEIGHT)];
+    [self.aboutUSButton setBackgroundImage:[UIImage imageNamed:@"button_us.png"] forState:UIControlStateNormal];
+    [self.aboutUSButton addTarget:self action:@selector(aboutUSAction) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.setttingButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.setttingButton setFrame:CGRectMake(TOTAL_WIDTH - X_OFFSET - B_WIDTH, Y_OFFSET, B_WIDTH, B_HEIGHT)];
+    [self.setttingButton setBackgroundImage:[UIImage imageNamed:@"button_setting.png"] forState:UIControlStateNormal];
+    [self.setttingButton addTarget:self action:@selector(setttingAction) forControlEvents:UIControlEventTouchUpInside];
+    
+    UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake((TOTAL_WIDTH-B_WIDTH) /2, Y_OFFSET, B_WIDTH, B_HEIGHT)];
+    titleLabel.text = T(@"全部");
+    titleLabel.backgroundColor = [UIColor clearColor];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.textColor = GRAYCOLOR;
+    titleLabel.font = [UIFont boldSystemFontOfSize:22.0f];
+    titleLabel.layer.shadowColor = [UIColor whiteColor].CGColor;
+    titleLabel.layer.shadowOffset = CGSizeMake(0, 1);
+    titleLabel.layer.shadowRadius = 1;
+    titleLabel.layer.shadowOpacity = 1;
+    
+    UIImageView *bottomLine = [[UIImageView alloc]initWithFrame:CGRectMake(0, 41, TOTAL_WIDTH, 3)];
+    [bottomLine setImage:[UIImage imageNamed:@"keyline_full.png"]];
+    
+    [self.controlView addSubview:self.aboutUSButton];
+    [self.controlView addSubview:self.setttingButton];
+    [self.controlView addSubview:titleLabel];
+    [self.controlView addSubview:bottomLine];
+    
+    [self.view addSubview:self.controlView];
+}
+
+- (void)initBottomView
+{
+    UIImageView *bottomView = [[UIImageView alloc]initWithFrame:CGRectMake(0,  TOTAL_HEIGHT()- 43, TOTAL_WIDTH, 32)];
+    [bottomView setImage:[UIImage imageNamed:@"bottom_full.png"]];
+    
+    [self.view addSubview:bottomView];
+}
+
+- (void)aboutUSAction
+{
+    
+}
+
+- (void)setttingAction
+{
+    
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark Accessors & selectors
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (AppDelegate *)appDelegate
+{
+	return (AppDelegate *)[[UIApplication sharedApplication] delegate];
+}
+
 
 @end
