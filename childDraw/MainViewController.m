@@ -39,14 +39,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property(strong, nonatomic)UIImageView *titleImage;
 @property(strong, nonatomic)AlbumViewController *albumViewController;
 @property(strong, nonatomic)UIButton *enterButton;
-@property(strong, nonatomic)UIButton *transButton;
+@property(strong, nonatomic)UIView *swipeView;
 @property(strong, nonatomic)CATransition* transition;
 
 @property(strong, nonatomic)NSArray *albumArray;
 @property(strong, nonatomic)NSArray *animationArray;
 @property(strong, nonatomic)NSString *audioPath;
 @property(strong, nonatomic)UIImageView *animArea;
-@property(strong, nonatomic)UIButton *listButton;
 @property(strong, nonatomic)Zipfile *theZipfile;
 @property(assign, nonatomic)NSInteger picCount;
 @property(assign, nonatomic)NSInteger aniCount;
@@ -58,6 +57,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 @property(readwrite, nonatomic)CGFloat offsetViewY;
 
+@property(nonatomic, strong)UISwipeGestureRecognizer *leftSwipe;
+@property(nonatomic, strong)UITapGestureRecognizer *clickTap;
+
 @end
 
 @implementation MainViewController
@@ -67,9 +69,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize albumArray;
 @synthesize animationArray;
 @synthesize audioPath;
-@synthesize transButton;
+@synthesize swipeView;
 @synthesize animArea;
-@synthesize listButton;
 @synthesize planetString;
 @synthesize theZipfile;
 @synthesize managedObjectContext = _managedObjectContext;
@@ -86,20 +87,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        
-        self.listButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 29)];
-        [self.listButton setBackgroundImage:[UIImage imageNamed: @"barbutton_cell.png"] forState:UIControlStateNormal];
-        [self.listButton addTarget:self action:@selector(listAction) forControlEvents:UIControlEventTouchUpInside];
-        
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.listButton];
-        
-        // right test view
-        UIButton *rightButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 29)];
-        [rightButton setBackgroundImage:[UIImage imageNamed: @"barbutton_mainmenu.png"] forState:UIControlStateNormal];
-        [rightButton addTarget:self action:@selector(rightAction) forControlEvents:UIControlEventTouchUpInside];
-        
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:rightButton];
-        
     }
     return self;
 }
@@ -138,8 +125,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (IS_IPHONE_5) {
         self.offsetViewY = 70.0f;
     }else{
-        self.offsetViewY = 30.0f;
+        self.offsetViewY = 40.0f;
     }
+    
+    UIImageView *bgView = [[UIImageView alloc]initWithFrame:self.view.frame];
+    if (IS_IPHONE_5) {
+        [bgView setImage:[UIImage imageNamed:@"5_bg.png"]];
+    }else{
+        [bgView setImage:[UIImage imageNamed:@"4s_bg.png"]];
+    }
+    [self.view addSubview:bgView];
     
     // download view
     [self initMainView];
@@ -286,8 +281,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     self.enterButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.enterButton setTitle:@"Enter" forState:UIControlStateNormal];
-    [self.enterButton setFrame:CGRectMake(66, 250
-                                          + self.offsetViewY, 188, 43)];
+    [self.enterButton setFrame:CGRectMake(66, 250 + self.offsetViewY, 188, 43)];
     [self.enterButton setBackgroundImage:[UIImage imageNamed:@"button_bg.png"] forState:UIControlStateNormal];
     [self.enterButton setBackgroundImage:[UIImage imageNamed:@"button_highlight_bg.png"] forState:UIControlStateHighlighted];
     [self.enterButton setImage:[UIImage imageNamed:@"footpoint.png"] forState:UIControlStateNormal];
@@ -300,17 +294,22 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.animArea = [[UIImageView alloc] initWithFrame:CGRectMake(10, 0, 300, 300)];
 
     // or animview
-    self.transButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.transButton.frame = CGRectMake(0, 0, TOTAL_WIDTH-20, 250);
-    [self.transButton setTitle:@"" forState:UIControlStateNormal];
-    [self.transButton addTarget:self action:@selector(playSound) forControlEvents:UIControlEventTouchUpInside];
-    self.transButton.alpha = 1;
-    self.transButton.backgroundColor = [UIColor clearColor];
-    self.transButton.tag = 0;
+    self.swipeView = [[UIView alloc]initWithFrame:CGRectMake(0, -20, TOTAL_WIDTH, TOTAL_WIDTH)];
+    self.swipeView.backgroundColor = RGBACOLOR(255, 0, 0, 0.1);
+
+    self.leftSwipe = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(actionSwipe:)];
+    self.leftSwipe.direction = (UISwipeGestureRecognizerDirectionLeft);
+    self.leftSwipe.numberOfTouchesRequired = 1;
+    [self.swipeView addGestureRecognizer:self.leftSwipe];
+    
+    self.clickTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(actionTap:)];
+    self.clickTap.numberOfTapsRequired = 1;
+    self.clickTap.numberOfTouchesRequired = 1;
+    [self.swipeView addGestureRecognizer:self.clickTap];
     
     [self.mainView addSubview:self.animArea];
     [self.mainView addSubview:self.enterButton];
-    [self.mainView addSubview:self.transButton];
+    [self.mainView addSubview:self.swipeView];
 
     [self.mainView setHidden:YES];
     [self.view addSubview:self.mainView];
@@ -342,6 +341,23 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 //    [self.downloadView setHidden:YES];
     
     [self.view addSubview:self.downloadView];
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - GestureRecognizer action
+/////////////////////////////////////////////////////////////////////////////////////
+
+- (void)actionSwipe:(UISwipeGestureRecognizer *)paramSender
+{
+    if (paramSender.direction & UISwipeGestureRecognizerDirectionLeft) {
+        DDLogVerbose(@"<<< left");
+        [self enterAction];
+    }
+}
+
+- (void)actionTap:(UISwipeGestureRecognizer *)paramSender
+{
+    [self playSound];
 }
 
 
@@ -438,12 +454,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     [super viewWillAppear:animated];
     [self.animArea startAnimating];
-
-//    self.theZipfile = [[ModelHelper sharedInstance]findZipfileWithFileName:self.planetString];
-//    if (self.theZipfile.isDownload.floatValue) {
-//        [self.downloadView setHidden:YES];
-//        [self downloadFinish];
-//    }
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES];
+    
 }
 - (void)viewWillDisappear:(BOOL)animated
 {

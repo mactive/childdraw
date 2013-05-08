@@ -76,7 +76,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.view setFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_HEIGHT())];
     
     UIImageView *bgView = [[UIImageView alloc]initWithFrame:self.view.frame];
-    [bgView setImage:[UIImage imageNamed:@"4s_bg.png"]];
+    if (IS_IPHONE_5) {
+        [bgView setImage:[UIImage imageNamed:@"5_bg.png"]];
+    }else{
+        [bgView setImage:[UIImage imageNamed:@"4s_bg.png"]];
+    }
     [self.view addSubview:bgView];
     
     CGRect viewRect = CGRectMake(0, CONTROL_HEIGHT, TOTAL_WIDTH, BG_HEIGHT+20);
