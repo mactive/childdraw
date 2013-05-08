@@ -41,6 +41,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property(strong, nonatomic)UIButton *enterButton;
 @property(strong, nonatomic)UIView *swipeView;
 @property(strong, nonatomic)CATransition* transition;
+@property(strong, nonatomic)UIButton *listButton;
 
 @property(strong, nonatomic)NSArray *albumArray;
 @property(strong, nonatomic)NSArray *animationArray;
@@ -81,6 +82,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize dlNumber,dlTitle;
 @synthesize transition;
 @synthesize titleString;
+@synthesize listButton;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -89,26 +91,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         // Custom initialization
     }
     return self;
-}
-
-- (void)listAction
-{
-    [self.navigationController.view.layer addAnimation:self.transition forKey:kCATransition];
-    [self.navigationController pushViewController:[self appDelegate].listViewContorller animated:NO];
-}
-
-- (void)rightAction
-{
-    SlideListViewController *controller = [[SlideListViewController alloc]initWithNibName:nil bundle:nil];
-    controller.managedObjectContext = self.managedObjectContext;
-    [self.navigationController pushViewController:controller animated:NO];
-}
-
-
-- (void)initViewControllers
-{
-    [self appDelegate].listViewContorller = [[ListViewController alloc]initWithNibName:nil bundle:nil];
-    [self appDelegate].listViewContorller.managedObjectContext = self.managedObjectContext;
 }
 
 - (void)viewDidLoad
@@ -123,12 +105,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.animationArray = [[NSArray alloc]init];
     
     if (IS_IPHONE_5) {
-        self.offsetViewY = 70.0f;
+        self.offsetViewY = 110.0f;
     }else{
-        self.offsetViewY = 40.0f;
+        self.offsetViewY = (TOTAL_HEIGHT() - TOTAL_WIDTH) / 3 ;
     }
-    
+    [self.view setFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_HEIGHT())];
+
     UIImageView *bgView = [[UIImageView alloc]initWithFrame:self.view.frame];
+    
     if (IS_IPHONE_5) {
         [bgView setImage:[UIImage imageNamed:@"5_bg.png"]];
     }else{
@@ -136,11 +120,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     [self.view addSubview:bgView];
     
+    
     // download view
     [self initMainView];
     [self initDownloadView];
     [self initViewControllers];
-    
+    [self initListButton];
+
     // transition animation
     self.transition = [CATransition animation];
     self.transition.duration = 1.8;
@@ -276,12 +262,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)initMainView
 {
-    self.mainView  = [[UIView alloc]initWithFrame:CGRectMake(0, self.offsetViewY, TOTAL_WIDTH, self.view.frame.size.height)];
+    self.mainView  = [[UIView alloc]initWithFrame:CGRectMake(0, self.offsetViewY, TOTAL_WIDTH, TOTAL_WIDTH )];
     self.mainView.backgroundColor = [UIColor clearColor];
     
     self.enterButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.enterButton setTitle:@"Enter" forState:UIControlStateNormal];
-    [self.enterButton setFrame:CGRectMake(66, 250 + self.offsetViewY, 188, 43)];
+    [self.enterButton setFrame:CGRectMake(66, TOTAL_WIDTH, 188, 43)];
     [self.enterButton setBackgroundImage:[UIImage imageNamed:@"button_bg.png"] forState:UIControlStateNormal];
     [self.enterButton setBackgroundImage:[UIImage imageNamed:@"button_highlight_bg.png"] forState:UIControlStateHighlighted];
     [self.enterButton setImage:[UIImage imageNamed:@"footpoint.png"] forState:UIControlStateNormal];
@@ -294,7 +280,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.animArea = [[UIImageView alloc] initWithFrame:CGRectMake(10, 0, 300, 300)];
 
     // or animview
-    self.swipeView = [[UIView alloc]initWithFrame:CGRectMake(0, -20, TOTAL_WIDTH, TOTAL_WIDTH)];
+    self.swipeView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_WIDTH)];
     self.swipeView.backgroundColor = RGBACOLOR(255, 0, 0, 0.1);
 
     self.leftSwipe = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(actionSwipe:)];
@@ -342,6 +328,36 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [self.view addSubview:self.downloadView];
 }
+
+#define LIST_OFFSET 12
+#define LIST_WIDTH  41
+
+- (void)initListButton
+{
+    // list button
+    self.listButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.listButton setFrame:CGRectMake(LIST_OFFSET, TOTAL_HEIGHT()-LIST_OFFSET - LIST_WIDTH, LIST_WIDTH, LIST_WIDTH)];
+    [self.listButton setBackgroundImage:[UIImage imageNamed:@"button_list.png"] forState:UIControlStateNormal];
+    [self.listButton setBackgroundImage:[UIImage imageNamed:@"button_list_highlight.png"] forState:UIControlStateHighlighted];
+    [self.listButton addTarget:self action:@selector(listAction) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.view addSubview:self.listButton];
+}
+
+- (void)listAction
+{
+    SlideListViewController *controller = [[SlideListViewController alloc]initWithNibName:nil bundle:nil];
+    controller.managedObjectContext = self.managedObjectContext;
+    [self.navigationController pushViewController:controller animated:NO];
+}
+
+
+- (void)initViewControllers
+{
+    [self appDelegate].listViewContorller = [[ListViewController alloc]initWithNibName:nil bundle:nil];
+    [self appDelegate].listViewContorller.managedObjectContext = self.managedObjectContext;
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - GestureRecognizer action
