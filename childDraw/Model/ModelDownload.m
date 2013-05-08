@@ -34,6 +34,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 @synthesize filename;
 @synthesize lastPlanet;
 @synthesize delegate;
+@synthesize thumbnailDelegate;
 
 + (ModelDownload *)sharedInstance {
     static ModelDownload *_sharedClient = nil;
@@ -176,7 +177,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 {
     
     NSString *prefix = [[NSUserDefaults standardUserDefaults] objectForKey:@"thumbnail_prefix"];
-    NSString *urlString = [NSString stringWithFormat:@"%@%@.png",prefix,filename];    
+    NSString *urlString = [NSString stringWithFormat:@"%@%@.png",prefix,fileName];    
     
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
@@ -191,6 +192,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
         
 #warning passstring
         // 下载成功之后再显示 passstring 给那个listview to show
+        [self.thumbnailDelegate passStringValue:fileName andIndex:0];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         DDLogError(@"Error: %@", error);

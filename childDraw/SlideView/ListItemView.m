@@ -18,7 +18,6 @@
 @property(nonatomic, strong)UILabel *timeLabel;
 @end
 
-
 @implementation ListItemView
 @synthesize imageView;
 @synthesize bgView;
@@ -42,7 +41,7 @@
                           CGRectMake((frame.size.width - ITEM_WIDTH)/2, (frame.size.height-ITEM_WIDTH)/2, ITEM_WIDTH, ITEM_WIDTH)];
         self.imageView.contentMode = UIViewContentModeScaleAspectFill;
 
-        self.timeLabel = [[UILabel alloc]initWithFrame:CGRectMake(frame.size.width-TIME_WIDTH, BG_HEIGHT, TIME_WIDTH, TIME_HEIGHT)];
+        self.timeLabel = [[UILabel alloc]initWithFrame:CGRectMake(frame.size.width-TIME_WIDTH-10, BG_HEIGHT, TIME_WIDTH, TIME_HEIGHT)];
         self.timeLabel.backgroundColor = [UIColor clearColor];
         self.timeLabel.textAlignment = NSTextAlignmentCenter;
         self.timeLabel.textColor = BLUECOLOR;
@@ -66,7 +65,6 @@
         [self.imageView setImage:[UIImage imageWithContentsOfFile:path]];
     }else{
         NSLog(@"file not exist %@",path);
-
     }
     
     [self setTime:filename];

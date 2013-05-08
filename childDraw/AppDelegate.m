@@ -49,7 +49,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize versionAlertView;
 @synthesize systemVersion;
 @synthesize downArray;
-@synthesize ASSETPATH, THUMBNAILPATH;
+@synthesize ASSETPATH;
+@synthesize THUMBNAILPATH;
 @synthesize lastPlanet;
 @synthesize lastPlanetTitle;
 @synthesize listViewContorller;
@@ -98,6 +99,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
     self.ASSETPATH =[[paths objectAtIndex:0] stringByAppendingPathComponent:@"/Assets/"];
     self.THUMBNAILPATH =[[paths objectAtIndex:0] stringByAppendingPathComponent:@"/Thumbnail/"];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if (![fileManager fileExistsAtPath:self.ASSETPATH]) {
+        [fileManager createDirectoryAtPath:self.ASSETPATH withIntermediateDirectories:NO attributes:nil error:nil];
+    }
+    if (![fileManager fileExistsAtPath:self.THUMBNAILPATH]) {
+        [fileManager createDirectoryAtPath:self.THUMBNAILPATH withIntermediateDirectories:NO attributes:nil error:nil];
+    }
+    
     // actions
     [self getConfig];
     

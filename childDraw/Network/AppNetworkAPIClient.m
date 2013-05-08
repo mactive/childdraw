@@ -132,7 +132,7 @@ static NSString * const kAppDataLogServerURLString  = @"http://218.61.10.155:901
         NSString *thumbnailPrefix = [NSString stringWithFormat:@"http://%@/",[JSON valueForKey:@"thumbnail_prefix"]];
         [[NSUserDefaults standardUserDefaults] setObject:thumbnailPrefix forKey:@"thumbnail_prefix"];
 
-        DDLogVerbose(@"getThumbnailsWithBlock JSON received: %@", JSON);
+//        DDLogVerbose(@"getThumbnailsWithBlock JSON received: %@", JSON);
         NSString* type = [JSON valueForKey:@"type"];
         if (![@"error" isEqualToString:type]) {
             if (block) {

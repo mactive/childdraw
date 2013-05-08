@@ -16,12 +16,13 @@
 @property(strong, nonatomic)NSString *lastPlanet;
 
 @property(nonatomic,assign) NSObject<PassValueDelegate> *delegate;
+@property(nonatomic,assign) NSObject<PassValueDelegate> *thumbnailDelegate;
 
 
 + (ModelDownload *)sharedInstance;
 
 -(void)downloadWithURL:(NSDictionary *)obj;
 -(void)downloadAndUpdate:(Zipfile *)zipfile;
-- (void)downloadThumbnailwithFilename:(NSString *)fileName;
+-(void)downloadThumbnailwithFilename:(NSString *)fileName;
 
 @end

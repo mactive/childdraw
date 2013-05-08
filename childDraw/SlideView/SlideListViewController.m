@@ -16,6 +16,8 @@
 #import "ModelDownload.h"
 #import "Zipfile.h"
 #import "ListItemView.h"
+#import "PassValueDelegate.h"
+
 #import "DDLog.h"
 
 // Log levels: off, error, warn, info, verbose
@@ -25,7 +27,7 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
 
-@interface SlideListViewController ()
+@interface SlideListViewController ()<PassValueDelegate>
 // control view
 @property(nonatomic, strong)UIView *controlView;
 @property(nonatomic, strong)UIButton *aboutUSButton;
@@ -36,6 +38,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property(nonatomic, strong)UISwipeGestureRecognizer *leftSwipe;
 @property(nonatomic, strong)UISwipeGestureRecognizer *rightSwipe;
 @property(nonatomic, strong)UITapGestureRecognizer *clickTap;
+@property(nonatomic, strong)NSMutableDictionary *itemDict;
 
 @property(nonatomic, strong) NSArray *sourceData;
 @property(nonatomic, assign) NSUInteger albumIndex;
@@ -51,7 +54,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize startInt;
 @synthesize isLOADMORE;
 @synthesize managedObjectContext;
-@synthesize scrollIndex;
+@synthesize itemDict;
 
 #define CONTROL_HEIGHT 66
 
@@ -94,6 +97,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
     
     self.sourceData = [[NSArray alloc]init];
+    self.itemDict = [[NSMutableDictionary alloc]init];
     self.startInt = 0;
     self.isLOADMORE = NO;
     
@@ -126,15 +130,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         self.startInt = 0;
         [self populateData:self.startInt];
     }
+    
+    [ModelDownload sharedInstance].thumbnailDelegate = (id)self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES];
-    
-    
-    
 }
 
 - (void)actionSwipe:(UISwipeGestureRecognizer *)paramSender
@@ -148,12 +151,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             self.isLOADMORE = YES;
             [self populateData:self.startInt];
         }
+        [self appDelegate].scrollIndex = self.scrollView.page+1;
+        DDLogVerbose(@"[self appDelegate].scrollIndex: %d",[self appDelegate].scrollIndex);
     }
     if (paramSender.direction & UISwipeGestureRecognizerDirectionRight) {
         DDLogVerbose(@">>> right");
         if (self.scrollView.page > 0 && self.scrollView.page <= [self.sourceData count]-1) {
             [self.scrollView setPage:self.scrollView.page - 1 animated:YES];
         }
+        [self appDelegate].scrollIndex = self.scrollView.page -1 ;
+        DDLogVerbose(@"[self appDelegate].scrollIndex: %d",[self appDelegate].scrollIndex);
     }
 }
 
@@ -203,9 +210,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     if (aZipfile == nil) {
                         aZipfile = (Zipfile *)[[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
                         [[ModelHelper sharedInstance]populateZipfile:aZipfile withServerJSONData:dict];
-                        [self downloadThumbnail:[ServerDataTransformer getStringObjFromServerJSON:dict byName:@"key"]];
                     }
                     [allData addObject:aZipfile];
+                    [self downloadThumbnail:[ServerDataTransformer getStringObjFromServerJSON:dict byName:@"key"]];
+
                 }
                 self.sourceData = [[NSArray alloc]initWithArray:allData];
             }
@@ -217,9 +225,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     if (aZipfile == nil) {
                         aZipfile = (Zipfile *)[[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
                         [[ModelHelper sharedInstance]populateZipfile:aZipfile withServerJSONData:dict];
-                        [self downloadThumbnail:[ServerDataTransformer getStringObjFromServerJSON:dict byName:@"key"]];
                     }
                     [tempMutableArray addObject:aZipfile];
+                    [self downloadThumbnail:[ServerDataTransformer getStringObjFromServerJSON:dict byName:@"key"]];
+
                 }
                 
                 self.sourceData = [[NSArray alloc]initWithArray:tempMutableArray];
@@ -239,10 +248,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 
             } else {
                 [self refreshSubView];
-                [self.scrollView setPage:start animated:YES];
-                self.startInt += [tempArray count];
-                [self appDelegate].scrollIndex = self.startInt;
                 DDLogVerbose(@"[self appDelegate].scrollIndex: %d",[self appDelegate].scrollIndex);
+                self.startInt += [tempArray count];
+
+                if ([self appDelegate].scrollIndex > 0 && [self appDelegate].scrollIndex < self.startInt ) {
+                    [self.scrollView setPage:[self appDelegate].scrollIndex];
+                }else{
+                    [self.scrollView setPage:start animated:YES];
+                }
+                
+
+                
             }
             
 
@@ -266,14 +282,32 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)refreshSubView
 {
+    CGRect frame = CGRectMake(0, 0, BG_WIDTH, BG_HEIGHT);
+
     for (NSUInteger index = 0; index < [self.sourceData count]; index ++) {
         //You add your content views here
         if (index >= self.startInt) {
-            id obj = [self.sourceData objectAtIndex:index];
-            [self.scrollView addContentSubview:[self createViewForObj:obj withIndex:index]];
+            
+            ListItemView *view = [[ListItemView alloc]initWithFrame:frame];
+
+            Zipfile *theFile = (Zipfile *)[self.sourceData objectAtIndex:index];
+
+            [self.scrollView addContentSubview:view];
+            [self.itemDict setObject:view forKey:theFile.fileName];
         }
         
     }
+}
+
+-(void)passStringValue:(NSString *)value andIndex:(NSUInteger )index
+{
+    NSLog(@"********* %@",value);
+//    if ([value isEqualToString:self.fileName]) {
+//        [self setAvatar:self.fileName];
+//    }
+    ListItemView *view = [self.itemDict objectForKey:value];    
+    [view setAvatar:value];
+    
 }
 
 
@@ -292,11 +326,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (UIView *)createViewForObj:(id)obj withIndex:(NSInteger)index{
     CGRect frame = CGRectMake(0, 0, BG_WIDTH, BG_HEIGHT);
     
-    Zipfile *theFile = (Zipfile *)[self.sourceData objectAtIndex:index];
-    
     ListItemView *view = [[ListItemView alloc]initWithFrame:frame];
-    [view setAvatar:theFile.fileName];
-    
     return view;
 }
 
