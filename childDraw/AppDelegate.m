@@ -49,11 +49,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize versionAlertView;
 @synthesize systemVersion;
 @synthesize downArray;
-@synthesize LIBRARYPATH;
+@synthesize ASSETPATH, THUMBNAILPATH;
 @synthesize lastPlanet;
 @synthesize lastPlanetTitle;
 @synthesize listViewContorller;
 @synthesize isShareSucceed;
+@synthesize scrollIndex;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -95,8 +96,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     //
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
-    self.LIBRARYPATH =[[paths objectAtIndex:0] stringByAppendingPathComponent:@"/Assets/"];
-    
+    self.ASSETPATH =[[paths objectAtIndex:0] stringByAppendingPathComponent:@"/Assets/"];
+    self.THUMBNAILPATH =[[paths objectAtIndex:0] stringByAppendingPathComponent:@"/Thumbnail/"];
     // actions
     [self getConfig];
     

@@ -10,6 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIImageView+AFNetworking.h"
 #import "NSDate-Utilities.h"
+#import "AppDelegate.h"
 
 @interface ListItemView()
 @property(nonatomic, strong)UIImageView *imageView;
@@ -55,9 +56,25 @@
     return self;
 }
 
-
 - (void)setAvatar:(NSString *)filename
 {
+    NSString *path = [[self appDelegate].THUMBNAILPATH stringByAppendingPathComponent:filename];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:path]) {
+        NSLog(@"file exist %@",path);
+        [self.imageView setImage:[UIImage imageWithContentsOfFile:path]];
+    }else{
+        NSLog(@"file not exist %@",path);
+
+    }
+    
+    [self setTime:filename];
+}
+/*
+- (void)setAvatar:(NSString *)filename
+{
+    
     NSString *prefix = [[NSUserDefaults standardUserDefaults] objectForKey:@"thumbnail_prefix"];
     NSString *url = [NSString stringWithFormat:@"%@%@.png",prefix,filename];
     NSLog(@"URL %@",url);
@@ -73,7 +90,7 @@
                                    }];
     [self setTime:filename];
 }
-
+*/
 - (void)setTime:(NSString *)filename
 {
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:(filename.floatValue)];
@@ -85,7 +102,10 @@
     //
     
 }
-
+- (AppDelegate *)appDelegate
+{
+	return (AppDelegate *)[[UIApplication sharedApplication] delegate];
+}
 
 /*
 // Only override drawRect: if you perform custom drawing.

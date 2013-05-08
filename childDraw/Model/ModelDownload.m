@@ -165,8 +165,38 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 {
     // unzip path to directory filename
     NSString *zipPath = path;
-    NSString *destinationPath = [[self appDelegate].LIBRARYPATH stringByAppendingPathComponent:filename];
+    NSString *destinationPath = [[self appDelegate].ASSETPATH stringByAppendingPathComponent:filename];
     [SSZipArchive unzipFileAtPath:zipPath toDestination:destinationPath];
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - download thumbnail
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)downloadThumbnailwithFilename:(NSString *)fileName
+{
+    
+    NSString *prefix = [[NSUserDefaults standardUserDefaults] objectForKey:@"thumbnail_prefix"];
+    NSString *urlString = [NSString stringWithFormat:@"%@%@.png",prefix,filename];    
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    // 不同的文件
+    NSString *path = [[self appDelegate].THUMBNAILPATH stringByAppendingPathComponent:fileName];
+    operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
+    
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        DDLogVerbose(@"Successfully thumbnail file to %@ %@", path,urlString);
+        
+#warning passstring
+        // 下载成功之后再显示 passstring 给那个listview to show
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        DDLogError(@"Error: %@", error);
+    }];
+    
+    [operation start];
 }
 
 - (AppDelegate *)appDelegate

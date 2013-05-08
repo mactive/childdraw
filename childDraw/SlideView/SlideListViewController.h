@@ -10,7 +10,8 @@
 #import "MCPagedScrollView.h"
 @interface SlideListViewController : UIViewController
 
-@property (nonatomic, strong) MCPagedScrollView* scrollView;
+@property(nonatomic, strong) MCPagedScrollView* scrollView;
 @property(strong, nonatomic)NSManagedObjectContext *managedObjectContext;
+@property(nonatomic, assign) NSUInteger scrollIndex;
 
 @end

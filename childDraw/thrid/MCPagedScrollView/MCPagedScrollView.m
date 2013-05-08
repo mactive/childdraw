@@ -21,7 +21,6 @@ const CGFloat MCPagedScrollViewPageControlHeight = 36.0;
 
 
 - (void) updateViewPositionAndPageControl;
-
 - (void) changePage:(UIPageControl*) aPageControl;
 
 @end
@@ -71,10 +70,7 @@ const CGFloat MCPagedScrollViewPageControlHeight = 36.0;
     [self insertSubview:view atIndex:index];
     [self.views insertObject:view atIndex:index];
     [self updateViewPositionAndPageControl];
-    self.contentOffset = CGPointMake(0, - self.scrollIndicatorInsets.top);
-    
-//    NSLog(@"scrollIndicatorInsets %f %f %f %f",self.scrollIndicatorInsets.bottom,self.scrollIndicatorInsets.top,self.scrollIndicatorInsets.left,self.scrollIndicatorInsets.right);
-
+//    self.contentOffset = CGPointMake(0, - self.scrollIndicatorInsets.top);
 }
 
 - (void)addContentSubviewsFromArray:(NSArray *)contentViews {
@@ -181,7 +177,6 @@ const CGFloat MCPagedScrollViewPageControlHeight = 36.0;
     CGFloat tt = itemWidth + itemOffset;
 //    NSLog(@"%.0f",tt *page);
     [self setContentOffset:CGPointMake(page * tt, - self.scrollIndicatorInsets.top) animated:animated];
-
 }
 
 #pragma mark -

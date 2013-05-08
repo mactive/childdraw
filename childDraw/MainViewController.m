@@ -191,7 +191,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     self.theZipfile = [[ModelHelper sharedInstance]findZipfileWithFileName:planet];
     
-    NSString *path = [[self appDelegate].LIBRARYPATH stringByAppendingPathComponent:planet];
+    NSString *path = [[self appDelegate].ASSETPATH stringByAppendingPathComponent:planet];
     [self listFileAtPath:path];
     
 }

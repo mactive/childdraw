@@ -51,6 +51,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize startInt;
 @synthesize isLOADMORE;
 @synthesize managedObjectContext;
+@synthesize scrollIndex;
 
 #define CONTROL_HEIGHT 66
 
@@ -119,6 +120,21 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [self initControlView];
     [self initBottomView];
+    
+    
+    if (self.sourceData == nil || [self.sourceData count] == 0) {
+        self.startInt = 0;
+        [self populateData:self.startInt];
+    }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES];
+    
+    
+    
 }
 
 - (void)actionSwipe:(UISwipeGestureRecognizer *)paramSender
@@ -143,13 +159,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)actionTap:(UISwipeGestureRecognizer *)paramSender
 {
-    
-    NSLog(@"sender.buttonIndex %d",self.scrollView.page);
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationController popToRootViewControllerAnimated:NO];
     
     Zipfile *theZipfile = [self.sourceData objectAtIndex:self.scrollView.page];
-    
+    NSLog(@"sender.buttonIndex %d %@",self.scrollView.page,theZipfile.fileName);
+
     [self appDelegate].mainViewController.planetString = theZipfile.fileName;
     [self appDelegate].mainViewController.titleString = theZipfile.title;
     
@@ -159,18 +174,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [[ModelDownload sharedInstance] downloadAndUpdate:theZipfile];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
 
-    [self.navigationController setNavigationBarHidden:YES];
-    
-    if (self.sourceData == nil || [self.sourceData count] == 0) {
-        self.startInt = 0;
-        [self populateData:self.startInt];
-    }
-    
-}
 
 // 解析公司列表
 - (void)populateData:(NSUInteger)start
@@ -189,11 +193,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             NSArray *tempArray = [[NSArray alloc] initWithArray:responseDict];
             NSMutableArray *tempMutableArray = [[NSMutableArray alloc]init];
             
-            
             NSEntityDescription *entity = [NSEntityDescription entityForName:@"Zipfile" inManagedObjectContext:self.managedObjectContext];
-            
-            self.startInt += [tempArray count];
-            
+                        
             // load more
             if (self.isLOADMORE) {
                 for (int i=0; i < [tempArray count]; i++) {
@@ -202,6 +203,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     if (aZipfile == nil) {
                         aZipfile = (Zipfile *)[[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
                         [[ModelHelper sharedInstance]populateZipfile:aZipfile withServerJSONData:dict];
+                        [self downloadThumbnail:[ServerDataTransformer getStringObjFromServerJSON:dict byName:@"key"]];
                     }
                     [allData addObject:aZipfile];
                 }
@@ -215,6 +217,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     if (aZipfile == nil) {
                         aZipfile = (Zipfile *)[[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
                         [[ModelHelper sharedInstance]populateZipfile:aZipfile withServerJSONData:dict];
+                        [self downloadThumbnail:[ServerDataTransformer getStringObjFromServerJSON:dict byName:@"key"]];
                     }
                     [tempMutableArray addObject:aZipfile];
                 }
@@ -235,12 +238,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 [HUD2 hide:YES afterDelay:1];
                 
             } else {
-//                [self.loadMoreButton setTitle:T(@"点击加载更多") forState:UIControlStateNormal];
+                [self refreshSubView];
+                [self.scrollView setPage:start animated:YES];
+                self.startInt += [tempArray count];
+                [self appDelegate].scrollIndex = self.startInt;
+                DDLogVerbose(@"[self appDelegate].scrollIndex: %d",[self appDelegate].scrollIndex);
             }
             
-            [self refreshSubView];
-            [self.scrollView setPage:start];
-            
+
+
         }
         if (error != nil) {
             HUD.mode = MBProgressHUDModeCustomView;
@@ -253,17 +259,35 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }];
 }
 
+- (void)downloadThumbnail:(NSString *)filename
+{
+    [[ModelDownload sharedInstance]downloadThumbnailwithFilename:filename];
+}
+
 - (void)refreshSubView
 {
-    [self.scrollView removeAllContentSubviews];
     for (NSUInteger index = 0; index < [self.sourceData count]; index ++) {
         //You add your content views here
-        id obj = [self.sourceData objectAtIndex:index];
+        if (index >= self.startInt) {
+            id obj = [self.sourceData objectAtIndex:index];
+            [self.scrollView addContentSubview:[self createViewForObj:obj withIndex:index]];
+        }
         
-        [self.scrollView addContentSubview:[self createViewForObj:obj withIndex:index]];
-//        [self.targetArray addObject:[self createViewForObj:obj withIndex:index]];
     }
 }
+
+
+//- (void)refreshSubView
+//{
+//    [self.scrollView removeAllContentSubviews];
+//    for (NSUInteger index = 0; index < [self.sourceData count]; index ++) {
+//        //You add your content views here
+//        id obj = [self.sourceData objectAtIndex:index];
+//        
+//        [self.scrollView addContentSubview:[self createViewForObj:obj withIndex:index]];
+////        [self.targetArray addObject:[self createViewForObj:obj withIndex:index]];
+//    }
+//}
 
 - (UIView *)createViewForObj:(id)obj withIndex:(NSInteger)index{
     CGRect frame = CGRectMake(0, 0, BG_WIDTH, BG_HEIGHT);

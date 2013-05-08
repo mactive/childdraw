@@ -22,5 +22,6 @@
 
 -(void)downloadWithURL:(NSDictionary *)obj;
 -(void)downloadAndUpdate:(Zipfile *)zipfile;
+- (void)downloadThumbnailwithFilename:(NSString *)fileName;
 
 @end
