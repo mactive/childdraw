@@ -112,11 +112,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [fileManager createDirectoryAtPath:self.THUMBNAILPATH withIntermediateDirectories:NO attributes:nil error:nil];
     }
     
+
     // actions
     [self getConfig];
     
-    _defaultGetCount  = 1;
-    [self downloadLastFiles:_defaultGetCount];
+    [self startMainSession];
     
     [WXApi registerApp:WXAPPID];
     
@@ -156,6 +156,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.window setRootViewController:mainController];
     
     [self.window makeKeyAndVisible];
+    
+    _defaultGetCount  = 1;
+    [self downloadLastFiles:_defaultGetCount];
 
 }
 
@@ -174,7 +177,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)downloadLastFiles:(NSInteger)count
 {
-    [self startMainSession];
 
     NSManagedObjectContext *moc = _managedObjectContext;
     

@@ -109,6 +109,7 @@
     
     // remove all core data
     [[ModelHelper sharedInstance] clearAllObjects];
+    [[self appDelegate] startMainSession];
     [self calcCacheSize];
 
 }

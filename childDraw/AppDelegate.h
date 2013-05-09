@@ -21,7 +21,8 @@
 @property (strong, nonatomic) NSString *CACHEILPATH;
 @property (strong, nonatomic) ListViewController *listViewContorller;
 @property (assign, nonatomic) NSUInteger scrollIndex;
+
 - (void)downloadLastFiles:(NSInteger)count;
 
-
+- (void)startMainSession;
 @end
