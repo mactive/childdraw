@@ -131,12 +131,57 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     
     if (self.sourceData == nil || [self.sourceData count] == 0) {
-        self.startInt = 0;
-        [self populateData:self.startInt];
+//        self.startInt = 0;
+//        [self populateData:self.startInt];
+        [self populateThumbnailData];
     }
     
     [ModelDownload sharedInstance].thumbnailDelegate = (id)self;
 }
+
+
+- (void)populateThumbnailData
+{
+    NSArray *nowContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[self appDelegate].THUMBNAILPATH
+                                                                                    error:NULL];
+    
+    NSSortDescriptor* sortOrder = [NSSortDescriptor sortDescriptorWithKey:@"self" ascending: NO];
+    NSArray *thumbnailContent =  [nowContent sortedArrayUsingDescriptors: [NSArray arrayWithObject: sortOrder]];
+    NSMutableArray *allData = [[NSMutableArray alloc]initWithArray:self.sourceData];
+
+    for (int count = 0; count < (int)[thumbnailContent count]; count++)
+    {
+        NSString *fileName = [thumbnailContent objectAtIndex:count];
+        
+        DDLogVerbose(@"name : %@",fileName);
+        
+        Zipfile *aZipfile = [[ModelHelper sharedInstance]findZipfileWithFileName:fileName];
+        if (aZipfile != nil) {
+            [allData addObject:aZipfile];
+        }
+    
+    }
+    
+    self.sourceData = [[NSArray alloc]initWithArray:allData];
+    if ([self.sourceData count] == 0) {
+        [self populateData:0];
+    }
+    [self refreshSubView];
+    
+    DDLogVerbose(@"[self appDelegate].scrollIndex: %d",[self appDelegate].scrollIndex);
+    
+    self.startInt =  [self.sourceData count];
+    
+    
+    if ([self appDelegate].scrollIndex > 0 && [self appDelegate].scrollIndex < self.startInt ) {
+        [self.scrollView setPage:[self appDelegate].scrollIndex];
+    }else{
+        [self.scrollView setPage:0 animated:YES];
+    }
+
+
+}
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -212,7 +257,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     NSDictionary *dict = [tempArray objectAtIndex:i];
                     Zipfile *aZipfile = [[ModelHelper sharedInstance]findZipfileWithFileName:[ServerDataTransformer getStringObjFromServerJSON:dict byName:@"key"]];
                     if (aZipfile == nil) {
-                        aZipfile = (Zipfile *)[[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
+                        aZipfile = (Zipfile *)[[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:self.managedObjectContext];
                         [[ModelHelper sharedInstance]populateZipfile:aZipfile withServerJSONData:dict];
                     }
                     [allData addObject:aZipfile];
@@ -227,7 +272,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                     NSDictionary *dict = [tempArray objectAtIndex:i];
                     Zipfile *aZipfile = [[ModelHelper sharedInstance]findZipfileWithFileName:[ServerDataTransformer getStringObjFromServerJSON:dict byName:@"key"]];
                     if (aZipfile == nil) {
-                        aZipfile = (Zipfile *)[[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:nil];
+                        aZipfile = (Zipfile *)[[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:self.managedObjectContext];
                         [[ModelHelper sharedInstance]populateZipfile:aZipfile withServerJSONData:dict];
                     }
                     [tempMutableArray addObject:aZipfile];
@@ -237,10 +282,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 
                 self.sourceData = [[NSArray alloc]initWithArray:tempMutableArray];
             }
+        
             
             // 数量太少不出现 load more
             if([tempArray count] == 0) {
-//                [self.loadMoreButton setTitle:T(@"没有更多了") forState:UIControlStateNormal];
                 
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
                 
@@ -251,21 +296,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                 [HUD2 hide:YES afterDelay:1];
                 
             } else {
+                // save to database immediately
+                MOCSave(self.managedObjectContext);
+                
                 [self refreshSubView];
                 DDLogVerbose(@"[self appDelegate].scrollIndex: %d",[self appDelegate].scrollIndex);
                 self.startInt += [tempArray count];
 
                 if ([self appDelegate].scrollIndex > 0 && [self appDelegate].scrollIndex < self.startInt ) {
-                    [self.scrollView setPage:[self appDelegate].scrollIndex];
+                    [self.scrollView setPage:[self appDelegate].scrollIndex animated:YES];
                 }else{
                     [self.scrollView setPage:start animated:YES];
                 }
-                
-
-                
             }
-            
-
 
         }
         if (error != nil) {
@@ -292,9 +335,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         //You add your content views here
         if (index >= self.startInt) {
             
-            ListItemView *view = [[ListItemView alloc]initWithFrame:frame];
-
             Zipfile *theFile = (Zipfile *)[self.sourceData objectAtIndex:index];
+            NSLog(@"self.sourceData: %@",theFile.fileName);
+            
+            ListItemView *view = [[ListItemView alloc]initWithFrame:frame];
+            [view setAvatar:theFile.fileName];
 
             [self.scrollView addContentSubview:view];
             [self.itemDict setObject:view forKey:theFile.fileName];
