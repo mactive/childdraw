@@ -15,5 +15,5 @@
 
 - (Zipfile *)findZipfileWithFileName:(NSString *)fileName;
 - (void)populateZipfile:(Zipfile *)zipfile withServerJSONData:(id)json;
-
+- (void)clearAllObjects;
 @end

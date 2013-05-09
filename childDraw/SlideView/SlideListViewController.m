@@ -17,6 +17,8 @@
 #import "Zipfile.h"
 #import "ListItemView.h"
 #import "PassValueDelegate.h"
+#import "AboutUsViewController.h"
+#import "SettingViewController.h"
 
 #import "DDLog.h"
 
@@ -439,12 +441,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)aboutUSAction
 {
-    
+    AboutUsViewController *controller = [[AboutUsViewController alloc]initWithNibName:nil bundle:nil];
+    [self.navigationController presentModalViewController:controller animated:YES];
 }
 
 - (void)setttingAction
 {
-    
+    SettingViewController *controller = [[SettingViewController alloc]initWithNibName:nil bundle:nil];
+    [self.navigationController presentModalViewController:controller animated:YES];
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

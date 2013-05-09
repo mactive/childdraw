@@ -81,5 +81,34 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     zipfile.title           = [ServerDataTransformer getStringObjFromServerJSON:json byName:@"title"];
 }
 
+- (void)clearAllObjects
+{
+    NSManagedObjectContext *moc = self.managedObjectContext;
+    
+    NSArray *dbArray = [[NSArray alloc]initWithObjects:
+                        @"Zipfile",
+                        nil];
+    
+    // Common
+    NSEntityDescription *entityDescription = [[NSEntityDescription alloc]init];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSError *error = [[NSError alloc]init];
+    NSArray *array = [[NSArray alloc] init];
+    
+    for (int i = 0; i< [dbArray count]; i++) {
+        
+        entityDescription = [NSEntityDescription entityForName:[dbArray objectAtIndex:i]
+                                        inManagedObjectContext:moc];
+        [request setEntity:entityDescription];
+        array = [moc executeFetchRequest:request error:&error];
+        
+        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            [moc deleteObject:obj];
+        }];
+    }
+    MOCSave(self.managedObjectContext);
+    
+}
+
 
 @end

@@ -55,6 +55,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property(strong, nonatomic)UIView *downloadView;
 @property(strong, nonatomic)UILabel *dlNumber;
 @property(strong, nonatomic)UILabel *dlTitle;
+@property(strong, nonatomic)UIImageView *dlImage;
 
 @property(readwrite, nonatomic)CGFloat offsetViewY;
 
@@ -79,7 +80,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize aniCount;
 @synthesize mainView;
 @synthesize downloadView;
-@synthesize dlNumber,dlTitle;
+@synthesize dlNumber,dlTitle,dlImage;
 @synthesize transition;
 @synthesize titleString;
 @synthesize listButton;
@@ -137,14 +138,27 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.title = PRODUCT_NAME;
     
 }
+
+/////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - download progress
+/////////////////////////////////////////////////////////////////////////////////////
+
+
 - (void)passNumberValue:(NSNumber *)value andTitle:(NSString *)title
 {
 //    DDLogVerbose(@"*****%f %@",value.floatValue,title);
     if ([title isEqualToString:self.planetString]) {
         self.dlTitle.text = T(@"下载中...");
-        self.dlNumber.text = [NSString stringWithFormat:@"%.0f%%",value.floatValue*100];
+        if (value.floatValue > 0.99) {
+            [self.dlImage setImage:[UIImage imageNamed:@"dl_success.png"]];
+            self.dlNumber.text = @"";
+        }else{
+            [self.dlImage setImage:nil];
+            self.dlNumber.text = [NSString stringWithFormat:@"%.0f%%",value.floatValue*100];
+        }
     }
 }
+
 - (void)passStringValue:(NSString *)value andIndex:(NSUInteger)index
 {    
     if ([value isEqualToString:DOWNLOADFINISH]) {
@@ -160,6 +174,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [self.downloadView setAlpha:1];
         [self.downloadView setHidden:NO];
         self.dlNumber.text = T(@"=.=!");
+        [self.dlImage setImage:[UIImage imageNamed:@"dl_error.png"]];
         self.dlTitle.text = T(@"失败!");
     }
 }
@@ -297,13 +312,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.view addSubview:self.mainView];
 }
 
+#define ICON_W 77
+#define ICON_H 44
 - (void)initDownloadView
 {
-    self.downloadView  = [[UIView alloc]initWithFrame:CGRectMake((TOTAL_WIDTH-BIG_BUTTON_WIDTH)/2 , self.offsetViewY, BIG_BUTTON_WIDTH, BIG_BUTTON_WIDTH+50)];
-    UIImageView *bgView = [[UIImageView alloc]initWithFrame:CGRectMake(0 , 50, BIG_BUTTON_WIDTH, BIG_BUTTON_WIDTH)];
+    CGRect rect = CGRectMake((TOTAL_WIDTH-BIG_BUTTON_WIDTH)/2 , self.offsetViewY *3 , BIG_BUTTON_WIDTH, BIG_BUTTON_WIDTH+50);
+    self.downloadView  = [[UIView alloc]initWithFrame:rect];
+    UIImageView *bgView = [[UIImageView alloc]initWithFrame:CGRectMake(0 ,0, BIG_BUTTON_WIDTH, BIG_BUTTON_WIDTH)];
     [bgView setImage:[UIImage imageNamed:@"circle_button_bg.png"]];
     
-    self.dlTitle = [[UILabel alloc]initWithFrame:CGRectMake(0 , BIG_BUTTON_WIDTH+60, BIG_BUTTON_WIDTH, 20)];
+    self.dlTitle = [[UILabel alloc]initWithFrame:CGRectMake(0 , BIG_BUTTON_WIDTH+10, BIG_BUTTON_WIDTH, 20)];
     self.dlTitle.backgroundColor = [UIColor clearColor];
     self.dlTitle.font = [UIFont systemFontOfSize:14.0f];
     self.dlTitle.textColor = GRAYCOLOR;
@@ -315,9 +333,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.dlNumber.font = BIGCUSTOMFONT;
     self.dlNumber.textColor = DARKCOLOR;
     self.dlNumber.textAlignment = NSTextAlignmentCenter;
-    self.dlNumber.text  = T(@">_<");
+    
+    self.dlImage = [[UIImageView alloc]initWithFrame:
+                    CGRectMake((BIG_BUTTON_WIDTH - ICON_W)/2, (BIG_BUTTON_WIDTH - ICON_H)/2,ICON_W ,ICON_H)];
+    [self.dlImage setImage:[UIImage imageNamed:@"dl_now.png"]];
     
     [self.downloadView addSubview:bgView];
+    [self.downloadView addSubview:self.dlImage];
     [self.downloadView addSubview:self.dlNumber];
     [self.downloadView addSubview:self.dlTitle];
 //    [self.downloadView setHidden:YES];
@@ -373,21 +395,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-#pragma mark - download progress
-/////////////////////////////////////////////////////////////////////////////////////
 
-- (void)downloadLastPlanet:(NSNumber *)value andTitle:(NSString *)title
-{
-    if (self.downloadView.hidden) {
-        [self.downloadView setHidden:NO];
-    }
-    
-    if ([title isEqualToString:self.planetString]) {
-        self.dlTitle.text = T(@"下载中...");
-        self.dlNumber.text = [NSString stringWithFormat:@"%.0f%%",value.floatValue*100];
-    }
-}
+//- (void)downloadLastPlanet:(NSNumber *)value andTitle:(NSString *)title
+//{
+//    if (self.downloadView.hidden) {
+//        [self.downloadView setHidden:NO];
+//    }
+//    
+//    if ([title isEqualToString:self.planetString]) {
+//        self.dlTitle.text = T(@"下载中...");
+//        self.dlNumber.text = [NSString stringWithFormat:@"%.0f%%",value.floatValue*100];
+//        [self.dlImage setImage:nil];
+//    }
+//}
 
 /////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - download finish
@@ -397,7 +417,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     [self moveYOffest:20 andDelay:0 andAlpha:0 withView:self.downloadView];
     [self.downloadView setHidden:YES];
-    self.dlNumber.text = T(@"0%");
+//    self.dlNumber.text = T(@"0%");
+    [self.dlImage setImage:[UIImage imageNamed:@"dl_now.png"]];
     [self moveYOffest:-20 andDelay:1 andAlpha:0 withView:self.downloadView];
     
     [self.mainView setHidden:NO];

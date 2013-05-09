@@ -142,22 +142,30 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
         
         DDLogVerbose(@"Successfully downloaded file to %@ %@", path,urlString);
         theZipfile.isDownload = NUM_BOOL(YES);
-#warning unzip is
+
         [self unzipFileName:theZipfile.fileName WithPath:path];
         theZipfile.isZiped = NUM_BOOL(YES);
         if ([self.lastPlanet isEqualToString:theZipfile.fileName]) {
-            [self.delegate passStringValue:DOWNLOADFINISH andIndex:0];
+            [self performSelector:@selector(downloadFinishAction) withObject:nil afterDelay:0.5];
+
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         theZipfile.isDownload = NUM_BOOL(NO);
         theZipfile.isZiped = NUM_BOOL(NO);
         DDLogError(@"Error: %@", error);
+        
         [self.delegate passStringValue:DOWNLOADFAILED andIndex:0];
+
 
     }];
     
     [operation start];
+}
+
+-(void)downloadFinishAction
+{
+    [self.delegate passStringValue:DOWNLOADFINISH andIndex:0];
 }
 
 // unzip

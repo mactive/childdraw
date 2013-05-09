@@ -18,6 +18,7 @@
 @property (strong, nonatomic) MainViewController *mainViewController;
 @property (strong, nonatomic) NSString *ASSETPATH;
 @property (strong, nonatomic) NSString *THUMBNAILPATH;
+@property (strong, nonatomic) NSString *CACHEILPATH;
 @property (strong, nonatomic) ListViewController *listViewContorller;
 @property (assign, nonatomic) NSUInteger scrollIndex;
 - (void)downloadLastFiles:(NSInteger)count;
