@@ -91,6 +91,7 @@
 		26E5A888170431E000BEBE65 /* back_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26E5A887170431E000BEBE65 /* back_button@2x.png */; };
 		26E5A8901705497600BEBE65 /* AppNetworkAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 26E5A88F1705497600BEBE65 /* AppNetworkAPIClient.m */; };
 		26E5A89417056EDA00BEBE65 /* IPAddress.c in Sources */ = {isa = PBXBuildFile; fileRef = 26E5A89317056EDA00BEBE65 /* IPAddress.c */; };
+		26EF346B173B812C00FDDAD6 /* rightarrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26EF346A173B812C00FDDAD6 /* rightarrow@2x.png */; };
 		26F39F4416FC3DEF001A6EF9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26F39F4316FC3DEF001A6EF9 /* UIKit.framework */; };
 		26F39F4616FC3DEF001A6EF9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26F39F4516FC3DEF001A6EF9 /* Foundation.framework */; };
 		26F39F4816FC3DEF001A6EF9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26F39F4716FC3DEF001A6EF9 /* CoreGraphics.framework */; };
@@ -219,6 +220,7 @@
 		26E5A88F1705497600BEBE65 /* AppNetworkAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppNetworkAPIClient.m; sourceTree = "<group>"; };
 		26E5A89217056EBC00BEBE65 /* IPAddress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IPAddress.h; sourceTree = "<group>"; };
 		26E5A89317056EDA00BEBE65 /* IPAddress.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IPAddress.c; sourceTree = "<group>"; };
+		26EF346A173B812C00FDDAD6 /* rightarrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rightarrow@2x.png"; sourceTree = "<group>"; };
 		26F39F4016FC3DEF001A6EF9 /* childDraw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = childDraw.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		26F39F4316FC3DEF001A6EF9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		26F39F4516FC3DEF001A6EF9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -464,6 +466,7 @@
 			isa = PBXGroup;
 			children = (
 				26DD4BB0172109B4003228E7 /* barbutton_mainmenu@2x.png */,
+				26EF346A173B812C00FDDAD6 /* rightarrow@2x.png */,
 				26604FC3173A4ED30010CE9E /* 5_bg@2x.png */,
 				26604FC4173A4ED30010CE9E /* button_share@2x.png */,
 				26604FC5173A4ED30010CE9E /* button_share_3@2x.png */,
@@ -656,6 +659,7 @@
 				26604FCE173A4ED30010CE9E /* button_share_1@2x.png in Resources */,
 				26604FCF173A4ED30010CE9E /* button_list_highlight@2x.png in Resources */,
 				26604FD0173A4ED30010CE9E /* button_list.png in Resources */,
+				26EF346B173B812C00FDDAD6 /* rightarrow@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

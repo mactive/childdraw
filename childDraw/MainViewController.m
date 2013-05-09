@@ -105,7 +105,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.animationArray = [[NSArray alloc]init];
     
     if (IS_IPHONE_5) {
-        self.offsetViewY = 110.0f;
+        self.offsetViewY = (TOTAL_HEIGHT() - TOTAL_WIDTH) / 3 ;
     }else{
         self.offsetViewY = (TOTAL_HEIGHT() - TOTAL_WIDTH) / 3 ;
     }
@@ -262,7 +262,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)initMainView
 {
-    self.mainView  = [[UIView alloc]initWithFrame:CGRectMake(0, self.offsetViewY, TOTAL_WIDTH, TOTAL_WIDTH )];
+    self.mainView  = [[UIView alloc]initWithFrame:CGRectMake(0, self.offsetViewY, TOTAL_WIDTH, TOTAL_WIDTH+50 )];
     self.mainView.backgroundColor = [UIColor clearColor];
     
     self.enterButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -270,10 +270,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.enterButton setFrame:CGRectMake(66, TOTAL_WIDTH, 188, 43)];
     [self.enterButton setBackgroundImage:[UIImage imageNamed:@"button_bg.png"] forState:UIControlStateNormal];
     [self.enterButton setBackgroundImage:[UIImage imageNamed:@"button_highlight_bg.png"] forState:UIControlStateHighlighted];
-    [self.enterButton setImage:[UIImage imageNamed:@"footpoint.png"] forState:UIControlStateNormal];
-    [self.enterButton setImageEdgeInsets:UIEdgeInsetsMake(0, -20, 0, 0)];
-    [self.enterButton setTitle:T(@"一步一步来") forState:UIControlStateNormal];
-    [self.enterButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 10, 0, 0)];
+    [self.enterButton setImage:[UIImage imageNamed:@"rightarrow.png"] forState:UIControlStateNormal];
+    [self.enterButton setImageEdgeInsets:UIEdgeInsetsMake(0, 100, 0, 0)];
+    [self.enterButton setTitle:T(@"GO") forState:UIControlStateNormal];
+    [self.enterButton.titleLabel setFont:CUSTOMFONT];
+    [self.enterButton setTitleColor:BLUECOLOR forState:UIControlStateNormal];
+    [self.enterButton setTitleEdgeInsets:UIEdgeInsetsMake(0, -20, 0, 0)];
     [self.enterButton setTitleColor:DARKCOLOR forState:UIControlStateNormal];
     [self.enterButton addTarget:self action:@selector(enterAction) forControlEvents:UIControlEventTouchUpInside];
     
@@ -281,7 +283,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
     // or animview
     self.swipeView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_WIDTH)];
-    self.swipeView.backgroundColor = RGBACOLOR(255, 0, 0, 0.1);
+    self.swipeView.backgroundColor = RGBACOLOR(255, 0, 0, 0);
 
     self.leftSwipe = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(actionSwipe:)];
     self.leftSwipe.direction = (UISwipeGestureRecognizerDirectionLeft);

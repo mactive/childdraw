@@ -56,13 +56,21 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    UIImageView *bgView = [[UIImageView alloc]initWithFrame:self.view.frame];
+    if (IS_IPHONE_5) {
+        [bgView setImage:[UIImage imageNamed:@"5_bg.png"]];
+    }else{
+        [bgView setImage:[UIImage imageNamed:@"4s_bg.png"]];
+    }
+    [self.view addSubview:bgView];
+    
     GCPagedScrollView* scrollView = [[GCPagedScrollView alloc] initWithFrame:self.view.frame];
     scrollView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
     self.view = scrollView;
     self.targetArray = [[NSMutableArray alloc]init];
     
     self.targetView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 432)];
-    self.scrollView.backgroundColor = BGCOLOR;
+    self.scrollView.backgroundColor = [UIColor clearColor];
     
 
     self.scrollView.minimumZoomScale = 1; //最小到0.3倍
@@ -133,7 +141,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     UIView* view = [[UIView alloc] initWithFrame:CGRectMake(10, 0, self.view.frame.size.width - 20,
                                                             self.view.frame.size.height - 50)];
     
-    view.backgroundColor = BGCOLOR;
+    view.backgroundColor = [UIColor clearColor];
     UIImageView* imageView = [[UIImageView alloc]initWithFrame:view.bounds];
     imageView.tag = 1001;
     if ([obj isKindOfClass:[UIImage class]]) {
