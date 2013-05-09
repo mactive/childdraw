@@ -33,6 +33,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property(nonatomic, strong)UIImagePickerController *pickerController;
 @property(nonatomic, strong)UIImage *photoImage;
 @property(nonatomic, strong)UISwipeGestureRecognizer *leftSwipe;
+@property(nonatomic, strong)GCPagedScrollView *scrollView;
 @end
 
 @implementation AlbumViewController
@@ -47,6 +48,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize keyString;
 @synthesize photoImage;
 @synthesize leftSwipe;
+@synthesize scrollView;
 
 
 #define kCameraSource       UIImagePickerControllerSourceTypeCamera
@@ -55,23 +57,24 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [self.view setFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_HEIGHT())];
+
     UIImageView *bgView = [[UIImageView alloc]initWithFrame:self.view.frame];
     if (IS_IPHONE_5) {
         [bgView setImage:[UIImage imageNamed:@"5_bg.png"]];
     }else{
         [bgView setImage:[UIImage imageNamed:@"4s_bg.png"]];
     }
+    
     [self.view addSubview:bgView];
     
-    GCPagedScrollView* scrollView = [[GCPagedScrollView alloc] initWithFrame:self.view.frame];
-    scrollView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
-    self.view = scrollView;
+    self.scrollView = [[GCPagedScrollView alloc] initWithFrame:self.view.frame];
+    self.scrollView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
+    
     self.targetArray = [[NSMutableArray alloc]init];
     
     self.targetView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 432)];
     self.scrollView.backgroundColor = [UIColor clearColor];
-    
 
     self.scrollView.minimumZoomScale = 1; //最小到0.3倍
     self.scrollView.maximumZoomScale = 1.0; //最大到3倍
@@ -79,7 +82,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.scrollView.scrollEnabled = YES;
     self.scrollView.pagingEnabled = YES;
     self.scrollView.delegate = self;
-        
+    
+    [self.view addSubview:self.scrollView];
+    
     [self refreshSubView];
 }
 
@@ -126,12 +131,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 
-#pragma mark -
-#pragma mark Getters
-
-- (GCPagedScrollView *)scrollView {
-    return (GCPagedScrollView*) self.view;
-}
 
 
 #pragma mark -
@@ -140,7 +139,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (UIView *)createViewForObj:(id)obj withIndex:(NSInteger)index{
     UIView* view = [[UIView alloc] initWithFrame:CGRectMake(10, 0, self.view.frame.size.width - 20,
                                                             self.view.frame.size.height - 50)];
-    
     view.backgroundColor = [UIColor clearColor];
     UIImageView* imageView = [[UIImageView alloc]initWithFrame:view.bounds];
     imageView.tag = 1001;

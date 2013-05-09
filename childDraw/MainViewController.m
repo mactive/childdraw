@@ -267,16 +267,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     self.enterButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.enterButton setTitle:@"Enter" forState:UIControlStateNormal];
-    [self.enterButton setFrame:CGRectMake(66, TOTAL_WIDTH, 188, 43)];
-    [self.enterButton setBackgroundImage:[UIImage imageNamed:@"button_bg.png"] forState:UIControlStateNormal];
-    [self.enterButton setBackgroundImage:[UIImage imageNamed:@"button_highlight_bg.png"] forState:UIControlStateHighlighted];
-    [self.enterButton setImage:[UIImage imageNamed:@"rightarrow.png"] forState:UIControlStateNormal];
-    [self.enterButton setImageEdgeInsets:UIEdgeInsetsMake(0, 100, 0, 0)];
-    [self.enterButton setTitle:T(@"GO") forState:UIControlStateNormal];
-    [self.enterButton.titleLabel setFont:CUSTOMFONT];
-    [self.enterButton setTitleColor:BLUECOLOR forState:UIControlStateNormal];
-    [self.enterButton setTitleEdgeInsets:UIEdgeInsetsMake(0, -20, 0, 0)];
-    [self.enterButton setTitleColor:DARKCOLOR forState:UIControlStateNormal];
+    [self.enterButton setFrame:CGRectMake(120, TOTAL_WIDTH-20, 80, 80)];
+    [self.enterButton setBackgroundImage:[UIImage imageNamed:@"button_go.png"] forState:UIControlStateNormal];
+    [self.enterButton setBackgroundImage:[UIImage imageNamed:@"button_go_highlight.png"] forState:UIControlStateHighlighted];
+    [self.enterButton setTitle:@"" forState:UIControlStateNormal];
     [self.enterButton addTarget:self action:@selector(enterAction) forControlEvents:UIControlEventTouchUpInside];
     
     self.animArea = [[UIImageView alloc] initWithFrame:CGRectMake(10, 0, 300, 300)];
@@ -296,8 +290,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.swipeView addGestureRecognizer:self.clickTap];
     
     [self.mainView addSubview:self.animArea];
-    [self.mainView addSubview:self.enterButton];
     [self.mainView addSubview:self.swipeView];
+    [self.mainView addSubview:self.enterButton];
 
     [self.mainView setHidden:YES];
     [self.view addSubview:self.mainView];
