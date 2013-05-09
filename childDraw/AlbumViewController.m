@@ -32,6 +32,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property(strong, nonatomic)UIActionSheet *shareActionSheet;
 @property(nonatomic, strong)UIImagePickerController *pickerController;
 @property(nonatomic, strong)UIImage *photoImage;
+@property(nonatomic, strong)UISwipeGestureRecognizer *leftSwipe;
 @end
 
 @implementation AlbumViewController
@@ -45,6 +46,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize pickerController;
 @synthesize keyString;
 @synthesize photoImage;
+@synthesize leftSwipe;
 
 
 #define kCameraSource       UIImagePickerControllerSourceTypeCamera
@@ -64,12 +66,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
 
     self.scrollView.minimumZoomScale = 1; //最小到0.3倍
-    self.scrollView.maximumZoomScale = 3.0; //最大到3倍
+    self.scrollView.maximumZoomScale = 1.0; //最大到3倍
     self.scrollView.clipsToBounds = YES;
-    self.scrollView.scrollEnabled = NO;
+    self.scrollView.scrollEnabled = YES;
     self.scrollView.pagingEnabled = YES;
     self.scrollView.delegate = self;
-    
+        
     [self refreshSubView];
 }
 
@@ -336,14 +338,12 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 
 - (void)finishPhoto:(UIImage *)image
 {
-
     NSUInteger count = [self.albumArray count];
     [self.scrollView setPage:count];
     self.targetView = [self.targetArray objectAtIndex:count];
     [self.shareView photoSuccess:image];
     
     [self.shareView.photoButton setEnabled:NO];
-    
 }
 
 
@@ -360,6 +360,10 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     }
 }
 
+- (void)backToMainView
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 - (void)viewWillDisappear:(BOOL)animated
 {

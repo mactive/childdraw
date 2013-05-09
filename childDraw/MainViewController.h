@@ -20,4 +20,5 @@
 - (void)downloadFinish;
 
 - (void)enterFirst:(BOOL)first orLast:(BOOL)last;
+- (void)backAction;
 @end

@@ -443,6 +443,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self enterFirst:YES orLast:NO];
 }
 
+- (void)backAction
+{
+    [self.albumViewController backToMainView];
+}
+
+
 - (void)enterFirst:(BOOL)first orLast:(BOOL)last
 {
     self.albumViewController.albumArray = self.albumArray;
@@ -456,7 +462,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.albumViewController jumpToFirst:first orLast:last];
 
     [self.navigationController pushViewController:self.albumViewController animated:YES];
-
 
 }
 

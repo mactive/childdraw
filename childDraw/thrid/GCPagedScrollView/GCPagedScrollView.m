@@ -9,6 +9,7 @@
 #import "GCPagedScrollView.h"
 #import <QuartzCore/CATransaction.h>
 #import "StyledPageControl.h"
+#import "AppDelegate.h"
 
 NSString * const GCPagedScrollViewContentOffsetKey = @"contentOffset";
 const CGFloat GCPagedScrollViewPageControlHeight = 36.0;
@@ -16,7 +17,6 @@ const CGFloat GCPagedScrollViewPageControlHeight = 36.0;
 @interface GCPagedScrollView ()
 
 @property (nonatomic, readonly) NSMutableArray* views;
-//@property (nonatomic, readonly) UIPageControl* pageControl;
 @property (nonatomic, strong) StyledPageControl *pageControl;
 
 - (void) updateViewPositionAndPageControl;
@@ -41,14 +41,6 @@ const CGFloat GCPagedScrollViewPageControlHeight = 36.0;
         self.showsVerticalScrollIndicator = NO;
         self.showsHorizontalScrollIndicator = NO;
         self.scrollsToTop = NO;
-        
-        //Place page control
-//        CGRect frame = CGRectMake(self.contentOffset.x, 0, self.frame.size.width, GCPagedScrollViewPageControlHeight);
-//        UIPageControl* aPageControl = [[UIPageControl alloc] initWithFrame:frame];
-//        [aPageControl addTarget:self action:@selector(changePage:) forControlEvents:UIControlEventValueChanged];
-//        aPageControl.defersCurrentPageDisplay = YES;
-//        aPageControl.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin);
-//        [self addSubview:aPageControl];
         
         StyledPageControl *aPageControl = [[StyledPageControl alloc]initWithFrame:CGRectZero];
         [aPageControl setFrame:CGRectMake(20,(self.frame.size.height-20)/2,self.frame.size.width-40,20)];
@@ -82,7 +74,7 @@ const CGFloat GCPagedScrollViewPageControlHeight = 36.0;
     [self updateViewPositionAndPageControl];
     self.contentOffset = CGPointMake(0, - self.scrollIndicatorInsets.top);
     
-    NSLog(@"scrollIndicatorInsets %f %f %f %f",self.scrollIndicatorInsets.bottom,self.scrollIndicatorInsets.top,self.scrollIndicatorInsets.left,self.scrollIndicatorInsets.right);
+//    NSLog(@"scrollIndicatorInsets %f %f %f %f",self.scrollIndicatorInsets.bottom,self.scrollIndicatorInsets.top,self.scrollIndicatorInsets.left,self.scrollIndicatorInsets.right);
 
 }
 
@@ -125,7 +117,7 @@ const CGFloat GCPagedScrollViewPageControlHeight = 36.0;
     UIEdgeInsets inset = self.scrollIndicatorInsets;
     CGFloat heightInset = inset.top + inset.bottom;
     self.contentSize = CGSizeMake(self.frame.size.width * [self.views count], self.frame.size.height - heightInset);
-    NSLog(@"ContentSize: %.0f %.0f",self.contentSize.width,self.contentSize.height);
+//    NSLog(@"ContentSize: %.0f %.0f",self.contentSize.width,self.contentSize.height);
     self.pageControl.numberOfPages = self.views.count;
 }
 
@@ -162,6 +154,7 @@ const CGFloat GCPagedScrollViewPageControlHeight = 36.0;
     [super setContentOffset:new];
     
     self.pageControl.currentPage = self.page; //Update the page number
+
 }
 
 - (NSMutableArray*) views {
@@ -172,6 +165,11 @@ const CGFloat GCPagedScrollViewPageControlHeight = 36.0;
 }
 
 - (NSUInteger) page {
+//    NSLog(@"%.0f",self.contentOffset.x);
+    if (self.contentOffset.x < -20.0f) {
+        //
+        [[self appDelegate].mainViewController backAction];
+    }
     return (self.contentOffset.x + self.frame.size.width / 2) / self.frame.size.width;
 }
 
@@ -183,8 +181,15 @@ const CGFloat GCPagedScrollViewPageControlHeight = 36.0;
     [self setContentOffset:CGPointMake(page * self.frame.size.width, - self.scrollIndicatorInsets.top) animated:animated];
 }
 
+
+
 #pragma mark -
 #pragma mark Dealloc
+
+- (AppDelegate *)appDelegate
+{
+	return (AppDelegate *)[[UIApplication sharedApplication] delegate];
+}
 
 
 

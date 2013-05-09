@@ -26,5 +26,6 @@
 - (void)refreshSubView;
 
 - (void)jumpToFirst:(BOOL)first orLast:(BOOL)last;
+- (void)backToMainView;
 
 @end
