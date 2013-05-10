@@ -164,12 +164,13 @@ static NSInteger const kContainerViewTag = -1000001;
 	scrollView.contentInset = contentInset;
 	// Restor the previous scroll offset, sicne the contentInset change coud had changed it
 	[scrollView setContentOffset:sOffset];
-	
 	// Update the scroll indicator insets
 	void (^updateScrollInsets)(void) = ^{
 		UIEdgeInsets scrollIndicatorInsets = scrollView.scrollIndicatorInsets;
 		scrollIndicatorInsets.top = offset;
 		scrollView.scrollIndicatorInsets = scrollIndicatorInsets;
+        NSLog(@"scrollIndicatorInsets.top***** %f",scrollView.scrollIndicatorInsets.top);
+
 	};
 	if (animated) {
 		[UIView animateWithDuration:.3f animations:updateScrollInsets];
@@ -223,6 +224,7 @@ static NSInteger const kContainerViewTag = -1000001;
 		UIView *newView = new.view;
 		if (newView) {
 			newView.frame = containerView.bounds;
+//            newView.frame = CGRectMake(containerView.frame.origin.x, containerView.frame.origin.y, containerView.frame.size.width/2, containerView.frame.size.height/2);
 			[containerView insertSubview:newView atIndex:0];
 			[new didMoveToParentViewController:self];
 		}
@@ -255,6 +257,12 @@ static NSInteger const kContainerViewTag = -1000001;
 }
 
 #pragma mark - ScrollView
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    NSLog(@"contentOffset.y: %f",scrollView.contentOffset.y);
+}
+
 
 - (UIScrollView *)scrollView {
 	return (UIScrollView *)self.frontController.view;

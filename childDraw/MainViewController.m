@@ -8,6 +8,7 @@
 
 #import "MainViewController.h"
 #import "AlbumViewController.h"
+#import "MBPullDownController.h"
 #import "SlideListViewController.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "JSONKit/JSONKit.h"
@@ -127,8 +128,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self initMainView];
     [self initDownloadView];
     [self initListButton];
+    [self initBottomView];
     
     self.title = PRODUCT_NAME;
+    
+    DDLogVerbose(@"open %d",self.pullDownController.open);
     
 }
 
@@ -353,6 +357,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.listButton addTarget:self action:@selector(listAction) forControlEvents:UIControlEventTouchUpInside];
     
     [self.view addSubview:self.listButton];
+}
+
+- (void)initBottomView
+{
+    UIImageView *bottomView = [[UIImageView alloc]initWithFrame:CGRectMake(0,  8, TOTAL_WIDTH, 32)];
+    [bottomView setImage:[UIImage imageNamed:@"bottom_full.png"]];
+    
+    [self.view addSubview:bottomView];
 }
 
 //- (void)listAction
