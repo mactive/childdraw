@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import "MainViewController.h"
+#import "MBPullDownController.h"
+#import "SlideListViewController.h"
 #import "AppNetworkAPIClient.h"
 #import "AFHTTPRequestOperation.h"
 #import "IPAddress.h"
@@ -19,7 +21,6 @@
 #import "ServerDataTransformer.h"
 #import "IPAddress.h"
 #import "MBProgressHUD.h"
-
 
 #import "DDLog.h"
 // Log levels: off, error, warn, info, verbose
@@ -46,6 +47,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 @implementation AppDelegate
 @synthesize mainViewController;
+@synthesize listViewController;
 @synthesize versionAlertView;
 @synthesize systemVersion;
 @synthesize downArray;
@@ -54,7 +56,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize CACHEILPATH;
 @synthesize lastPlanet;
 @synthesize lastPlanetTitle;
-@synthesize listViewContorller;
 @synthesize isShareSucceed;
 @synthesize scrollIndex;
 
@@ -137,29 +138,48 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     // badge back to zero
     [UIApplication sharedApplication].applicationIconBadgeNumber=0;
-    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
-    
+
     // mainMenuViewController
     
     self.mainViewController = [[MainViewController alloc]initWithNibName:nil bundle:nil];
-    UINavigationController *mainController = [[UINavigationController alloc] initWithRootViewController:self.mainViewController];
     self.mainViewController.managedObjectContext = _managedObjectContext;
+
+    self.listViewController = [[SlideListViewController alloc]initWithNibName:nil bundle:nil];
+    self.listViewController.managedObjectContext = _managedObjectContext;
     
-    [XFox logAllPageViews:mainController];
-    [self getIPAddress];
+//    UINavigationController *mainController = [[UINavigationController alloc] initWithRootViewController:self.mainViewController];
+    UINavigationController *mainController = [self setUpViewControllerHierarchy];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = BGCOLOR;
-    [self.window addSubview:self.mainViewController.view];
+//    [self.window addSubview:self.mainViewController.view];
     [self.window setRootViewController:mainController];
-    
     [self.window makeKeyAndVisible];
     
     _defaultGetCount  = 1;
     [self downloadLastFiles:_defaultGetCount];
+    [XFox logAllPageViews:mainController];
+    
+    [self getIPAddress];
 
+}
+
+#pragma mark - Controllers
+
+- (UINavigationController *)setUpViewControllerHierarchy {
+//	MainViewController *front = [[MainViewController alloc] init];
+    MainViewController *front = self.mainViewController;
+	SlideListViewController *back = self.listViewController;
+	MBPullDownController *pullDownController = [[MBPullDownController alloc] initWithFrontController:front backController:back];
+//    pullDownController.openDragOffset = 0.0f;
+//    pullDownController.openBottomOffset = 0.0f;
+//    pullDownController.closeDragOffset = 0.0f;
+    pullDownController.closedTopOffset = 0.0f;
+    
+	UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:pullDownController];
+	navigationController.navigationBarHidden = YES;
+	return navigationController;
 }
 
 -(void)getTheLastPlanet:(NSArray *)data

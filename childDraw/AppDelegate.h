@@ -8,18 +8,18 @@
 
 #import <UIKit/UIKit.h>
 #import "MainViewController.h"
+#import "SlideListViewController.h"
 #import "WXApi.h"
 
-@class ListViewController;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate,WXApiDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) MainViewController *mainViewController;
+@property (strong, nonatomic) SlideListViewController *listViewController;
 @property (strong, nonatomic) NSString *ASSETPATH;
 @property (strong, nonatomic) NSString *THUMBNAILPATH;
 @property (strong, nonatomic) NSString *CACHEILPATH;
-@property (strong, nonatomic) ListViewController *listViewContorller;
 @property (assign, nonatomic) NSUInteger scrollIndex;
 
 - (void)downloadLastFiles:(NSInteger)count;

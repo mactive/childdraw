@@ -18,6 +18,7 @@
 		26274035173CA3C500556581 /* button_next@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26274033173CA3C500556581 /* button_next@2x.png */; };
 		26274038173CAF0700556581 /* rate_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26274036173CAF0700556581 /* rate_icon@2x.png */; };
 		26274039173CAF0700556581 /* advise_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26274037173CAF0700556581 /* advise_icon@2x.png */; };
+		2627403D173CE1CC00556581 /* MBPullDownController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2627403C173CE1CC00556581 /* MBPullDownController.m */; };
 		26502E331713E654005BFD7B /* half_cell_shadow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26502E321713E654005BFD7B /* half_cell_shadow@2x.png */; };
 		26502E371713F80D005BFD7B /* footpoint@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26502E341713F80D005BFD7B /* footpoint@2x.png */; };
 		26502E381713F80D005BFD7B /* button_highlight_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26502E351713F80D005BFD7B /* button_highlight_bg@2x.png */; };
@@ -137,6 +138,8 @@
 		26274033173CA3C500556581 /* button_next@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_next@2x.png"; sourceTree = "<group>"; };
 		26274036173CAF0700556581 /* rate_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rate_icon@2x.png"; sourceTree = "<group>"; };
 		26274037173CAF0700556581 /* advise_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "advise_icon@2x.png"; sourceTree = "<group>"; };
+		2627403B173CE1CC00556581 /* MBPullDownController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBPullDownController.h; sourceTree = "<group>"; };
+		2627403C173CE1CC00556581 /* MBPullDownController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBPullDownController.m; sourceTree = "<group>"; };
 		26502E321713E654005BFD7B /* half_cell_shadow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "half_cell_shadow@2x.png"; sourceTree = "<group>"; };
 		26502E341713F80D005BFD7B /* footpoint@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "footpoint@2x.png"; sourceTree = "<group>"; };
 		26502E351713F80D005BFD7B /* button_highlight_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_highlight_bg@2x.png"; sourceTree = "<group>"; };
@@ -301,6 +304,15 @@
 				261CBF2E1712B39700F59321 /* WXApiObject.h */,
 			);
 			path = whchat;
+			sourceTree = "<group>";
+		};
+		2627403A173CE1CC00556581 /* MBPullDownController */ = {
+			isa = PBXGroup;
+			children = (
+				2627403B173CE1CC00556581 /* MBPullDownController.h */,
+				2627403C173CE1CC00556581 /* MBPullDownController.m */,
+			);
+			path = MBPullDownController;
 			sourceTree = "<group>";
 		};
 		26502E4B17156FC1005BFD7B /* StypePagecontrol */ = {
@@ -565,6 +577,7 @@
 		26F39F7416FC45CB001A6EF9 /* thrid */ = {
 			isa = PBXGroup;
 			children = (
+				2627403A173CE1CC00556581 /* MBPullDownController */,
 				26604FBF173911380010CE9E /* NSDateCategory */,
 				26604F9B17377BF80010CE9E /* MCPagedScrollView */,
 				26502E4B17156FC1005BFD7B /* StypePagecontrol */,
@@ -762,6 +775,7 @@
 				26604FA91738C48E0010CE9E /* ListItemView.m in Sources */,
 				26604FAA1738C48E0010CE9E /* SlideListViewController.m in Sources */,
 				26604FC2173911380010CE9E /* NSDate-Utilities.m in Sources */,
+				2627403D173CE1CC00556581 /* MBPullDownController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

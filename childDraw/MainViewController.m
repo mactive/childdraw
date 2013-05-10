@@ -40,7 +40,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property(strong, nonatomic)AlbumViewController *albumViewController;
 @property(strong, nonatomic)UIButton *enterButton;
 @property(strong, nonatomic)UIView *swipeView;
-@property(strong, nonatomic)CATransition* transition;
 @property(strong, nonatomic)UIButton *listButton;
 
 @property(strong, nonatomic)NSArray *albumArray;
@@ -81,7 +80,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize mainView;
 @synthesize downloadView;
 @synthesize dlNumber,dlTitle,dlImage;
-@synthesize transition;
 @synthesize titleString;
 @synthesize listButton;
 
@@ -110,7 +108,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }else{
         self.offsetViewY = (TOTAL_HEIGHT() - TOTAL_WIDTH) / 3 ;
     }
-    [self.view setFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_HEIGHT())];
+    
+    self.view = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_HEIGHT())];
+
+//    [self.view setFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_HEIGHT())];
 
     UIImageView *bgView = [[UIImageView alloc]initWithFrame:self.view.frame];
     
@@ -125,15 +126,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     // download view
     [self initMainView];
     [self initDownloadView];
-    [self initViewControllers];
     [self initListButton];
-
-    // transition animation
-    self.transition = [CATransition animation];
-    self.transition.duration = 1.8;
-    self.transition.type = kCATransitionMoveIn;
-    self.transition.timingFunction = UIViewAnimationCurveEaseInOut;
-    self.transition.subtype = kCATransitionFromBottom;
     
     self.title = PRODUCT_NAME;
     
@@ -362,19 +355,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.view addSubview:self.listButton];
 }
 
-- (void)listAction
-{
-    SlideListViewController *controller = [[SlideListViewController alloc]initWithNibName:nil bundle:nil];
-    controller.managedObjectContext = self.managedObjectContext;
-    [self.navigationController pushViewController:controller animated:NO];
-}
+//- (void)listAction
+//{
+//    SlideListViewController *controller = [[SlideListViewController alloc]initWithNibName:nil bundle:nil];
+//    controller.managedObjectContext = self.managedObjectContext;
+//    [self.navigationController pushViewController:controller animated:NO];
+//}
 
 
-- (void)initViewControllers
-{
-    [self appDelegate].listViewContorller = [[ListViewController alloc]initWithNibName:nil bundle:nil];
-    [self appDelegate].listViewContorller.managedObjectContext = self.managedObjectContext;
-}
+//- (void)initViewControllers
+//{
+//    [self appDelegate].listViewContorller = [[ListViewController alloc]initWithNibName:nil bundle:nil];
+//    [self appDelegate].listViewContorller.managedObjectContext = self.managedObjectContext;
+//}
 
 
 /////////////////////////////////////////////////////////////////////////////////////
