@@ -208,15 +208,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             
         }else{
             DDLogWarn(@"Not get nothing");
-                MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.mainViewController.view animated:YES];
-                HUD.removeFromSuperViewOnHide = YES;
-                HUD.labelText = T(@"亲,连不上网啦!");
-                HUD.detailsLabelText = T(@"检查一下吧");
-                HUD.mode = MBProgressHUDModeCustomView;
-                [HUD hide:YES afterDelay:1];
-//            }
+            
+            MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.mainViewController.view animated:YES];
+            HUD.removeFromSuperViewOnHide = YES;
+            HUD.labelText = T(@"亲,连不上网啦!");
+            HUD.detailsLabelText = T(@"检查一下吧");
+            HUD.mode = MBProgressHUDModeCustomView;
+            [HUD hide:YES afterDelay:1];
         }
-     
     }];
     
 }

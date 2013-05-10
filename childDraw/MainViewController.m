@@ -282,9 +282,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     self.enterButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.enterButton setTitle:@"Enter" forState:UIControlStateNormal];
-    [self.enterButton setFrame:CGRectMake(120, TOTAL_WIDTH-20, 80, 80)];
-    [self.enterButton setBackgroundImage:[UIImage imageNamed:@"button_go.png"] forState:UIControlStateNormal];
-    [self.enterButton setBackgroundImage:[UIImage imageNamed:@"button_go_highlight.png"] forState:UIControlStateHighlighted];
+    [self.enterButton setFrame:CGRectMake(115, TOTAL_WIDTH-20, 90, 60)];
+    [self.enterButton setBackgroundImage:[UIImage imageNamed:@"button_next.png"] forState:UIControlStateNormal];
+    [self.enterButton setBackgroundImage:[UIImage imageNamed:@"button_next_highlight.png"] forState:UIControlStateHighlighted];
     [self.enterButton setTitle:@"" forState:UIControlStateNormal];
     [self.enterButton addTarget:self action:@selector(enterAction) forControlEvents:UIControlEventTouchUpInside];
     
@@ -470,7 +470,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     self.albumViewController.albumArray = self.albumArray;
     self.albumViewController.shareView = [[ShareWithPhotoView alloc]initWithFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_WIDTH)];
-    [self.albumViewController refreshSubView];
+//    [self.albumViewController refreshSubView];
     [self.albumViewController setHidesBottomBarWhenPushed:YES];
     self.albumViewController.title = self.titleString;
     self.albumViewController.keyString = self.planetString;

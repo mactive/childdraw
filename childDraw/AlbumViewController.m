@@ -71,9 +71,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.scrollView = [[GCPagedScrollView alloc] initWithFrame:self.view.frame];
     self.scrollView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
     
-    self.targetArray = [[NSMutableArray alloc]init];
-    
-    self.targetView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 432)];
+//    self.targetArray = [[NSMutableArray alloc]init];
+//    self.targetView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 432)];
     self.scrollView.backgroundColor = [UIColor clearColor];
 
     self.scrollView.minimumZoomScale = 1; //最小到0.3倍
@@ -85,7 +84,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     [self.view addSubview:self.scrollView];
     
-    [self refreshSubView];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -94,7 +92,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
     [self.scrollView setPage:self.albumIndex];
     
-    self.targetView = [self.targetArray objectAtIndex:self.scrollView.page];
+//    self.targetView = [self.targetArray objectAtIndex:self.scrollView.page];
     //DDLogVerbose(@"page %d %@",self.scrollView.page,self.targetView);
     NSUInteger count = [self.albumArray count];
     if (self.shareView != nil) {
@@ -110,6 +108,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [XFox logEvent:EVENT_READING_FINISH_TIMER
     withParameters:[NSDictionary dictionaryWithObjectsAndKeys:self.keyString,@"key", nil]
              timed:YES];
+    
+    [self refreshSubView];
+
 }
 
 // refresh
@@ -154,19 +155,21 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)refreshSubView
 {
     [self.scrollView removeAllContentSubviews];
-    self.targetArray = [[NSMutableArray alloc]init];
+//    self.targetArray = [[NSMutableArray alloc]init];
+    
+    DDLogVerbose(@"self.albumArray: %@",self.albumArray);
     
     for (NSUInteger index = 0; index < [self.albumArray count]; index ++) {
         //You add your content views here
         id obj = [self.albumArray objectAtIndex:index];
         
         [self.scrollView addContentSubview:[self createViewForObj:obj withIndex:index]];
-        [self.targetArray addObject:[self createViewForObj:obj withIndex:index]];
+//        [self.targetArray addObject:[self createViewForObj:obj withIndex:index]];
     }
     
     if (self.shareView != nil) {
         [self.scrollView addContentSubview:self.shareView];
-        [self.targetArray addObject:self.shareView];
+//        [self.targetArray addObject:self.shareView];
     }
 }
 
@@ -346,7 +349,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     NSUInteger count = [self.albumArray count];
     [self.scrollView setPage:count];
-    self.targetView = [self.targetArray objectAtIndex:count];
+//    self.targetView = [self.targetArray objectAtIndex:count];
     [self.shareView photoSuccess:image];
     
     [self.shareView.photoButton setEnabled:NO];
