@@ -129,7 +129,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     if ([scrollView isEqual:self.scrollView]) {
         NSUInteger count = [self.albumArray count];
-
         if (self.scrollView.page == count) {
             [XFox endTimedEvent:EVENT_READING_FINISH_TIMER withParameters:nil];
         }
@@ -179,7 +178,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
 }
 
+/////////////////////////////////////////////////////////////////////////////
+#pragma mark - share weibo
+/////////////////////////////////////////////////////////////////////////////
 
+
+
+/////////////////////////////////////////////////////////////////////////////
+#pragma mark - share weichat
+/////////////////////////////////////////////////////////////////////////////
 - (void) sendWechatImageContent:(UIImage *)image withOption:(NSUInteger)option
 {
     if ([WXApi isWXAppInstalled]  && [WXApi isWXAppSupportApi]) {
@@ -244,15 +251,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 //////////////////////////////////////////////////////////////////////////////////////////
 
 
-- (void)takePhotoFromLibaray
-{
-    self.pickerController = [[UIImagePickerController alloc] init];
-    self.pickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    self.pickerController.delegate = self;
-    self.pickerController.allowsEditing = NO;
-    [self presentModalViewController:self.pickerController animated:YES];
-}
-
 - (void)takePhotoFromCamera
 {
     if (![UIImagePickerController isSourceTypeAvailable:kCameraSource]) {
@@ -305,6 +303,18 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     }
 }
 
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    /* keep the order first dismiss picker and pop controller */
+    [picker dismissModalViewControllerAnimated:YES];
+    //    [self.controller.navigationController popViewControllerAnimated:NO];
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - finish photo action
+//////////////////////////////////////////////////////////////////////////////////////////
+
 - (void)finishPhoto:(UIImage *)image
 {
     NSUInteger count = [self.albumArray count];
@@ -340,12 +350,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     [XFox endTimedEvent:EVENT_READING_TIMER withParameters:nil];
 }
 
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
-{
-    /* keep the order first dismiss picker and pop controller */
-    [picker dismissModalViewControllerAnimated:YES];
-    //    [self.controller.navigationController popViewControllerAnimated:NO];
-}
+
 
 
 /*
@@ -397,6 +402,15 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
  }
  }
  
+ }
+ 
+ - (void)takePhotoFromLibaray
+ {
+ self.pickerController = [[UIImagePickerController alloc] init];
+ self.pickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+ self.pickerController.delegate = self;
+ self.pickerController.allowsEditing = NO;
+ [self presentModalViewController:self.pickerController animated:YES];
  }
  */
 
