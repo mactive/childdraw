@@ -128,13 +128,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     if ([scrollView isEqual:self.scrollView]) {
-        //DDLogVerbose(@"End page %d %@",self.scrollView.page,self.targetView);
-//        self.targetView = [self.targetArray objectAtIndex:self.scrollView.page];
         NSUInteger count = [self.albumArray count];
-//        if (self.shareView != nil) {
-//            count = count + 1;
-//        }
-//        self.title = [NSString stringWithFormat:@"%d/%d",self.scrollView.page+1,count];
+
         if (self.scrollView.page == count) {
             [XFox endTimedEvent:EVENT_READING_FINISH_TIMER withParameters:nil];
         }
@@ -185,7 +180,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 
-- (void) sendImageContent:(UIImage *)image withOption:(NSUInteger)option
+- (void) sendWechatImageContent:(UIImage *)image withOption:(NSUInteger)option
 {
     if ([WXApi isWXAppInstalled]  && [WXApi isWXAppSupportApi]) {
 
@@ -232,65 +227,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [XFox logEvent:EVENT_PHOTO];
     }
     
-    if ([value isEqualToString:SHAREWECHAT]) {
-        //
-//        self.photoImage = [UIImage imageNamed:@"about_team.png"];
-        [self sendImageContent:self.photoImage withOption:index];
+    else if ([value isEqualToString:SHAREWECHAT] || [value isEqualToString:SHAREWECHATFRIEND]) {
+        [self sendWechatImageContent:self.photoImage withOption:index];
+    }
+    
+    else if ([value isEqualToString:SHAREWEIBO]) {
+        //        self.photoImage = [UIImage imageNamed:@"about_team.png"];
+        [self sendWechatImageContent:self.photoImage withOption:index];
     }
     
 }
-
-- (void)shareButtonAction
-{
-    [self.shareView.photoButton setEnabled:YES];
-
-    self.shareActionSheet = [[UIActionSheet alloc]
-                             initWithTitle:T(@"分享到")
-                             delegate:self
-                             cancelButtonTitle:T(@"取消")
-                             destructiveButtonTitle:nil
-                             otherButtonTitles:T(@"微信朋友圈"), T(@"微信好友"),nil];
-    self.shareActionSheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;
-    [self.shareActionSheet showFromRect:self.view.bounds inView:self.view animated:YES];
-}
-
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (actionSheet == self.shareActionSheet) {
-        if (buttonIndex == 0 || buttonIndex == 1) {
-            [self sendImageContent:self.photoImage withOption:buttonIndex];
-        }
-    }
-    
-}
-
-/*
-- (void)photoButtonAction
-{
-    self.photoActionSheet = [[UIActionSheet alloc]
-                             initWithTitle:T(@"选择图片或者相机")
-                             delegate:self
-                             cancelButtonTitle:T(@"取消")
-                             destructiveButtonTitle:nil
-                             otherButtonTitles:T(@"本地相册"), T(@"照相"),nil];
-    self.photoActionSheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;
-    [self.photoActionSheet showFromRect:self.view.bounds inView:self.view animated:YES];
-    
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (actionSheet == self.photoActionSheet) {
-        if (buttonIndex == 0) {
-            [self takePhotoFromLibaray];
-        }else if (buttonIndex == 1) {
-            [self takePhotoFromCamera];
-        }
-    }
-    
-}
-*/
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -400,6 +346,59 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     [picker dismissModalViewControllerAnimated:YES];
     //    [self.controller.navigationController popViewControllerAnimated:NO];
 }
+
+
+/*
+ - (void)shareButtonAction
+ {
+ [self.shareView.photoButton setEnabled:YES];
+ 
+ self.shareActionSheet = [[UIActionSheet alloc]
+ initWithTitle:T(@"分享到")
+ delegate:self
+ cancelButtonTitle:T(@"取消")
+ destructiveButtonTitle:nil
+ otherButtonTitles:T(@"微信朋友圈"), T(@"微信好友"),nil];
+ self.shareActionSheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;
+ [self.shareActionSheet showFromRect:self.view.bounds inView:self.view animated:YES];
+ }
+ 
+ 
+ - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+ {
+ if (actionSheet == self.shareActionSheet) {
+ if (buttonIndex == 0 || buttonIndex == 1) {
+ [self sendImageContent:self.photoImage withOption:buttonIndex];
+ }
+ }
+ }
+ 
+ 
+ - (void)photoButtonAction
+ {
+ self.photoActionSheet = [[UIActionSheet alloc]
+ initWithTitle:T(@"选择图片或者相机")
+ delegate:self
+ cancelButtonTitle:T(@"取消")
+ destructiveButtonTitle:nil
+ otherButtonTitles:T(@"本地相册"), T(@"照相"),nil];
+ self.photoActionSheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;
+ [self.photoActionSheet showFromRect:self.view.bounds inView:self.view animated:YES];
+ 
+ }
+ 
+ - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+ {
+ if (actionSheet == self.photoActionSheet) {
+ if (buttonIndex == 0) {
+ [self takePhotoFromLibaray];
+ }else if (buttonIndex == 1) {
+ [self takePhotoFromCamera];
+ }
+ }
+ 
+ }
+ */
 
 
 

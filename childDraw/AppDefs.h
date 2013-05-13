@@ -12,9 +12,14 @@
 
 #define M_APPLEID 626129422
 #define WXAPPID @"wx4b9a37d1d5fc4db2"
-//#define WXAPPID @"wxd930ea5d5a258f4f"
 
 //#define WXAPPKEY @"16b848bbf25d583b87a070205942b565"
+
+
+#define kAppKey             @"1437838508"
+#define kAppSecret          @"5b1382fab1fa6562ff10ff57181a801f"
+#define kAppRedirectURI     @"https://api.weibo.com/oauth2/default.html"
+
 
 #define FEEDBACK_EMAIL @"babydrawapp@gmail.com"
 #define PRODUCT_NAME @"宝宝来画画"
