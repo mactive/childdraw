@@ -60,6 +60,13 @@ alpha:(a)]
 #define DOWNLOADFAILED @"DownloadFailed"
 #define PHOTOACTION @"PhotoForShare"
 #define SHAREACTION @"ShareForWeixin"
+
+#define SHAREWEIBO @"ShareForWeibo"
+#define SHAREWECHAT @"ShareForWechat"
+#define SHAREWECHATFRIEND @"ShareForWechatFirend"
+
+
+
 // font
 #define BIGCUSTOMFONT [UIFont fontWithName:@"Museo" size:40.0f]
 #define CUSTOMFONT [UIFont fontWithName:@"Museo" size:16.0f]

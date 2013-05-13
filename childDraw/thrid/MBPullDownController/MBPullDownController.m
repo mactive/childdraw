@@ -15,7 +15,7 @@
 
 static CGFloat const kDefaultClosedTopOffset = 44.f;
 static CGFloat const kDefaultOpenBottomOffset = 44.f;
-static CGFloat const kDefaultOpenDragOffset = 100.f;
+static CGFloat const kDefaultOpenDragOffset = 60.f;
 static CGFloat const kDefaultCloseDragOffset = 44.f;
 
 static NSInteger const kContainerViewTag = -1000001;
@@ -169,7 +169,7 @@ static NSInteger const kContainerViewTag = -1000001;
 		UIEdgeInsets scrollIndicatorInsets = scrollView.scrollIndicatorInsets;
 		scrollIndicatorInsets.top = offset;
 		scrollView.scrollIndicatorInsets = scrollIndicatorInsets;
-        NSLog(@"scrollIndicatorInsets.top***** %f",scrollView.scrollIndicatorInsets.top);
+//        NSLog(@"scrollIndicatorInsets.top***** %f",scrollView.scrollIndicatorInsets.top);
 
 	};
 	if (animated) {
@@ -292,11 +292,17 @@ static NSInteger const kContainerViewTag = -1000001;
 	CGPoint offset = [self scrollView].contentOffset;
 	if (!open && enabled && offset.y < - self.openDragOffset - self.closedTopOffset) {
 		[self setOpen:YES animated:YES];
+        [self.frontController setEditing:YES];
+        NSLog(@"Open");
 	} else if (open) {
 		if (enabled && offset.y > self.closeDragOffset - self.view.bounds.size.height + self.openBottomOffset) {
 			[self setOpen:NO animated:YES];
+            [self.frontController setEditing:NO];
+            NSLog(@"Close");
 		} else {
 			[self setOpen:YES animated:YES];
+            [self.frontController setEditing:YES];
+            NSLog(@"Open");
 		}
 	}
 }

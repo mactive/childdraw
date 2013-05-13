@@ -42,6 +42,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property(strong, nonatomic)UIButton *enterButton;
 @property(strong, nonatomic)UIView *swipeView;
 @property(strong, nonatomic)UIButton *listButton;
+@property(strong, nonatomic)UIButton *backDownButton;
+
 
 @property(strong, nonatomic)NSArray *albumArray;
 @property(strong, nonatomic)NSArray *animationArray;
@@ -83,6 +85,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize dlNumber,dlTitle,dlImage;
 @synthesize titleString;
 @synthesize listButton;
+@synthesize backDownButton;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -128,7 +131,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self initMainView];
     [self initDownloadView];
     [self initListButton];
-    [self initBottomView];
+//    [self initBottomView];
     
     self.title = PRODUCT_NAME;
     
@@ -345,19 +348,42 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 }
 
 #define LIST_OFFSET 12
-#define LIST_WIDTH  41
+#define LIST_WIDTH  60
 
 - (void)initListButton
 {
     // list button
     self.listButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.listButton setFrame:CGRectMake(LIST_OFFSET, TOTAL_HEIGHT()-LIST_OFFSET - LIST_WIDTH, LIST_WIDTH, LIST_WIDTH)];
+    [self.listButton setFrame:CGRectMake(LIST_OFFSET, LIST_OFFSET, LIST_WIDTH, LIST_WIDTH)];
     [self.listButton setBackgroundImage:[UIImage imageNamed:@"button_list.png"] forState:UIControlStateNormal];
     [self.listButton setBackgroundImage:[UIImage imageNamed:@"button_list_highlight.png"] forState:UIControlStateHighlighted];
     [self.listButton addTarget:self action:@selector(listAction) forControlEvents:UIControlEventTouchUpInside];
     
+    
+    self.backDownButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.backDownButton setFrame:CGRectMake(0, 0, TOTAL_WIDTH, 44)];
+    [self.backDownButton setBackgroundColor:[UIColor clearColor]];
+    [self.backDownButton addTarget:self action:@selector(listAction) forControlEvents:UIControlEventTouchUpInside];
+    [self.backDownButton setHidden:YES];
+
     [self.view addSubview:self.listButton];
+    [self.view addSubview:self.backDownButton];
 }
+
+- (void)listAction
+{
+    if (self.pullDownController.open) {
+        [self.pullDownController setOpen:NO animated:YES];
+        [self.listButton setHidden:NO];
+        [self.backDownButton setHidden:YES];
+    }else{
+        [self.pullDownController setOpen:YES animated:YES];
+        [self.listButton setHidden:YES];
+        [self.backDownButton setHidden:NO];
+    }
+}
+
+
 
 - (void)initBottomView
 {
@@ -484,7 +510,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.albumViewController jumpToFirst:first orLast:last];
 
     [self.navigationController pushViewController:self.albumViewController animated:YES];
-
 }
 
 
@@ -499,8 +524,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.animArea startAnimating];
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES];
-    
 }
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -517,6 +542,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
 	return (AppDelegate *)[[UIApplication sharedApplication] delegate];
 }
+
+- (void)setEditing:(BOOL)editing
+{
+    if (editing == YES) {
+        [self.listButton setHidden:YES];
+        [self.backDownButton setHidden:NO];
+    }else{
+        [self.listButton setHidden:NO];
+        [self.backDownButton setHidden:YES];
+    }
+}
+
 
 
 @end

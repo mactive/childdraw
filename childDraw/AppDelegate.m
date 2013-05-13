@@ -152,7 +152,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     UINavigationController *mainController = [self setUpViewControllerHierarchy];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.backgroundColor = BGCOLOR;
+    self.window.backgroundColor = BLUECOLOR;
 //    [self.window addSubview:self.mainViewController.view];
     [self.window setRootViewController:mainController];
     [self.window makeKeyAndVisible];
@@ -402,7 +402,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)showShareSucceed
 {
     if (self.isShareSucceed) {
-        [self.mainViewController enterFirst:NO orLast:YES];
+//        [self.mainViewController enterFirst:NO orLast:YES];
     }
 }
 

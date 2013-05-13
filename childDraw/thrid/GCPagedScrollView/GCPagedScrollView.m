@@ -46,7 +46,7 @@ const CGFloat GCPagedScrollViewPageControlHeight = 36.0;
         [aPageControl setFrame:CGRectMake(20,(self.frame.size.height-20)/2,self.frame.size.width-40,20)];
         [aPageControl addTarget:self action:@selector(changePage:) forControlEvents:UIControlEventValueChanged];
         [aPageControl setPageControlStyle:PageControlStyleWithPageNumber];
-        [aPageControl setUserInteractionEnabled:NO];
+        [aPageControl setUserInteractionEnabled:YES];
         [self addSubview:aPageControl];
 
         pageControl = aPageControl;

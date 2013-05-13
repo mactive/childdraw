@@ -14,6 +14,7 @@
 @property(strong, nonatomic)NSString *planetString;
 @property(strong, nonatomic)NSString *titleString;
 
+
 @property(strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 - (void)downloadLastPlanet:(NSNumber *)value andTitle:(NSString *)title;
@@ -21,4 +22,10 @@
 
 - (void)enterFirst:(BOOL)first orLast:(BOOL)last;
 - (void)backAction;
+
+// set open and close
+- (void)mainViewOpen;
+- (void)mainViewClose;
+
+
 @end

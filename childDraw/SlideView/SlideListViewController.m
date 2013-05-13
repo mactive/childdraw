@@ -59,7 +59,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize managedObjectContext;
 @synthesize itemDict;
 
-#define CONTROL_HEIGHT 66
+#define CONTROL_HEIGHT 56
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -135,7 +135,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     if (self.sourceData == nil || [self.sourceData count] == 0) {
 //        self.startInt = 0;
-//        [self populateData:self.startInt];
+        [self populateData:0];
         [self populateThumbnailData];
     }
     
@@ -181,10 +181,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }else{
         [self.scrollView setPage:0 animated:YES];
     }
-
-
 }
-
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -219,6 +216,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)actionTap:(UISwipeGestureRecognizer *)paramSender
 {
     [self.pullDownController setOpen:NO animated:YES];
+    [self.pullDownController.frontController setEditing:NO];
     
 //    [self.navigationController setNavigationBarHidden:NO];
 //    [self.navigationController popToRootViewControllerAnimated:NO];
@@ -228,7 +226,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
     [self appDelegate].mainViewController.planetString = theZipfile.fileName;
     [self appDelegate].mainViewController.titleString = theZipfile.title;
-    
+//    [[self appDelegate].mainViewController.listButton setHidden:NO];
+
     [ModelDownload sharedInstance].lastPlanet = theZipfile.fileName;
     /* 绑定这两个 delegate */
     [ModelDownload sharedInstance].delegate = (id)[self appDelegate].mainViewController;

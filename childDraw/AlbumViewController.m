@@ -52,6 +52,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 #define kCameraSource       UIImagePickerControllerSourceTypeCamera
+#define LIST_OFFSET 0
 
 #pragma mark - View lifecycle
 
@@ -66,25 +67,34 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [bgView setImage:[UIImage imageNamed:@"4s_bg.png"]];
     }
     
-    [self.view addSubview:bgView];
     
-    self.scrollView = [[GCPagedScrollView alloc] initWithFrame:self.view.frame];
+    UIImageView *backImage = [[UIImageView alloc]initWithFrame:CGRectMake(LIST_OFFSET, LIST_OFFSET/2, 90, 60)];
+    [backImage setImage:[UIImage imageNamed:@"button_back.png"]];
+    backImage.userInteractionEnabled = YES;
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backToMainView)];
+    [backImage addGestureRecognizer:singleTap];
+    
+    self.scrollView = [[GCPagedScrollView alloc] initWithFrame:self.view.bounds];
     self.scrollView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
     
 //    self.targetArray = [[NSMutableArray alloc]init];
 //    self.targetView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 432)];
     self.scrollView.backgroundColor = [UIColor clearColor];
 
-    self.scrollView.minimumZoomScale = 1; //最小到0.3倍
+    self.scrollView.minimumZoomScale = 1.0; //最小到0.3倍
     self.scrollView.maximumZoomScale = 1.0; //最大到3倍
     self.scrollView.clipsToBounds = YES;
     self.scrollView.scrollEnabled = YES;
     self.scrollView.pagingEnabled = YES;
     self.scrollView.delegate = self;
     
-    [self.view addSubview:self.scrollView];
     
+    [self.view addSubview:bgView];
+    [self.view addSubview:self.scrollView];
+    [self.view addSubview:backImage];
+
 }
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -149,6 +159,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         
     [imageView setContentMode:UIViewContentModeScaleAspectFit];
     [view addSubview:imageView];
+    
     return view;
 }
 
@@ -192,9 +203,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
         req.bText = NO;
         req.message = message;
-        if (option == 0) {
+        if (option == 3) {
             req.scene = WXSceneTimeline;
-        }else if (option == 1){
+        }else if (option == 2){
             req.scene = WXSceneSession;
         }
         
@@ -214,15 +225,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     if ([value isEqualToString:PHOTOACTION] && index == 1) {
         //
+//        [self finishPhoto:[UIImage imageNamed:@"about_team.png"]];
+        
         [self takePhotoFromCamera];
         self.albumIndex = [self.albumArray count];
         [XFox logEvent:EVENT_PHOTO];
     }
     
-    if ([value isEqualToString:SHAREACTION] && index == 1) {
+    if ([value isEqualToString:SHAREWECHAT]) {
         //
-        [self shareButtonAction];
+//        self.photoImage = [UIImage imageNamed:@"about_team.png"];
+        [self sendImageContent:self.photoImage withOption:index];
     }
+    
 }
 
 - (void)shareButtonAction
@@ -300,11 +315,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 		return;
 	}
     
-    //    self.tableView.allowsSelection = NO;
     self.pickerController = [[UIImagePickerController alloc] init];
     self.pickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
 	self.pickerController.delegate = self;
-	self.pickerController.allowsEditing = YES;
+	self.pickerController.allowsEditing = NO;
     
     [self presentModalViewController:self.pickerController animated:YES];
 }
@@ -315,8 +329,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     
-	UIImage *originalImage = [info objectForKey:UIImagePickerControllerEditedImage];
-    UIImage *screenImage = [originalImage imageByScalingToSize:CGSizeMake(320, 320)];
+	UIImage *originalImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+    UIImage *screenImage = [originalImage imageByScalingToSize:CGSizeMake(320, 480)];
     NSData *imageData = UIImageJPEGRepresentation(screenImage, JPEG_QUALITY);
     DDLogVerbose(@"Imagedata size %i", [imageData length]);
     UIImage *image = [UIImage imageWithData:imageData];
@@ -351,7 +365,6 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     [self.scrollView setPage:count];
 //    self.targetView = [self.targetArray objectAtIndex:count];
     [self.shareView photoSuccess:image];
-    
     [self.shareView.photoButton setEnabled:NO];
 }
 
