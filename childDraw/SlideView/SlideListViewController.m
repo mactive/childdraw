@@ -19,6 +19,7 @@
 #import "PassValueDelegate.h"
 #import "AboutUsViewController.h"
 #import "SettingViewController.h"
+#import "MBPullDownController.h"
 
 #import "DDLog.h"
 
@@ -217,8 +218,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)actionTap:(UISwipeGestureRecognizer *)paramSender
 {
-    [self.navigationController setNavigationBarHidden:NO];
-    [self.navigationController popToRootViewControllerAnimated:NO];
+    [self.pullDownController setOpen:NO animated:YES];
+    
+//    [self.navigationController setNavigationBarHidden:NO];
+//    [self.navigationController popToRootViewControllerAnimated:NO];
     
     Zipfile *theZipfile = [self.sourceData objectAtIndex:self.scrollView.page];
     NSLog(@"sender.buttonIndex %d %@",self.scrollView.page,theZipfile.fileName);
