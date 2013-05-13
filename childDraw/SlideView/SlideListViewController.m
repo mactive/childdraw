@@ -135,7 +135,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     if (self.sourceData == nil || [self.sourceData count] == 0) {
 //        self.startInt = 0;
-        [self populateData:0];
+//        [self populateData:0];
         [self populateThumbnailData];
     }
     
