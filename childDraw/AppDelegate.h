@@ -10,9 +10,9 @@
 #import "MainViewController.h"
 #import "SlideListViewController.h"
 #import "WXApi.h"
+#import "WeiboSDK.h"
 
-
-@interface AppDelegate : UIResponder <UIApplicationDelegate,WXApiDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate,WXApiDelegate,WeiboSDKDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) MainViewController *mainViewController;

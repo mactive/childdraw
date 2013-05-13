@@ -10,8 +10,9 @@
 #import "UIImage+ProportionalFill.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <QuartzCore/QuartzCore.h>
-#import "MBProgressHUD.h"
+//#import "MBProgressHUD.h"
 #import "WXApi.h"
+#import "WeiboSDK.h"
 
 #import "DDLog.h"
 // Log levels: off, error, warn, info, verbose
@@ -23,7 +24,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 
-@interface AlbumViewController ()<UIScrollViewAccessibilityDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate,WXApiDelegate>
+@interface AlbumViewController ()<UIScrollViewAccessibilityDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate,WXApiDelegate,WeiboSDKDelegate>
 
 - (UIView*) createViewForObj:(id)obj;
 @property(strong, nonatomic)UIView *targetView;
@@ -182,7 +183,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 #pragma mark - share weibo
 /////////////////////////////////////////////////////////////////////////////
 
-
+- (void)ssoButtonPressed
+{
+    WBAuthorizeRequest *request = [WBAuthorizeRequest request];
+    request.redirectURI = kAppRedirectURI;
+    request.scope = @"email,direct_messages_write";
+    request.userInfo = @{@"SSO_From": @"SendMessageToWeiboViewController",
+                         @"Other_Info_1": [NSNumber numberWithInt:123],
+                         @"Other_Info_2": @[@"obj1", @"obj2"],
+                         @"Other_Info_3": @{@"key1": @"obj1", @"key2": @"obj2"}};
+    [WeiboSDK sendRequest:request];
+}
 
 /////////////////////////////////////////////////////////////////////////////
 #pragma mark - share weichat
@@ -240,7 +251,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     else if ([value isEqualToString:SHAREWEIBO]) {
         //        self.photoImage = [UIImage imageNamed:@"about_team.png"];
-        [self sendWechatImageContent:self.photoImage withOption:index];
+        [self ssoButtonPressed];
     }
     
 }
@@ -280,10 +291,10 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     UIImage *image = [UIImage imageWithData:imageData];
     
     // HUD show
-    MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    HUD.removeFromSuperViewOnHide = YES;
-    HUD.labelText = T(@"已经保存至本地");
-    HUD.mode = MBProgressHUDModeText;
+//    MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//    HUD.removeFromSuperViewOnHide = YES;
+//    HUD.labelText = T(@"已经保存至本地");
+//    HUD.mode = MBProgressHUDModeText;
     
     if (picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
         // Save Video to Photo Album

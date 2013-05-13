@@ -120,6 +120,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self startMainSession];
     
     [WXApi registerApp:WXAPPID];
+    [WeiboSDK registerApp:kAppKey];
+    [WeiboSDK enableDebugMode:YES];
     
     return YES;
 }
