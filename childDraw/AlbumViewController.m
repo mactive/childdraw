@@ -220,7 +220,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
 //    message.mediaObject = pageObject;
     
-    message.imageObject = image;
+//    message.imageObject = image;
     
 
     WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:message];
@@ -237,10 +237,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
         WXMediaMessage *message = [WXMediaMessage message];
         
-        UIImage *thumbnailImage = [image imageByScalingToSize:CGSizeMake(120, 120)];
+        UIImage *thumbnailImage = [image imageByScalingToSize:CGSizeMake(40, 60)];
         
         [message setThumbImage:thumbnailImage];
         [message setTitle:PRODUCT_NAME];
+        [message setDescription:@"和宝宝一起画画的App"];
         
         WXImageObject *ext = [WXImageObject object];
         ext.imageData = UIImageJPEGRepresentation(image, 0.7);;
