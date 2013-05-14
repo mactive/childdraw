@@ -188,11 +188,47 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     WBAuthorizeRequest *request = [WBAuthorizeRequest request];
     request.redirectURI = kAppRedirectURI;
     request.scope = @"email,direct_messages_write";
-    request.userInfo = @{@"SSO_From": @"SendMessageToWeiboViewController",
-                         @"Other_Info_1": [NSNumber numberWithInt:123],
-                         @"Other_Info_2": @[@"obj1", @"obj2"],
-                         @"Other_Info_3": @{@"key1": @"obj1", @"key2": @"obj2"}};
+    request.userInfo = nil;
     [WeiboSDK sendRequest:request];
+}
+
+- (void)didReceiveWeiboRequest:(WBBaseResponse *) response {
+    
+    if ([response isKindOfClass:WBAuthorizeResponse.class])
+    {
+        NSString *title = @"认证结果";
+        NSString *message = [NSString stringWithFormat:@"响应状态: %d\nresponse.userId: %@\nresponse.accessToken: %@\n响应UserInfo数据: %@\n 原请求UserInfo数据: %@",
+                             response.statusCode,
+                             [(WBAuthorizeResponse *)response userID],
+                             [(WBAuthorizeResponse *)response accessToken],
+                             response.userInfo,
+                             response.requestUserInfo];
+        
+        NSLog(@"title:%@ %@",title,message);
+        self.photoImage = [UIImage imageNamed:@"about_team.png"];
+        [self finishPhoto:self.photoImage];
+    }
+    
+    
+    
+}
+- (void)sendWebContent:(UIImage *)image
+{
+    WBWebpageObject *pageObject = [ WBWebpageObject object ];
+    pageObject.objectID = @"identifier1";
+    pageObject.thumbnailData = UIImageJPEGRepresentation(image , JPEG_QUALITY);
+    pageObject.title = @"Sample Title";
+    
+    pageObject.description = @"Sample Description";
+    pageObject.webpageUrl = @"http://www.weibo.com";
+    
+    WBMessageObject *message = [[WBMessageObject alloc] init];
+    message.text = @"测试通过WeiboSDK发送文字到微博!";
+    message.mediaObject = pageObject;
+    
+    WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:message];
+    [ WeiboSDK sendRequest:request ];
+    
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -252,7 +288,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     else if ([value isEqualToString:SHAREWEIBO]) {
         //        self.photoImage = [UIImage imageNamed:@"about_team.png"];
-        [self ssoButtonPressed];
+        [self sendWebContent:self.photoImage];
     }
     
 }

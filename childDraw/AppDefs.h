@@ -18,7 +18,7 @@
 
 #define kAppKey             @"1437838508"
 #define kAppSecret          @"5b1382fab1fa6562ff10ff57181a801f"
-#define kAppRedirectURI     @"https://api.weibo.com/oauth2/default.html"
+#define kAppRedirectURI     @"http://www.wingedstone.com/weibo/success.html"
 
 
 #define FEEDBACK_EMAIL @"babydrawapp@gmail.com"

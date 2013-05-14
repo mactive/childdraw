@@ -120,8 +120,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self startMainSession];
     
     [WXApi registerApp:WXAPPID];
-    [WeiboSDK registerApp:kAppKey];
+    
+    
     [WeiboSDK enableDebugMode:YES];
+    [WeiboSDK registerApp:kAppKey];
     
     return YES;
 }
@@ -383,9 +385,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     NSString *urlString = url.absoluteString;
-    NSRange range = [urlString rangeOfString:WXAPPID];
+    NSRange wechatRange = [urlString rangeOfString:WXAPPID];
+    NSRange weiboRange  = [urlString rangeOfString:kAppKey];
     
-    if (range.length > 0 ) {
+    if (wechatRange.length > 0 || weiboRange.length > 0) {
         //
         self.isShareSucceed = YES;
     }else{
@@ -397,8 +400,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                    selector:@selector(showShareSucceed)
                                    userInfo:nil
                                     repeats:NO];
+    if (wechatRange.length) {
+        return  [WXApi handleOpenURL:url delegate:self];
+    }else{
+        return [WeiboSDK handleOpenURL:url delegate:self];
+    }
     
-    return  [WXApi handleOpenURL:url delegate:self];
 }
 
 - (void)showShareSucceed
@@ -407,6 +414,35 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 //        [self.mainViewController enterFirst:NO orLast:YES];
     }
 }
+
+- (void)didReceiveWeiboResponse:(WBBaseResponse *)response
+{
+    if ([response isKindOfClass:WBSendMessageToWeiboResponse.class])
+    {
+        NSString *title = @"发送结果";
+        NSString *message = [NSString stringWithFormat:@"响应状态: %d\n响应UserInfo数据: %@\n原请求UserInfo数据: %@",
+                             response.statusCode, response.userInfo, response.requestUserInfo];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                        message:message
+                                                       delegate:nil
+                                              cancelButtonTitle:@"确定"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
+    else if ([response isKindOfClass:WBAuthorizeResponse.class])
+    {
+        NSString *title = @"认证结果";
+        NSString *message = [NSString stringWithFormat:@"响应状态: %d\nresponse.userId: %@\nresponse.accessToken: %@\n响应UserInfo数据: %@\n原请求UserInfo数据: %@",
+                             response.statusCode, [(WBAuthorizeResponse *)response userID], [(WBAuthorizeResponse *)response accessToken], response.userInfo, response.requestUserInfo];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                        message:message
+                                                       delegate:nil
+                                              cancelButtonTitle:@"确定"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }
+}
+
 
 - (void)onResp:(BaseResp *)resp
 {
