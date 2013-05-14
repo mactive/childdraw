@@ -405,14 +405,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     if (wechatRange.length) {
         return  [WXApi handleOpenURL:url delegate:self];
     }else if(weiboRange.length){
-        return [WeiboSDK handleOpenURL:url delegate:self];
+        [self startMainSession];
+        return  YES;
+//        return [WeiboSDK handleOpenURL:url delegate:self];
+
     }else if (weiboSuccessRange.length){
         [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"bind_weibo_success"];
+        [self startMainSession];
         return YES;
     }
-    
-    
-    
 }
 
 - (void)showShareSucceed
@@ -422,7 +423,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 //        [self.mainViewController enterFirst:NO orLast:YES];
     }
 }
-
+/*
 - (void)didReceiveWeiboResponse:(WBBaseResponse *)response
 {
     if ([response isKindOfClass:WBSendMessageToWeiboResponse.class])
@@ -447,9 +448,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                                                        delegate:nil
                                               cancelButtonTitle:@"确定"
                                               otherButtonTitles:nil];
-        [alert show];
+//        [alert show];
     }
 }
+ 
+*/
 
 
 - (void)onResp:(BaseResp *)resp

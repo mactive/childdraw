@@ -72,7 +72,7 @@
         
         // button 
         self.sButton_1 = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.sButton_1 setFrame:CGRectMake(76, 240, 41, 41)];
+        [self.sButton_1 setFrame:CGRectMake(66, 240, 60, 60)];
         [self.sButton_1 setBackgroundImage:[UIImage imageNamed:@"button_share_1.png"] forState:UIControlStateNormal];
         [self.sButton_1 addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.sButton_1 setHidden:YES];
@@ -80,7 +80,7 @@
         
         
         self.sButton_2 = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.sButton_2 setFrame:CGRectMake(140, 200, 41, 41)];
+        [self.sButton_2 setFrame:CGRectMake(135, 200, 60, 60)];
         [self.sButton_2 setBackgroundImage:[UIImage imageNamed:@"button_share_2.png"] forState:UIControlStateNormal];
         [self.sButton_2 addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.sButton_2 setHidden:YES];
@@ -88,7 +88,7 @@
 
         
         self.sButton_3 = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.sButton_3 setFrame:CGRectMake(203, 240, 41, 41)];
+        [self.sButton_3 setFrame:CGRectMake(193, 240, 60, 60)];
         [self.sButton_3 setBackgroundImage:[UIImage imageNamed:@"button_share_3.png"] forState:UIControlStateNormal];
         [self.sButton_3 addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.sButton_3 setHidden:YES];

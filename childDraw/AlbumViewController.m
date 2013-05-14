@@ -190,35 +190,38 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         //成功绑定过
         [self sendWebContent:self.photoImage];
     }else{
-        WBAuthorizeRequest *request = [WBAuthorizeRequest request];
-        request.redirectURI = kAppRedirectURI;
-        request.scope = @"email,direct_messages_write";
-        request.userInfo = nil;
-        [WeiboSDK sendRequest:request];
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"请在设置页面绑定微博"
+                                                       message:@"谢谢"
+                                                      delegate:self
+                                             cancelButtonTitle:T(@"确定")
+                                             otherButtonTitles:nil];
+        [alert show];
     }
 }
 
 
-- (void)sendWebContent:(UIImage *)photoImage
+- (void)sendWebContent:(UIImage *)sendImage
 {
 
     WBMessageObject *message = [[WBMessageObject alloc] init];
-    WBWebpageObject *pageObject = [WBWebpageObject object];
-    WBImageObject *imageObject = [WBImageObject object];
-    message.text = @"我拍了张孩子画画的照片 @@宝宝来画画";
+    WBImageObject *image = [WBImageObject object];
+    message.text = @"我拍了张孩子画画的照片 @宝宝来画画";
     
-    imageObject.imageData = UIImageJPEGRepresentation(photoImage , JPEG_QUALITY);
+    image.imageData = UIImageJPEGRepresentation(sendImage , JPEG_QUALITY);
+//    imageObject.imageData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"about_team" ofType:@"png"]];
     
-    UIImage *sendImage = [photoImage imageByScalingToSize:CGSizeMake(30, 45)];
-
-    pageObject.objectID = @"identifier1";
-    pageObject.thumbnailData = UIImageJPEGRepresentation(sendImage , JPEG_QUALITY);
-    pageObject.title = @"分享宝宝的画";
-    pageObject.description = @"宝宝来画画,一起够了世界吧";
-    pageObject.webpageUrl = @"http://www.wingedstone.com/childcraw/";
+//    WBWebpageObject *pageObject = [WBWebpageObject object];
+//    UIImage *sendImage = [photoImage imageByScalingToSize:CGSizeMake(120, 180)];
+//    pageObject.objectID = @"identifier1";
+//    pageObject.thumbnailData = UIImageJPEGRepresentation(sendImage , JPEG_QUALITY);
+//    pageObject.title = @"分享宝宝的画";
+//    pageObject.description = @"宝宝来画画,一起够了世界吧";
+//    pageObject.webpageUrl = @"http://www.wingedstone.com/childcraw/";
     
-    message.mediaObject = pageObject;
-    message.imageObject = imageObject;
+//    message.mediaObject = pageObject;
+    
+    message.imageObject = image;
+    
 
     WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:message];
     [WeiboSDK sendRequest:request];

@@ -10,11 +10,13 @@
 #import <QuartzCore/QuartzCore.h>
 #import "AppDelegate.h"
 #import "ModelHelper.h"
+#import "WeiboSDK.h"
 
-@interface SettingViewController ()<UIAlertViewDelegate>
+@interface SettingViewController ()<UIAlertViewDelegate,WeiboSDKDelegate>
 @property(strong, nonatomic)UIButton *clearButton;
 @property(strong, nonatomic)UIButton *adviseButton;
 @property(strong, nonatomic)UIButton *rateButton;
+@property(strong, nonatomic)UIButton *weiboButton;
 @property(strong, nonatomic)NSArray *assetContent;
 @property(strong, nonatomic)UIAlertView *clearAlertView;
 @end
@@ -24,6 +26,7 @@
 @synthesize adviseButton;
 @synthesize rateButton;
 @synthesize clearAlertView;
+@synthesize weiboButton;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -61,9 +64,7 @@
     [self.clearButton setImageEdgeInsets:UIEdgeInsetsMake(0, 230, 0, 0)];
     [self.clearButton setBackgroundColor:[UIColor whiteColor]];
     [self.clearButton addTarget:self action:@selector(clearAlertAction) forControlEvents:UIControlEventTouchUpInside];
-    
 
-    
     self.adviseButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.adviseButton setFrame:CGRectMake( BUTTON_X, BUTTON_Y+BUTTON_H+BUTTON_Y_OFFSET, BUTTON_W,BUTTON_H)];
     [self.adviseButton setTitle:T(@"建议或反馈") forState:UIControlStateNormal];
@@ -96,13 +97,41 @@
     [self.rateButton setBackgroundColor:[UIColor whiteColor]];
     [self.rateButton addTarget:self action:@selector(rateButton) forControlEvents:UIControlEventTouchUpInside];
     
+    self.weiboButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.weiboButton setFrame:CGRectMake( BUTTON_X, BUTTON_Y+BUTTON_H*3+BUTTON_Y_OFFSET*3, BUTTON_W,BUTTON_H)];
+    [self.weiboButton setTitle:T(@"绑定微博") forState:UIControlStateNormal];
+    self.weiboButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [self.weiboButton setTitleEdgeInsets:UIEdgeInsetsMake(0, -10, 0, 0)];
+    [self.weiboButton setTitleColor:GRAYCOLOR forState:UIControlStateNormal];
+    self.weiboButton.layer.cornerRadius = 5.0f;
+    self.weiboButton.layer.shadowColor = DARKCOLOR.CGColor;
+    self.weiboButton.layer.shadowOffset = CGSizeMake(0, 1);
+    self.weiboButton.layer.shadowRadius = 1;
+    self.weiboButton.layer.shadowOpacity = 0.4;
+    [self.weiboButton setImage:[UIImage imageNamed:@"weibo_icon.png"] forState:UIControlStateNormal];
+    [self.weiboButton setImageEdgeInsets:UIEdgeInsetsMake(0, 230, 0, 0)];
+    [self.weiboButton setBackgroundColor:[UIColor whiteColor]];
+    [self.weiboButton addTarget:self action:@selector(weiboAction) forControlEvents:UIControlEventTouchUpInside];
+    
     [self.view addSubview:self.clearButton];
     [self.view addSubview:self.adviseButton];
     [self.view addSubview:self.rateButton];
-        
+    [self.view addSubview:self.weiboButton];
+    
     [self initTopView];
     [self calcCacheSize];
 }
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    NSString *bind = [[NSUserDefaults standardUserDefaults]objectForKey:@"bind_weibo_success"];
+    
+    if ([bind isEqualToString:@"YES"]) {
+        [self.weiboButton setTitle:T(@"绑定成功") forState:UIControlStateNormal];
+    }
+}
+
 - (void)calcCacheSize
 {
     CGFloat totalSize = 0.0f;
@@ -178,7 +207,6 @@
 
 }
 
-
 -(CGFloat)fileSizeForDir:(NSString*)path//计算文件夹下文件的总大小
 {
     NSFileManager *fileManager = [[NSFileManager alloc] init];
@@ -205,6 +233,19 @@
     
 }
 
+-(void)weiboAction
+{
+//    [WeiboSDK isWeiboAppInstalled];
+
+    WBAuthorizeRequest *request = [WBAuthorizeRequest request];
+    request.redirectURI = kAppRedirectURI;
+    request.scope = @"email,direct_messages_write";
+    request.userInfo = @{@"SSO_From": @"SettingViewController",
+                         @"Other_Info_1": [NSNumber numberWithInt:123],
+                         @"Other_Info_2": @[@"obj1", @"obj2"],
+                         @"Other_Info_3": @{@"key1": @"obj1", @"key2": @"obj2"}};
+    [WeiboSDK sendRequest:request];
+}
 
 - (void)adviseAction
 {
