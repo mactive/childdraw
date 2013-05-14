@@ -185,49 +185,43 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)ssoButtonPressed
 {
-    WBAuthorizeRequest *request = [WBAuthorizeRequest request];
-    request.redirectURI = kAppRedirectURI;
-    request.scope = @"email,direct_messages_write";
-    request.userInfo = nil;
-    [WeiboSDK sendRequest:request];
+    NSString *bind = [[NSUserDefaults standardUserDefaults]objectForKey:@"bind_weibo_success"];
+    if ([bind isEqualToString:@"YES"]) {
+        //成功绑定过
+        [self sendWebContent:self.photoImage];
+    }else{
+        WBAuthorizeRequest *request = [WBAuthorizeRequest request];
+        request.redirectURI = kAppRedirectURI;
+        request.scope = @"email,direct_messages_write";
+        request.userInfo = nil;
+        [WeiboSDK sendRequest:request];
+    }
 }
 
-- (void)didReceiveWeiboRequest:(WBBaseResponse *) response {
-    
-    if ([response isKindOfClass:WBAuthorizeResponse.class])
-    {
-        NSString *title = @"认证结果";
-        NSString *message = [NSString stringWithFormat:@"响应状态: %d\nresponse.userId: %@\nresponse.accessToken: %@\n响应UserInfo数据: %@\n 原请求UserInfo数据: %@",
-                             response.statusCode,
-                             [(WBAuthorizeResponse *)response userID],
-                             [(WBAuthorizeResponse *)response accessToken],
-                             response.userInfo,
-                             response.requestUserInfo];
-        
-        NSLog(@"title:%@ %@",title,message);
-        self.photoImage = [UIImage imageNamed:@"about_team.png"];
-        [self finishPhoto:self.photoImage];
-    }
-    
-    
-    
-}
-- (void)sendWebContent:(UIImage *)image
+
+- (void)sendWebContent:(UIImage *)photoImage
 {
-    WBWebpageObject *pageObject = [ WBWebpageObject object ];
-    pageObject.objectID = @"identifier1";
-    pageObject.thumbnailData = UIImageJPEGRepresentation(image , JPEG_QUALITY);
-    pageObject.title = @"Sample Title";
-    
-    pageObject.description = @"Sample Description";
-    pageObject.webpageUrl = @"http://www.weibo.com";
-    
+
     WBMessageObject *message = [[WBMessageObject alloc] init];
-    message.text = @"测试通过WeiboSDK发送文字到微博!";
-    message.mediaObject = pageObject;
+    WBWebpageObject *pageObject = [WBWebpageObject object];
+    WBImageObject *imageObject = [WBImageObject object];
+    message.text = @"我拍了张孩子画画的照片 @@宝宝来画画";
     
+    imageObject.imageData = UIImageJPEGRepresentation(photoImage , JPEG_QUALITY);
+    
+    UIImage *sendImage = [photoImage imageByScalingToSize:CGSizeMake(30, 45)];
+
+    pageObject.objectID = @"identifier1";
+    pageObject.thumbnailData = UIImageJPEGRepresentation(sendImage , JPEG_QUALITY);
+    pageObject.title = @"分享宝宝的画";
+    pageObject.description = @"宝宝来画画,一起够了世界吧";
+    pageObject.webpageUrl = @"http://www.wingedstone.com/childcraw/";
+    
+    message.mediaObject = pageObject;
+    message.imageObject = imageObject;
+
     WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:message];
-    [ WeiboSDK sendRequest:request ];
+    [WeiboSDK sendRequest:request];
     
 }
 
@@ -273,11 +267,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)passStringValue:(NSString *)value andIndex:(NSUInteger)index
 {
     if ([value isEqualToString:PHOTOACTION] && index == 1) {
-        //
-//        [self finishPhoto:[UIImage imageNamed:@"about_team.png"]];
         
-//        [self takePhotoFromCamera];
-        [self ssoButtonPressed];
+        [self takePhotoFromCamera];
         self.albumIndex = [self.albumArray count];
         [XFox logEvent:EVENT_PHOTO];
     }
@@ -288,7 +279,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     else if ([value isEqualToString:SHAREWEIBO]) {
         //        self.photoImage = [UIImage imageNamed:@"about_team.png"];
-        [self sendWebContent:self.photoImage];
+        
+        [self ssoButtonPressed]; //test weibo
     }
     
 }
@@ -459,6 +451,24 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
  self.pickerController.delegate = self;
  self.pickerController.allowsEditing = NO;
  [self presentModalViewController:self.pickerController animated:YES];
+ }
+ */
+
+/*
+ - (void)didReceiveWeiboRequest:(WBBaseResponse *) response {
+ 
+ if ([response isKindOfClass:WBAuthorizeResponse.class])
+ {
+ NSString *title = @"认证结果";
+ NSString *message = [NSString stringWithFormat:@"响应状态: %d\nresponse.userId: %@\nresponse.accessToken: %@\n响应UserInfo数据: %@\n 原请求UserInfo数据: %@",
+ response.statusCode,
+ [(WBAuthorizeResponse *)response userID],
+ [(WBAuthorizeResponse *)response accessToken],
+ response.userInfo,
+ response.requestUserInfo];
+ 
+ NSLog(@"title:%@ %@",title,message);
+ }
  }
  */
 

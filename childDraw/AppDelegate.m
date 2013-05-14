@@ -387,6 +387,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSString *urlString = url.absoluteString;
     NSRange wechatRange = [urlString rangeOfString:WXAPPID];
     NSRange weiboRange  = [urlString rangeOfString:kAppKey];
+    NSRange weiboSuccessRange  = [urlString rangeOfString:@"bind_weibo_success"];
     
     if (wechatRange.length > 0 || weiboRange.length > 0) {
         //
@@ -395,22 +396,29 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         self.isShareSucceed = NO;
     }
     
-    [NSTimer scheduledTimerWithTimeInterval:1.0
-                                     target:self
-                                   selector:@selector(showShareSucceed)
-                                   userInfo:nil
-                                    repeats:NO];
+//    [NSTimer scheduledTimerWithTimeInterval:1.0
+//                                     target:self
+//                                   selector:@selector(showShareSucceed)
+//                                   userInfo:nil
+//                                    repeats:NO];
+    
     if (wechatRange.length) {
         return  [WXApi handleOpenURL:url delegate:self];
-    }else{
+    }else if(weiboRange.length){
         return [WeiboSDK handleOpenURL:url delegate:self];
+    }else if (weiboSuccessRange.length){
+        [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"bind_weibo_success"];
+        return YES;
     }
+    
+    
     
 }
 
 - (void)showShareSucceed
 {
     if (self.isShareSucceed) {
+        
 //        [self.mainViewController enterFirst:NO orLast:YES];
     }
 }
