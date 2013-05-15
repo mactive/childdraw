@@ -7,20 +7,23 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <WeiboSDK/GeoInfo.h>
-#import <WeiboSDK/Province.h>
-#import <WeiboSDK/Resources.h>
-#import <WeiboSDK/Status.h>
-#import <WeiboSDK/User.h>
-#import <WeiboSDK/WeiboAccount.h>
-#import <WeiboSDK/WeiboAccounts.h>
-#import <WeiboSDK/WeiboAuthentication.h>
-#import <WeiboSDK/WeiboConfig.h>
-#import <WeiboSDK/WeiboEngine.h>
-#import <WeiboSDK/StatusQuery.h>
-#import <WeiboSDK/TimelineQuery.h>
-#import <WeiboSDK/UserQuery.h>
-#import <WeiboSDK/WeiboQuery.h>
-#import <WeiboSDK/WeiboRequest.h>
-#import <WeiboSDK/WeiboSignIn.h>
-#import <WeiboSDK/WeiboSignInViewController.h>
+
+#import "WeiboSignIn.h"
+#import "WeiboAccounts.h"
+#import "GeoInfo.h"
+#import "Province.h"
+#import "Resources.h"
+#import "Status.h"
+#import "User.h"
+#import "WeiboAccount.h"
+#import "WeiboAccounts.h"
+#import "WeiboAuthentication.h"
+#import "WeiboConfig.h"
+#import "WeiboEngine.h"
+#import "StatusQuery.h"
+#import "TimelineQuery.h"
+#import "UserQuery.h"
+#import "WeiboQuery.h"
+#import "WeiboRequest.h"
+#import "WeiboSignIn.h"
+#import "WeiboSignInViewController.h"

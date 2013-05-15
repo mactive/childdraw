@@ -223,6 +223,39 @@ static NSString * const kAppDataLogServerURLString  = @"http://218.61.10.155:901
     }];
 }
 
+- (void)postToWeibo:(NSDictionary *)postData andURL:(NSString *)url withBlock:(void(^)(id, NSError *))block
+{
+    AppNetworkAPIClient *dataLogClient = [[AppNetworkAPIClient alloc] initWithBaseURL:[NSURL URLWithString:kAppDataLogServerURLString]];
+    [dataLogClient setDefaultHeader:@"Content-Type" value:@"multipart/form-data"];
+
+    
+    NSString* csrfToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"csrfmiddlewaretoken"];
+    NSDictionary *paramDict = [NSDictionary dictionaryWithObjectsAndKeys: csrfToken, @"csrfmiddlewaretoken", nil];
+    
+    NSMutableURLRequest *postRequest = [dataLogClient multipartFormRequestWithMethod:@"POST" path:url parameters:postData constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        //
+        NSData* imageData = UIImagePNGRepresentation((UIImage*)[postData objectForKey:@"pic"]);
+        [formData appendPartWithFileData:imageData name:@"pic" fileName:@"try.png" mimeType:@"image/png"];
+    }];
+
+    
+    AFHTTPRequestOperation *operation = [dataLogClient HTTPRequestOperationWithRequest:postRequest success:nil failure:nil];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (block) {
+            block(responseObject, nil);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (block) {
+            DDLogError(@"%@",error);
+            block(nil, error);
+        }
+    }];
+    
+    [dataLogClient enqueueHTTPRequestOperation:operation];
+
+}
+
 
 #pragma mark - common post path
 - (void)postPath:(NSString *)path

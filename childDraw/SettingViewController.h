@@ -8,10 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "BBCustomBackButtonViewController.h"
-#import "WeiboSignIn.h"
-#import "WeiboAccounts.h"
+#import "WeiboSDK.h"
 
-@interface SettingViewController : BBCustomBackButtonViewController<WeiboSignInDelegate>
+@interface SettingViewController : BBCustomBackButtonViewController<WeiboSignInDelegate,WeiboRequestDelegate>
 {
     WeiboSignIn *_weiboSignIn;
 }

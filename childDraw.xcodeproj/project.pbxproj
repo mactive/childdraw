@@ -322,6 +322,7 @@
 		2673B3611743A81E0084F792 /* WeiboSignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeiboSignInViewController.h; sourceTree = "<group>"; };
 		2673B3621743A81E0084F792 /* WeiboSignInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeiboSignInViewController.m; sourceTree = "<group>"; };
 		2673B3631743A81E0084F792 /* WeiboSignInViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WeiboSignInViewController.xib; sourceTree = "<group>"; };
+		2673B37B1743ABFC0084F792 /* WeiboSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeiboSDK.h; path = WeiboSDK/WeiboSDK.h; sourceTree = "<group>"; };
 		26DD4BB0172109B4003228E7 /* barbutton_mainmenu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "barbutton_mainmenu@2x.png"; sourceTree = "<group>"; };
 		26DD4BB1172109B4003228E7 /* barbutton_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "barbutton_bg@2x.png"; sourceTree = "<group>"; };
 		26DD4BB2172109B4003228E7 /* barbutton_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "barbutton_add@2x.png"; sourceTree = "<group>"; };
@@ -547,6 +548,7 @@
 		2673B3381743A81E0084F792 /* WeiboSDK */ = {
 			isa = PBXGroup;
 			children = (
+				2673B37B1743ABFC0084F792 /* WeiboSDK.h */,
 				2673B3391743A81E0084F792 /* Additions */,
 				2673B33C1743A81E0084F792 /* Models */,
 				2673B3471743A81E0084F792 /* Utilities */,

@@ -18,6 +18,8 @@
 @property(strong, nonatomic)UIButton *weiboButton;
 @property(strong, nonatomic)NSArray *assetContent;
 @property(strong, nonatomic)UIAlertView *clearAlertView;
+@property(nonatomic, strong)UIImageView *imgAttachment;
+
 @end
 
 @implementation SettingViewController
@@ -26,6 +28,7 @@
 @synthesize rateButton;
 @synthesize clearAlertView;
 @synthesize weiboButton;
+@synthesize imgAttachment;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -94,7 +97,7 @@
     [self.rateButton setImage:[UIImage imageNamed:@"rate_icon.png"] forState:UIControlStateNormal];
     [self.rateButton setImageEdgeInsets:UIEdgeInsetsMake(0, 230, 0, 0)];
     [self.rateButton setBackgroundColor:[UIColor whiteColor]];
-    [self.rateButton addTarget:self action:@selector(rateButton) forControlEvents:UIControlEventTouchUpInside];
+    [self.rateButton addTarget:self action:@selector(rateAction) forControlEvents:UIControlEventTouchUpInside];
     
     self.weiboButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.weiboButton setFrame:CGRectMake( BUTTON_X, BUTTON_Y+BUTTON_H*3+BUTTON_Y_OFFSET*3, BUTTON_W,BUTTON_H)];
@@ -127,6 +130,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    if ([[WeiboAccounts shared]currentAccount]) {
+        NSString *name = [[WeiboAccounts shared]currentAccount].screenName;
+        [self.weiboButton setTitle:name forState:UIControlStateNormal];
+    }
 }
 
 - (void)calcCacheSize
@@ -230,6 +237,9 @@
     
 }
 
+/////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
+
 - (void)weiboAction
 {
     [_weiboSignIn signInOnViewController:self];
@@ -253,6 +263,19 @@
     }
 }
 
+- (void)request:(WeiboRequest *)request didFailWithError:(NSError *)error {
+    NSLog(@"Failed to post: %@", error);
+}
+
+- (void)request:(WeiboRequest *)request didLoad:(id)result
+{
+    Status *status = [Status statusWithJsonDictionary:result];
+    NSLog(@"status id: %lld", status.statusId);
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 
 - (void)adviseAction
 {

@@ -11,6 +11,7 @@
 #import "WeiboAccounts.h"
 #import "ASIHTTPRequest.h"
 #import "ASIFormDataRequest.h"
+#import "AppNetworkAPIClient.h"
 
 NSString *WeiboAPIErrorDomain = @"com.zhiweibo.api";
 NSString *kUserAgent = @"ZhiWeibo";
@@ -223,6 +224,15 @@ static const int kGeneralErrorCode = 10000;
     
     [_request clearDelegatesAndCancel];
     
+    [[AppNetworkAPIClient sharedClient]postToWeibo:params andURL:url withBlock:^(id object, NSError *error) {
+        //
+        if (error == nil) {
+            NSLog(@"%@",object);
+        }
+    }];
+    
+    /*
+    
     ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url]];
     [request setDelegate:self];
     [request setValidatesSecureCertificate:NO];
@@ -251,6 +261,7 @@ static const int kGeneralErrorCode = 10000;
     [request startAsynchronous];
     
     _request = request;
+    */
 }
 
 - (void)cancel

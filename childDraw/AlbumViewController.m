@@ -227,6 +227,24 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
 }
 */
+
+
+- (void)postNewStatus
+{
+    WeiboRequest *request = [[WeiboRequest alloc] initWithDelegate:self];
+
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    NSString *postPath = self.photoImage ? @"statuses/upload.json" : @"statuses/update.json";
+    [params setObject:@"分享ddd成功" forKey:@"status"];
+    if (self.photoImage) {
+        [params setObject:self.photoImage forKey:@"pic"];
+    }
+    [request postToPath:postPath params:params];
+    
+}
+
+
 /////////////////////////////////////////////////////////////////////////////
 #pragma mark - share weichat
 /////////////////////////////////////////////////////////////////////////////
@@ -282,7 +300,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     else if ([value isEqualToString:SHAREWEIBO]) {
         //        self.photoImage = [UIImage imageNamed:@"about_team.png"];
-        
+        [self postNewStatus];
     }
     
 }
