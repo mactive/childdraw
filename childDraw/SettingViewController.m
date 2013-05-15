@@ -127,11 +127,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSString *bind = [[NSUserDefaults standardUserDefaults]objectForKey:@"bind_weibo_success"];
-    
-    if ([bind isEqualToString:@"YES"]) {
-        [self.weiboButton setTitle:T(@"绑定成功") forState:UIControlStateNormal];
-    }
 }
 
 - (void)calcCacheSize
@@ -237,9 +232,25 @@
 
 - (void)weiboAction
 {
-
     [_weiboSignIn signInOnViewController:self];
+}
 
+- (void)finishedWithAuth:(WeiboAuthentication *)auth error:(NSError *)error {
+    if (error) {
+        NSLog(@"failed to auth: %@", error);
+    }
+    else {
+        [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"bind_weibo_success"];
+        NSString *bind = [[NSUserDefaults standardUserDefaults]objectForKey:@"bind_weibo_success"];
+
+        if ([bind isEqualToString:@"YES"]) {
+            [self.weiboButton setTitle:T(@"绑定成功") forState:UIControlStateNormal];
+        }
+        
+        NSLog(@"Success to auth: %@", auth.userId);
+    
+        [[WeiboAccounts shared]addAccountWithAuthentication:auth];
+    }
 }
 
 

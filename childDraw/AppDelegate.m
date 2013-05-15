@@ -383,7 +383,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSString *urlString = url.absoluteString;
     NSRange wechatRange = [urlString rangeOfString:WXAPPID];
     NSRange weiboRange  = [urlString rangeOfString:kAppKey];
-    NSRange weiboSuccessRange  = [urlString rangeOfString:@"bind_weibo_success"];
     
     if (wechatRange.length > 0 || weiboRange.length > 0) {
         //
@@ -398,10 +397,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [self startMainSession];
         return  YES;
 
-    }else if (weiboSuccessRange.length){
-        [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"bind_weibo_success"];
-        [self startMainSession];
-        return YES;
     }
 }
 

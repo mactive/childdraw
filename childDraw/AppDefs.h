@@ -16,12 +16,9 @@
 //#define WXAPPKEY @"16b848bbf25d583b87a070205942b565"
 
 
-#define kAppKey         @"2045436852"
-#define kAppRedirectURI    @"http://www.sina.com"
-
-//#define kAppKey             @"1437838508"
-//#define kAppSecret          @"5b1382fab1fa6562ff10ff57181a801f"
-//#define kAppRedirectURI     @"http://www.wingedstone.com/weibo/success.html"
+#define kAppKey             @"1437838508"
+#define kAppSecret          @"5b1382fab1fa6562ff10ff57181a801f"
+#define kAppRedirectURI     @"http://www.wingedstone.com/weibo/success.html"
 
 
 #define FEEDBACK_EMAIL @"babydrawapp@gmail.com"
