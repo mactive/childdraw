@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "BBCustomBackButtonViewController.h"
+#import "WeiboSDK/WeiboSDK.h"
 
 @interface SettingViewController : BBCustomBackButtonViewController
 

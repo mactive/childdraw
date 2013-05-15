@@ -12,7 +12,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import "MBProgressHUD.h"
 #import "WXApi.h"
-#import "WeiboSDK.h"
 
 #import "DDLog.h"
 // Log levels: off, error, warn, info, verbose
@@ -24,7 +23,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 
-@interface AlbumViewController ()<UIScrollViewAccessibilityDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate,WXApiDelegate,WeiboSDKDelegate>
+@interface AlbumViewController ()<UIScrollViewAccessibilityDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate,WXApiDelegate>
 
 - (UIView*) createViewForObj:(id)obj;
 @property(strong, nonatomic)UIView *targetView;
@@ -182,7 +181,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 /////////////////////////////////////////////////////////////////////////////
 #pragma mark - share weibo
 /////////////////////////////////////////////////////////////////////////////
-
+/*
 - (void)ssoButtonPressed
 {
     NSString *bind = [[NSUserDefaults standardUserDefaults]objectForKey:@"bind_weibo_success"];
@@ -220,14 +219,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
 //    message.mediaObject = pageObject;
     
-//    message.imageObject = image;
+    message.imageObject = image;
     
-
     WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:message];
     [WeiboSDK sendRequest:request];
     
+    
 }
-
+*/
 /////////////////////////////////////////////////////////////////////////////
 #pragma mark - share weichat
 /////////////////////////////////////////////////////////////////////////////
@@ -284,7 +283,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     else if ([value isEqualToString:SHAREWEIBO]) {
         //        self.photoImage = [UIImage imageNamed:@"about_team.png"];
         
-        [self ssoButtonPressed]; //test weibo
     }
     
 }
