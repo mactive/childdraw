@@ -10,7 +10,7 @@
 #import "UIImage+ProportionalFill.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <QuartzCore/QuartzCore.h>
-#import "MBProgressHUD.h"
+//#import "MBProgressHUD.h"
 #import "WXApi.h"
 
 #import "DDLog.h"
@@ -322,10 +322,10 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     UIImage *image = [UIImage imageWithData:imageData];
     
     // HUD show
-    MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    HUD.removeFromSuperViewOnHide = YES;
-    HUD.labelText = T(@"已经保存至本地");
-    HUD.mode = MBProgressHUDModeText;
+//    MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//    HUD.removeFromSuperViewOnHide = YES;
+//    HUD.labelText = T(@"已经保存至本地");
+//    HUD.mode = MBProgressHUDModeText;
     
     if (picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
         // Save Video to Photo Album

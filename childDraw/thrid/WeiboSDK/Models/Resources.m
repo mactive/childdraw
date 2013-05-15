@@ -7,7 +7,7 @@
 //
 
 #import "Resources.h"
-#import "JSONKit/JSONKit.h"
+#import "JSONKit.h"
 
 static NSMutableDictionary *gProvinces;
 

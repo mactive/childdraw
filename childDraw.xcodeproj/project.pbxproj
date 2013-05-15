@@ -15,7 +15,6 @@
 		261CBF2717127A7E00F59321 /* list_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 261CBF2617127A7E00F59321 /* list_bg@2x.png */; };
 		261CBF2A1712A1C700F59321 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 261CBF291712A1C700F59321 /* SettingViewController.m */; };
 		261CBF2F1712B39700F59321 /* libWeChatSDK_armv7_armv7s.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 261CBF2C1712B39700F59321 /* libWeChatSDK_armv7_armv7s.a */; };
-		262236F917434D64001CE90F /* libWeiboSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 262236F817434D64001CE90F /* libWeiboSDK.a */; };
 		262239C317434F10001CE90F /* NSDictionaryAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2622399A17434F10001CE90F /* NSDictionaryAdditions.m */; };
 		262239C417434F10001CE90F /* GeoInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2622399D17434F10001CE90F /* GeoInfo.m */; };
 		262239C517434F10001CE90F /* Province.m in Sources */ = {isa = PBXBuildFile; fileRef = 2622399F17434F10001CE90F /* Province.m */; };
@@ -24,7 +23,7 @@
 		262239C817434F10001CE90F /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 262239A517434F10001CE90F /* User.m */; };
 		262239C917434F10001CE90F /* PathHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 262239A817434F10001CE90F /* PathHelper.m */; };
 		262239CA17434F10001CE90F /* WeiboAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 262239AB17434F10001CE90F /* WeiboAccount.m */; };
-		262239CB17434F10001CE90F /* WeiboAccounts.m in Sources */ = {isa = PBXBuildFile; fileRef = 262239AD17434F10001CE90F /* WeiboAccounts.m */; };
+		262239CB17434F10001CE90F /* WeiboAccounts.m in Sources */ = {isa = PBXBuildFile; fileRef = 262239AD17434F10001CE90F /* WeiboAccounts.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		262239CC17434F10001CE90F /* WeiboAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = 262239AF17434F10001CE90F /* WeiboAuthentication.m */; };
 		262239CD17434F10001CE90F /* WeiboEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 262239B217434F10001CE90F /* WeiboEngine.m */; };
 		262239CE17434F10001CE90F /* StatusQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 262239B517434F10001CE90F /* StatusQuery.m */; };
@@ -159,7 +158,7 @@
 		261CBF2C1712B39700F59321 /* libWeChatSDK_armv7_armv7s.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK_armv7_armv7s.a; sourceTree = "<group>"; };
 		261CBF2D1712B39700F59321 /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
 		261CBF2E1712B39700F59321 /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
-		262236F817434D64001CE90F /* libWeiboSDK.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libWeiboSDK.a; path = "childDraw/thrid/WeiboSDK/build/Release-iphoneos/libWeiboSDK.a"; sourceTree = "<group>"; };
+		262236F817434D64001CE90F /* libWeiboSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libWeiboSDK.a; path = "childDraw/thrid/WeiboSDK/build/Release-iphoneos/libWeiboSDK.a"; sourceTree = "<group>"; };
 		2622399917434F10001CE90F /* NSDictionaryAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDictionaryAdditions.h; sourceTree = "<group>"; };
 		2622399A17434F10001CE90F /* NSDictionaryAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDictionaryAdditions.m; sourceTree = "<group>"; };
 		2622399C17434F10001CE90F /* GeoInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoInfo.h; sourceTree = "<group>"; };
@@ -348,7 +347,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				262236F917434D64001CE90F /* libWeiboSDK.a in Frameworks */,
 				2672CF44171C040B00E5E251 /* SystemConfiguration.framework in Frameworks */,
 				26502E4A171535D7005BFD7B /* AssetsLibrary.framework in Frameworks */,
 				2652C6B4170987F900054D45 /* CoreData.framework in Frameworks */,
