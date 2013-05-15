@@ -8,16 +8,16 @@
 
 #import "ModelHelper.h"
 #import "Zipfile.h"
-#import "DDLog.h"
+//#import "DDLog.h"
 #import "AFImageRequestOperation.h"
 #import "AppNetworkAPIClient.h"
 #import "ServerDataTransformer.h"
 // Log levels: off, error, warn, info, verbose
-#if DEBUG
-static const int ddLogLevel = LOG_LEVEL_VERBOSE;
-#else
-static const int ddLogLevel = LOG_LEVEL_ERROR;
-#endif
+//#if DEBUG
+//static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+//#else
+//static const int ddLogLevel = LOG_LEVEL_ERROR;
+//#endif
 
 @interface ModelHelper(){
     
@@ -59,11 +59,11 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     
     if ([array count] == 0)
     {
-        DDLogError(@"Zipfile doesn't exist: %@", error);
+//        DDLogError(@"Zipfile doesn't exist: %@", error);
         return nil;
     } else {
         if ([array count] > 1) {
-            DDLogError(@"More than one user object with same Zipfile name: %@", fileName);
+//            DDLogError(@"More than one user object with same Zipfile name: %@", fileName);
         }
         return [array objectAtIndex:0];
     }
