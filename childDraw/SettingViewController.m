@@ -117,6 +117,9 @@
     [self.view addSubview:self.rateButton];
     [self.view addSubview:self.weiboButton];
     
+    _weiboSignIn = [[WeiboSignIn alloc] init];
+    _weiboSignIn.delegate = self;
+    
     [self initTopView];
     [self calcCacheSize];
 }
@@ -230,6 +233,13 @@
 
     return size/1024;
     
+}
+
+- (void)weiboAction
+{
+
+    [_weiboSignIn signInOnViewController:self];
+
 }
 
 
