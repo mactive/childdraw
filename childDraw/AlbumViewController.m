@@ -176,6 +176,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [self.scrollView addContentSubview:self.shareView];
 //        [self.targetArray addObject:self.shareView];
     }
+    
+    
 }
 
 /////////////////////////////////////////////////////////////////////////////

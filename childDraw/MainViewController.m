@@ -508,7 +508,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     // Pass the selected object to the new view controller.
 
     [self.albumViewController jumpToFirst:first orLast:last];
-
+    
+//    NSLog(@"%@",ttNC);
+    NSLog(@"%@",self.navigationController);
     [self.navigationController pushViewController:self.albumViewController animated:YES];
 }
 

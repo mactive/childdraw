@@ -652,8 +652,6 @@
 		26F39F3716FC3DEF001A6EF9 = {
 			isa = PBXGroup;
 			children = (
-				2673B2BA1743A7C80084F792 /* Security.framework */,
-				2673B2B81743A2C70084F792 /* libz.dylib */,
 				26F39F4916FC3DEF001A6EF9 /* childDraw */,
 				26F39F4216FC3DEF001A6EF9 /* Frameworks */,
 				26F39F4116FC3DEF001A6EF9 /* Products */,
@@ -672,6 +670,8 @@
 		26F39F4216FC3DEF001A6EF9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2673B2BA1743A7C80084F792 /* Security.framework */,
+				2673B2B81743A2C70084F792 /* libz.dylib */,
 				2673B2881743875E0084F792 /* MobileCoreServices.framework */,
 				2673B283174385330084F792 /* libxml2.dylib */,
 				2672CF43171C040B00E5E251 /* SystemConfiguration.framework */,
@@ -1145,6 +1145,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/childDraw/thrid/whchat\"",
 				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1165,6 +1166,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/childDraw/thrid/whchat\"",
 				);
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

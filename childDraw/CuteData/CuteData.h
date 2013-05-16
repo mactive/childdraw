@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "NSObject+SBJson.h"
 
 /*!
  *  @brief Provides all available methods for defining and reporting Analytics from use
