@@ -80,7 +80,7 @@
         
         
         self.sButton_2 = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.sButton_2 setFrame:CGRectMake(135, 200, 60, 60)];
+        [self.sButton_2 setFrame:CGRectMake(130, 200, 60, 60)];
         [self.sButton_2 setBackgroundImage:[UIImage imageNamed:@"button_share_2.png"] forState:UIControlStateNormal];
         [self.sButton_2 addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.sButton_2 setHidden:YES];

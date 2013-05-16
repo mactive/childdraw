@@ -174,8 +174,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 	SlideListViewController *back = self.listViewController;
 	MBPullDownController *pullDownController = [[MBPullDownController alloc] initWithFrontController:front backController:back];
 //    pullDownController.openDragOffset = 0.0f;
-//    pullDownController.openBottomOffset = 0.0f;
+    if (IS_IPHONE_5) {
+        pullDownController.openBottomOffset = 60.0f;
+    }else{
+        pullDownController.openBottomOffset = 44.0f;
+    }
 //    pullDownController.closeDragOffset = 0.0f;
+    
+    
     pullDownController.closedTopOffset = 0.0f;
     
 	UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:pullDownController];

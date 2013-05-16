@@ -326,7 +326,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     else if ([value isEqualToString:SHAREWEIBO]) {
         //        self.photoImage = [UIImage imageNamed:@"about_team.png"];
-        [self postNewStatus];
+        if ([[WeiboAccounts shared]currentAccount]) {
+            [self postNewStatus];
+        }else{
+            MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            HUD.removeFromSuperViewOnHide = YES;
+            HUD.labelText = T(@"请去设置中重新绑定微博");
+            HUD.mode = MBProgressHUDModeText;
+            [HUD hide:YES afterDelay:1];
+        }
     }
     
 }

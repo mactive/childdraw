@@ -108,7 +108,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     self.animationArray = [[NSArray alloc]init];
     
     if (IS_IPHONE_5) {
-        self.offsetViewY = (TOTAL_HEIGHT() - TOTAL_WIDTH) / 3 ;
+        self.offsetViewY = (TOTAL_HEIGHT() - TOTAL_WIDTH) / 2 ;
     }else{
         self.offsetViewY = (TOTAL_HEIGHT() - TOTAL_WIDTH) / 3 ;
     }
@@ -316,7 +316,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 #define ICON_H 44
 - (void)initDownloadView
 {
-    CGRect rect = CGRectMake((TOTAL_WIDTH-BIG_BUTTON_WIDTH)/2 , self.offsetViewY *3 , BIG_BUTTON_WIDTH, BIG_BUTTON_WIDTH+50);
+    CGRect rect = CGRectMake((TOTAL_WIDTH-BIG_BUTTON_WIDTH)/2 , self.offsetViewY *2 , BIG_BUTTON_WIDTH, BIG_BUTTON_WIDTH+50);
     self.downloadView  = [[UIView alloc]initWithFrame:rect];
     UIImageView *bgView = [[UIImageView alloc]initWithFrame:CGRectMake(0 ,0, BIG_BUTTON_WIDTH, BIG_BUTTON_WIDTH)];
     [bgView setImage:[UIImage imageNamed:@"circle_button_bg.png"]];
@@ -359,11 +359,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.listButton setBackgroundImage:[UIImage imageNamed:@"button_list_highlight.png"] forState:UIControlStateHighlighted];
     [self.listButton addTarget:self action:@selector(listAction) forControlEvents:UIControlEventTouchUpInside];
     
+    CGFloat backy = 0;
+    if (IS_IPHONE_5) {
+        backy = 13;
+    }else{
+        backy = 5;
+    }
     
     self.backDownButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.backDownButton setFrame:CGRectMake(0, 0, TOTAL_WIDTH, 44)];
+    [self.backDownButton setFrame:CGRectMake(0, backy, TOTAL_WIDTH, 32)];
     [self.backDownButton setBackgroundColor:[UIColor clearColor]];
-    [self.backDownButton addTarget:self action:@selector(listAction) forControlEvents:UIControlEventTouchUpInside];
+    [self.backDownButton setBackgroundImage:[UIImage imageNamed:@"bottom_full.png"] forState:UIControlStateNormal];
+    [self.backDownButton addTarget:self action:@selector(backDownAction) forControlEvents:UIControlEventTouchUpInside];
     [self.backDownButton setHidden:YES];
 
     [self.view addSubview:self.listButton];
@@ -372,15 +379,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)listAction
 {
-    if (self.pullDownController.open) {
-        [self.pullDownController setOpen:NO animated:YES];
-        [self.listButton setHidden:NO];
-        [self.backDownButton setHidden:YES];
-    }else{
-        [self.pullDownController setOpen:YES animated:YES];
-        [self.listButton setHidden:YES];
-        [self.backDownButton setHidden:NO];
-    }
+    [self.pullDownController setOpen:YES animated:YES];
+    [self.listButton setHidden:YES];
+    [self.backDownButton setHidden:NO];
+}
+
+-(void)backDownAction
+{
+    [self.pullDownController setOpen:NO animated:YES];
+    [self.listButton setHidden:NO];
+    [self.backDownButton setHidden:YES];
 }
 
 

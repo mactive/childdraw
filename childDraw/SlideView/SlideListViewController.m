@@ -30,7 +30,7 @@ static const int ddLogLevel = LOG_LEVEL_VERBOSE;
 static const int ddLogLevel = LOG_LEVEL_OFF;
 #endif
 
-@interface SlideListViewController ()<PassValueDelegate>
+@interface SlideListViewController ()<PassValueDelegate,MBPullDownDelegate>
 // control view
 @property(nonatomic, strong)UIView *controlView;
 @property(nonatomic, strong)UIButton *aboutUSButton;
@@ -86,7 +86,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     [self.view addSubview:bgView];
     
-    CGRect viewRect = CGRectMake(0, CONTROL_HEIGHT, TOTAL_WIDTH, BG_HEIGHT+20);
+    
+    CGRect viewRect = CGRectMake(0, TOTAL_HEIGHT()*0.15, TOTAL_WIDTH, BG_HEIGHT+20);
     self.scrollView = [[MCPagedScrollView alloc] initWithFrame:viewRect];
     self.scrollView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
     self.scrollView.backgroundColor = [UIColor clearColor];
@@ -139,8 +140,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     [ModelDownload sharedInstance].thumbnailDelegate = (id)self;
+    self.pullDownController.delegate = (id)self;
 }
 
+- (void)MBPullDownOpen{
+    //
+    DDLogVerbose(@"MBPullDownOpen");
+    [self populateThumbnailData];
+}
+- (void)MBPullDownClose
+{
+    //
+    DDLogVerbose(@"MBPullDownClose");
+}
 
 - (void)populateThumbnailData
 {
@@ -401,23 +413,28 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 #define B_WIDTH 60
 #define B_HEIGHT 30
 #define X_OFFSET 10
-#define Y_OFFSET 5
 
 - (void)initControlView
 {
-    self.controlView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, TOTAL_WIDTH, CONTROL_HEIGHT)];
+    CGFloat YOffset = 0;
+    if (IS_IPHONE_5) {
+        YOffset = 10;
+    }else{
+        YOffset = 5;
+    }
+    self.controlView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_HEIGHT()*0.15)];
     
     self.aboutUSButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.aboutUSButton setFrame:CGRectMake(X_OFFSET, Y_OFFSET, B_WIDTH, B_HEIGHT)];
+    [self.aboutUSButton setFrame:CGRectMake(X_OFFSET, YOffset, B_WIDTH, B_HEIGHT)];
     [self.aboutUSButton setBackgroundImage:[UIImage imageNamed:@"button_us.png"] forState:UIControlStateNormal];
     [self.aboutUSButton addTarget:self action:@selector(aboutUSAction) forControlEvents:UIControlEventTouchUpInside];
     
     self.setttingButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.setttingButton setFrame:CGRectMake(TOTAL_WIDTH - X_OFFSET - B_WIDTH, Y_OFFSET, B_WIDTH, B_HEIGHT)];
+    [self.setttingButton setFrame:CGRectMake(TOTAL_WIDTH - X_OFFSET - B_WIDTH, YOffset, B_WIDTH, B_HEIGHT)];
     [self.setttingButton setBackgroundImage:[UIImage imageNamed:@"button_setting.png"] forState:UIControlStateNormal];
     [self.setttingButton addTarget:self action:@selector(setttingAction) forControlEvents:UIControlEventTouchUpInside];
     
-    UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake((TOTAL_WIDTH-B_WIDTH) /2, Y_OFFSET, B_WIDTH, B_HEIGHT)];
+    UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake((TOTAL_WIDTH-B_WIDTH) /2, YOffset, B_WIDTH, B_HEIGHT)];
     titleLabel.text = T(@"全部");
     titleLabel.backgroundColor = [UIColor clearColor];
     titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -428,7 +445,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     titleLabel.layer.shadowRadius = 1;
     titleLabel.layer.shadowOpacity = 1;
     
-    UIImageView *bottomLine = [[UIImageView alloc]initWithFrame:CGRectMake(0, 41, TOTAL_WIDTH, 3)];
+    UIImageView *bottomLine = [[UIImageView alloc]initWithFrame:CGRectMake(0, 36+YOffset, TOTAL_WIDTH, 3)];
     [bottomLine setImage:[UIImage imageNamed:@"keyline_full.png"]];
     
     [self.controlView addSubview:self.aboutUSButton];

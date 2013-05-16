@@ -165,7 +165,6 @@ const CGFloat MCPagedScrollViewPageControlHeight = 36.0;
 }
 
 - (NSUInteger) page {
-    NSLog(@"%.0f",self.contentOffset.x);
     return floor(self.contentOffset.x / (itemOffset+itemWidth));
 }
 

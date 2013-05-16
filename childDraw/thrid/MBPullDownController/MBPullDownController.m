@@ -23,6 +23,7 @@ static NSInteger const kContainerViewTag = -1000001;
 
 @interface MBPullDownController ()
 
+
 @property (nonatomic, strong) MBPullDownControllerTapUpRecognizer *tapUpRecognizer;
 @property (nonatomic, assign) BOOL adjustedScroll;
 
@@ -37,7 +38,7 @@ static NSInteger const kContainerViewTag = -1000001;
 
 
 @implementation MBPullDownController
-
+@synthesize delegate;
 #pragma mark - Lifecycle
 
 - (id)init {
@@ -52,6 +53,10 @@ static NSInteger const kContainerViewTag = -1000001;
 		[self sharedInitialization];
 	}
 	return self;
+}
+
+- (void)initWithDelegate:(id<MBPullDownDelegate>)delegate {
+    self.delegate = delegate;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -145,6 +150,13 @@ static NSInteger const kContainerViewTag = -1000001;
 }
 
 - (void)setOpen:(BOOL)open animated:(BOOL)animated {
+    if (animated) {
+        NSLog(@"scrollIndicatorInsets.top-------- %d",open);
+        if ([self.delegate respondsToSelector:@selector(MBPullDownOpen)]) {
+            [self.delegate MBPullDownOpen];
+        }
+    }
+
 	if (open != _open) {
 		[self willChangeValueForKey:@"open"];
 		_open = open;
@@ -169,7 +181,9 @@ static NSInteger const kContainerViewTag = -1000001;
 		UIEdgeInsets scrollIndicatorInsets = scrollView.scrollIndicatorInsets;
 		scrollIndicatorInsets.top = offset;
 		scrollView.scrollIndicatorInsets = scrollIndicatorInsets;
-//        NSLog(@"scrollIndicatorInsets.top***** %f",scrollView.scrollIndicatorInsets.top);
+        if (self.open == YES && scrollView.scrollIndicatorInsets.top > 0) {
+//            NSLog(@"scrollIndicatorInsets.top***** %f",scrollView.scrollIndicatorInsets.top);
+        }
 
 	};
 	if (animated) {
@@ -258,11 +272,6 @@ static NSInteger const kContainerViewTag = -1000001;
 
 #pragma mark - ScrollView
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    NSLog(@"contentOffset.y: %f",scrollView.contentOffset.y);
-}
-
 
 - (UIScrollView *)scrollView {
 	return (UIScrollView *)self.frontController.view;
@@ -293,16 +302,16 @@ static NSInteger const kContainerViewTag = -1000001;
 	if (!open && enabled && offset.y < - self.openDragOffset - self.closedTopOffset) {
 		[self setOpen:YES animated:YES];
         [self.frontController setEditing:YES];
-        NSLog(@"Open");
+        NSLog(@"MB 1");
 	} else if (open) {
 		if (enabled && offset.y > self.closeDragOffset - self.view.bounds.size.height + self.openBottomOffset) {
 			[self setOpen:NO animated:YES];
             [self.frontController setEditing:NO];
-            NSLog(@"Close");
+            NSLog(@"MB 2");
 		} else {
-			[self setOpen:YES animated:YES];
-            [self.frontController setEditing:YES];
-            NSLog(@"Open");
+//			[self setOpen:YES animated:YES];
+//            [self.frontController setEditing:YES];
+//            NSLog(@"MB 3");
 		}
 	}
 }

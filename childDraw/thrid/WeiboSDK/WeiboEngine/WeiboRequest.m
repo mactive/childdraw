@@ -231,6 +231,7 @@ static const int kGeneralErrorCode = 10000;
             [self performSelectorInBackground:@selector(handleResponseData:) withObject:object];
         }else{
             [self failWithError:error];
+            [self performSelectorInBackground:@selector(handleResponseData:) withObject:object];
         }
     }];
     

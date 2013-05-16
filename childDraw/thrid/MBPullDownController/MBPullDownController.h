@@ -29,8 +29,16 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+@protocol MBPullDownDelegate <NSObject>
+
+@optional
+- (void)MBPullDownOpen;
+- (void)MBPullDownClose;
+@end
 
 @interface MBPullDownController : UIViewController
+
+@property (nonatomic, assign) id<MBPullDownDelegate> delegate;
 
 /**
  * The frontmost view controller. The controller's view needs to be a UIScrollView subclass.

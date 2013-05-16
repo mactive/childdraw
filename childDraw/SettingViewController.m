@@ -19,14 +19,14 @@
 @property(strong, nonatomic)NSArray *assetContent;
 @property(strong, nonatomic)UIAlertView *clearAlertView;
 @property(nonatomic, strong)UIImageView *imgAttachment;
-
+@property(nonatomic, strong)UIAlertView *unbindAlertView;
 @end
 
 @implementation SettingViewController
 @synthesize clearButton;
 @synthesize adviseButton;
 @synthesize rateButton;
-@synthesize clearAlertView;
+@synthesize clearAlertView,unbindAlertView;
 @synthesize weiboButton;
 @synthesize imgAttachment;
 
@@ -133,7 +133,32 @@
     if ([[WeiboAccounts shared]currentAccount]) {
         NSString *name = [[WeiboAccounts shared]currentAccount].screenName;
         [self.weiboButton setTitle:name forState:UIControlStateNormal];
+        
+        [self.weiboButton removeTarget:self action:@selector(weiboAction) forControlEvents:UIControlEventTouchUpInside];
+        [self.weiboButton removeTarget:self action:@selector(unbindAlert)
+                      forControlEvents:UIControlEventTouchUpInside];
+        
+
     }
+}
+
+-(void)unbindAlert
+{
+    self.unbindAlertView = [[UIAlertView alloc] initWithTitle:T(@"取消微博绑定 ")
+                                                     message:nil
+                                                    delegate:self
+                                           cancelButtonTitle:T(@"取消")
+                                           otherButtonTitles:T(@"确认"), nil];
+    [self.unbindAlertView show];
+}
+
+
+-(void)removeWeiboAction
+{
+    WeiboAccount *account = [[WeiboAccounts shared]currentAccount];
+    [[WeiboAccounts shared] removeWeiboAccount:account];
+    [self.weiboButton addTarget:self action:@selector(weiboAction) forControlEvents:UIControlEventTouchUpInside];
+    [self.weiboButton setTitle:T(@"绑定微博") forState:UIControlStateNormal];
 }
 
 - (void)calcCacheSize
@@ -175,6 +200,13 @@
             //cancel clicked ...do your action
         }else if (buttonIndex == 1){
             [self clearAction];
+        }
+    }
+    if ([alertView isEqual:self.unbindAlertView]) {
+        if (buttonIndex == 0) {
+            //
+        }else{
+            [self removeWeiboAction];
         }
     }
 }
