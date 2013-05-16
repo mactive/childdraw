@@ -59,7 +59,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize managedObjectContext;
 @synthesize itemDict;
 
-#define CONTROL_HEIGHT 56
+#define HEIGHT_RATE 0.13
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -87,7 +87,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.view addSubview:bgView];
     
     
-    CGRect viewRect = CGRectMake(0, TOTAL_HEIGHT()*0.15, TOTAL_WIDTH, BG_HEIGHT+20);
+    CGRect viewRect = CGRectMake(0, TOTAL_HEIGHT()*HEIGHT_RATE, TOTAL_WIDTH, BG_HEIGHT+20);
     self.scrollView = [[MCPagedScrollView alloc] initWithFrame:viewRect];
     self.scrollView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
     self.scrollView.backgroundColor = [UIColor clearColor];
@@ -133,20 +133,31 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self initControlView];
     [self initBottomView];
     
-    if (self.sourceData == nil || [self.sourceData count] == 0) {
-        //        self.startInt = 0;
-        //        [self populateData:0];
-        [self populateThumbnailData];
-    }
-    
     [ModelDownload sharedInstance].thumbnailDelegate = (id)self;
     self.pullDownController.delegate = (id)self;
+    
+//    if (self.sourceData == nil || [self.sourceData count] == 0) {
+//        //        self.startInt = 0;
+//        //        [self populateData:0];
+//        [self populateThumbnailData];
+//    }
 }
 
+// like view will appear
 - (void)MBPullDownOpen{
     //
-    DDLogVerbose(@"MBPullDownOpen");
-    [self populateThumbnailData];
+    DDLogVerbose(@"MBPullDownOpen");    
+    if (self.sourceData == nil || [self.sourceData count] == 0) {
+        //        self.startInt = 0;
+        [self populateThumbnailData];
+    }
+//    [self populateData:0];
+
+    
+//    NSString *is_first = [[NSUserDefaults standardUserDefaults]objectForKey:@"is_first"];
+//    if ([is_first isEqualToString:@"YES"]) {
+//        [[NSUserDefaults standardUserDefaults]setObject:@"NO" forKey:@"is_first"];
+//    }
 }
 - (void)MBPullDownClose
 {
@@ -156,7 +167,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)populateThumbnailData
 {
-    NSString *is_first = [[NSUserDefaults standardUserDefaults]objectForKey:@"is_first"];
     NSArray *nowContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[self appDelegate].THUMBNAILPATH
                                                                                     error:NULL];
     
@@ -178,10 +188,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     self.sourceData = [[NSArray alloc]initWithArray:allData];
-    if ([self.sourceData count] == 0 || [is_first isEqualToString:@"YES"]) {
+    if ([self.sourceData count] == 0 ) {
         [self populateData:0];
-        [[NSUserDefaults standardUserDefaults]setObject:@"NO" forKey:@"is_first"];
-
     }
     
     [self refreshSubView];
@@ -422,7 +430,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }else{
         YOffset = 5;
     }
-    self.controlView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_HEIGHT()*0.15)];
+    self.controlView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_HEIGHT()*HEIGHT_RATE)];
     
     self.aboutUSButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.aboutUSButton setFrame:CGRectMake(X_OFFSET, YOffset, B_WIDTH, B_HEIGHT)];

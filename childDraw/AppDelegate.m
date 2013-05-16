@@ -231,6 +231,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [sourceData enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 // 交给 delegate 去做
                 [[ModelDownload sharedInstance] downloadWithURL:obj];
+                [[ModelDownload sharedInstance]downloadThumbnailwithFilename:
+                 [ServerDataTransformer getStringObjFromServerJSON:obj byName:@"key"]];
+
             }];
             
         }else{
@@ -325,8 +328,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     _defaultGetCount  = 1;
     // 下载最新的 
     [self downloadLastFiles:_defaultGetCount];
-    // 请求最新的数据
-    [self.listViewController populateData:0];
     
     [XFox logEvent:EVENT_ENTER_FOREGROUND];
 

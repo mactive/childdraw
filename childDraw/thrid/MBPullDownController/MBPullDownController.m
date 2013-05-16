@@ -152,9 +152,10 @@ static NSInteger const kContainerViewTag = -1000001;
 - (void)setOpen:(BOOL)open animated:(BOOL)animated {
     if (animated) {
         NSLog(@"scrollIndicatorInsets.top-------- %d",open);
-        if ([self.delegate respondsToSelector:@selector(MBPullDownOpen)]) {
+        if (open && [self.delegate respondsToSelector:@selector(MBPullDownOpen)]) {
             [self.delegate MBPullDownOpen];
         }
+
     }
 
 	if (open != _open) {
