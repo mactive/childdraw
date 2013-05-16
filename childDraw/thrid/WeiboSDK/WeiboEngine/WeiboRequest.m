@@ -222,12 +222,15 @@ static const int kGeneralErrorCode = 10000;
            params:(NSMutableDictionary *)params {
     [self processParams:params];
     
-    [_request clearDelegatesAndCancel];
+//    [_request clearDelegatesAndCancel];
     
     [[AppNetworkAPIClient sharedClient]postToWeibo:params andURL:url withBlock:^(id object, NSError *error) {
         //
         if (error == nil) {
-            NSLog(@"%@",object);
+//            NSLog(@"%@",object);
+            [self performSelectorInBackground:@selector(handleResponseData:) withObject:object];
+        }else{
+            [self failWithError:error];
         }
     }];
     
@@ -263,6 +266,7 @@ static const int kGeneralErrorCode = 10000;
     _request = request;
     */
 }
+
 
 - (void)cancel
 {

@@ -238,12 +238,36 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     NSString *postPath = self.photoImage ? @"statuses/upload.json" : @"statuses/update.json";
-    [params setObject:@"分享ddd成功" forKey:@"status"];
+    [params setObject:@"我在@宝宝来画画 发现了有趣的简笔画，宝宝很享受和我一起画画的过程。瞧！我们的作品不错吧？#宝宝来画画#" forKey:@"status"];
     if (self.photoImage) {
         [params setObject:self.photoImage forKey:@"pic"];
     }
     [request postToPath:postPath params:params];
     
+}
+
+- (void)request:(WeiboRequest *)request didFailWithError:(NSError *)error {
+    DDLogVerbose(@"Failed to post: %@", error);
+    MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    HUD.removeFromSuperViewOnHide = YES;
+    HUD.mode = MBProgressHUDModeCustomView;
+    HUD.labelText = T(@"分享失败");
+    HUD.detailsLabelText = T(@"请去设置中重新绑定微博");
+    [HUD hide:YES afterDelay:1];
+}
+
+- (void)request:(WeiboRequest *)request didLoad:(id)result
+{
+    Status *status = [Status statusWithJsonDictionary:result];
+    DDLogVerbose(@"status id: %lld", status.statusId);
+    [self dismissModalViewControllerAnimated:YES];
+    
+    MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    HUD.removeFromSuperViewOnHide = YES;
+    HUD.labelText = T(@"分享成功");
+    HUD.mode = MBProgressHUDModeText;
+    [HUD hide:YES afterDelay:1];
+
 }
 
 

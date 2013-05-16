@@ -132,10 +132,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self initControlView];
     [self initBottomView];
     
-    
     if (self.sourceData == nil || [self.sourceData count] == 0) {
-//        self.startInt = 0;
-//        [self populateData:0];
+        //        self.startInt = 0;
+        //        [self populateData:0];
         [self populateThumbnailData];
     }
     
@@ -191,6 +190,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES];
+    
 }
 
 - (void)actionSwipe:(UISwipeGestureRecognizer *)paramSender

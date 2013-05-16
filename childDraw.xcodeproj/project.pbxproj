@@ -114,6 +114,7 @@
 		2673B3771743A81E0084F792 /* WeiboSignIn.m in Sources */ = {isa = PBXBuildFile; fileRef = 2673B3601743A81E0084F792 /* WeiboSignIn.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		2673B3781743A81E0084F792 /* WeiboSignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2673B3621743A81E0084F792 /* WeiboSignInViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		2673B3791743A81E0084F792 /* WeiboSignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2673B3631743A81E0084F792 /* WeiboSignInViewController.xib */; };
+		2673B3851744C53E0084F792 /* NSData+Godzippa.m in Sources */ = {isa = PBXBuildFile; fileRef = 2673B3841744C53E0084F792 /* NSData+Godzippa.m */; };
 		26DD4BB9172109B4003228E7 /* barbutton_mainmenu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26DD4BB0172109B4003228E7 /* barbutton_mainmenu@2x.png */; };
 		26DD4BBA172109B4003228E7 /* barbutton_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26DD4BB1172109B4003228E7 /* barbutton_bg@2x.png */; };
 		26DD4BBB172109B4003228E7 /* barbutton_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26DD4BB2172109B4003228E7 /* barbutton_add@2x.png */; };
@@ -323,6 +324,8 @@
 		2673B3621743A81E0084F792 /* WeiboSignInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeiboSignInViewController.m; sourceTree = "<group>"; };
 		2673B3631743A81E0084F792 /* WeiboSignInViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WeiboSignInViewController.xib; sourceTree = "<group>"; };
 		2673B37B1743ABFC0084F792 /* WeiboSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeiboSDK.h; path = WeiboSDK/WeiboSDK.h; sourceTree = "<group>"; };
+		2673B3831744C53E0084F792 /* NSData+Godzippa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Godzippa.h"; sourceTree = "<group>"; };
+		2673B3841744C53E0084F792 /* NSData+Godzippa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Godzippa.m"; sourceTree = "<group>"; };
 		26DD4BB0172109B4003228E7 /* barbutton_mainmenu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "barbutton_mainmenu@2x.png"; sourceTree = "<group>"; };
 		26DD4BB1172109B4003228E7 /* barbutton_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "barbutton_bg@2x.png"; sourceTree = "<group>"; };
 		26DD4BB2172109B4003228E7 /* barbutton_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "barbutton_add@2x.png"; sourceTree = "<group>"; };
@@ -631,6 +634,15 @@
 			path = WeiboQuery;
 			sourceTree = "<group>";
 		};
+		2673B3821744C53E0084F792 /* Godzippa */ = {
+			isa = PBXGroup;
+			children = (
+				2673B3831744C53E0084F792 /* NSData+Godzippa.h */,
+				2673B3841744C53E0084F792 /* NSData+Godzippa.m */,
+			);
+			path = Godzippa;
+			sourceTree = "<group>";
+		};
 		26E5A8891705490000BEBE65 /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -815,6 +827,7 @@
 		26F39F7416FC45CB001A6EF9 /* thrid */ = {
 			isa = PBXGroup;
 			children = (
+				2673B3821744C53E0084F792 /* Godzippa */,
 				2673B3381743A81E0084F792 /* WeiboSDK */,
 				2673B2BC1743A7ED0084F792 /* ASIHTTPRequest */,
 				2627403A173CE1CC00556581 /* MBPullDownController */,
@@ -1048,6 +1061,7 @@
 				2673B3761743A81E0084F792 /* WeiboRequest.m in Sources */,
 				2673B3771743A81E0084F792 /* WeiboSignIn.m in Sources */,
 				2673B3781743A81E0084F792 /* WeiboSignInViewController.m in Sources */,
+				2673B3851744C53E0084F792 /* NSData+Godzippa.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

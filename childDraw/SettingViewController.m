@@ -263,17 +263,6 @@
     }
 }
 
-- (void)request:(WeiboRequest *)request didFailWithError:(NSError *)error {
-    NSLog(@"Failed to post: %@", error);
-}
-
-- (void)request:(WeiboRequest *)request didLoad:(id)result
-{
-    Status *status = [Status statusWithJsonDictionary:result];
-    NSLog(@"status id: %lld", status.statusId);
-    [self dismissModalViewControllerAnimated:YES];
-}
-
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 

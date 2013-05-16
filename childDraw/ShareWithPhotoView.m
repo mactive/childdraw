@@ -209,9 +209,7 @@
     targetView.alpha = alpha;
     targetView.frame = rect;    
     [UIView commitAnimations];
-    if (alpha == 0) {
-        [targetView setHidden:YES];
-    }
+
 }
 
 

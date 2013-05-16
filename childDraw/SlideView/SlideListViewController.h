@@ -13,4 +13,6 @@
 @property(nonatomic, strong) MCPagedScrollView* scrollView;
 @property(strong, nonatomic)NSManagedObjectContext *managedObjectContext;
 
+- (void)populateData:(NSUInteger)start;
+
 @end

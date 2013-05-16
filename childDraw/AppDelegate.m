@@ -317,7 +317,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 //    sleep(1);
     _defaultGetCount  = 1;
+    // 下载最新的 
     [self downloadLastFiles:_defaultGetCount];
+    // 请求最新的数据
+    [self.listViewController populateData:0];
+    
     [XFox logEvent:EVENT_ENTER_FOREGROUND];
 
 }
