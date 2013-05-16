@@ -145,6 +145,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)populateThumbnailData
 {
+    NSString *is_first = [[NSUserDefaults standardUserDefaults]objectForKey:@"is_first"];
     NSArray *nowContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[self appDelegate].THUMBNAILPATH
                                                                                     error:NULL];
     
@@ -166,9 +167,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     self.sourceData = [[NSArray alloc]initWithArray:allData];
-    if ([self.sourceData count] == 0) {
+    if ([self.sourceData count] == 0 || [is_first isEqualToString:@"YES"]) {
         [self populateData:0];
+        [[NSUserDefaults standardUserDefaults]setObject:@"NO" forKey:@"is_first"];
+
     }
+    
     [self refreshSubView];
     
     DDLogVerbose(@"[self appDelegate].scrollIndex: %d",[self appDelegate].scrollIndex);
@@ -280,6 +284,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
                         [[ModelHelper sharedInstance]populateZipfile:aZipfile withServerJSONData:dict];
                     }
                     [tempMutableArray addObject:aZipfile];
+                    DDLogVerbose(@"key %@",[ServerDataTransformer getStringObjFromServerJSON:dict byName:@"key"]);
+                    
                     [self downloadThumbnail:[ServerDataTransformer getStringObjFromServerJSON:dict byName:@"key"]];
 
                 }

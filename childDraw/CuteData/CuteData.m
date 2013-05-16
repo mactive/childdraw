@@ -7,7 +7,8 @@
 //
 
 #import "CuteData.h"
-#import "NSObject+SBJson.h"
+//#import "NSObject+SBJson.h"
+#import "SBJson.h"
 #import "AppNetworkAPIClient.h"
 #import "PageViewLogger.h"
 #import "NSData+Godzippa.h"
@@ -35,6 +36,8 @@ NSString* XFoxAgentVersion = @"0.1";
 @property (nonatomic) NSTimeInterval currentSessionStartDateInTimeInterval;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @property (nonatomic, strong) NSString *guid;
+
+- (NSString *)JSONParse:(id)object;
 @end
 
 @implementation XFox
@@ -221,14 +224,14 @@ NSString* XFoxAgentVersion = @"0.1";
             xfoxDict = [[NSDictionary alloc]initWithObjectsAndKeys:
                         [NSString stringWithFormat:@"%.2f", interval],@"offset",
                         eventName, @"action",
-                        [parameters JSONRepresentation],@"p",
+                        [[self sInstance] JSONParse:parameters],@"p",
                         [NSString stringWithFormat:@"%f",seconds], @"dur",
                         nil];
         } else {
             xfoxDict = [[NSDictionary alloc]initWithObjectsAndKeys:
                         [NSString stringWithFormat:@"%.2f", interval],@"offset",
                         eventName, @"action",
-                        [parameters JSONRepresentation],@"p",
+                        [[self sInstance] JSONParse:parameters],@"p",
                         nil];
             
         }
@@ -249,8 +252,16 @@ NSString* XFoxAgentVersion = @"0.1";
     
     NSLog(@"%@",xfoxDict);
     
-    return [xfoxDict JSONRepresentation];    
+    return [[self sInstance] JSONParse:xfoxDict];
     
+}
+
+- (NSString *)JSONParse:(id)object {
+    SBJsonWriter *writer = [[SBJsonWriter alloc] init];
+    NSString *json = [writer stringWithObject:object];
+    if (!json)
+        NSLog(@"-JSONRepresentation failed. Error is: %@", writer.error);
+    return json;
 }
 
 + (NSString *)createSessionKey:(NSString *)namespace
@@ -320,7 +331,7 @@ NSString* XFoxAgentVersion = @"0.1";
                                 fox.guid, @"guid",
                                 @"REPLACECODE",@"items",
                             nil];
-    NSString *logDictString = [logDict JSONRepresentation];
+    NSString *logDictString = [self JSONParse:logDict];
     
     NSString *log = [logDictString stringByReplacingOccurrencesOfString:@"\"REPLACECODE\"}" withString:itemsString];
     

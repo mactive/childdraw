@@ -113,6 +113,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         [fileManager createDirectoryAtPath:self.THUMBNAILPATH withIntermediateDirectories:NO attributes:nil error:nil];
     }
     
+    [[NSUserDefaults standardUserDefaults]setObject:@"YES" forKey:@"is_first"];
 
     // actions
     [self getConfig];
