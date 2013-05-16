@@ -316,7 +316,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 #define ICON_H 44
 - (void)initDownloadView
 {
-    CGRect rect = CGRectMake((TOTAL_WIDTH-BIG_BUTTON_WIDTH)/2 , self.offsetViewY *2 , BIG_BUTTON_WIDTH, BIG_BUTTON_WIDTH+50);
+    CGFloat dowmY = 0;
+    if (IS_IPHONE_5) {
+        dowmY = self.offsetViewY *2;
+    }else{
+        dowmY = self.offsetViewY *3;
+    }
+    CGRect rect = CGRectMake((TOTAL_WIDTH-BIG_BUTTON_WIDTH)/2 , dowmY , BIG_BUTTON_WIDTH, BIG_BUTTON_WIDTH+50);
     self.downloadView  = [[UIView alloc]initWithFrame:rect];
     UIImageView *bgView = [[UIImageView alloc]initWithFrame:CGRectMake(0 ,0, BIG_BUTTON_WIDTH, BIG_BUTTON_WIDTH)];
     [bgView setImage:[UIImage imageNamed:@"circle_button_bg.png"]];

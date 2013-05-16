@@ -60,6 +60,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize itemDict;
 
 #define HEIGHT_RATE 0.13
+#define HEIGHT_RATE_IP5 0.16
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -86,8 +87,14 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     [self.view addSubview:bgView];
     
+    CGFloat frameY = 0;
+    if (IS_IPHONE_5) {
+        frameY = TOTAL_HEIGHT()*HEIGHT_RATE_IP5;
+    }else{
+        frameY = TOTAL_HEIGHT()*HEIGHT_RATE;
+    }
     
-    CGRect viewRect = CGRectMake(0, TOTAL_HEIGHT()*HEIGHT_RATE, TOTAL_WIDTH, BG_HEIGHT+20);
+    CGRect viewRect = CGRectMake(0, frameY, TOTAL_WIDTH, BG_HEIGHT+20);
     self.scrollView = [[MCPagedScrollView alloc] initWithFrame:viewRect];
     self.scrollView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
     self.scrollView.backgroundColor = [UIColor clearColor];
@@ -425,12 +432,16 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)initControlView
 {
     CGFloat YOffset = 0;
+    CGFloat frameY = 0;
     if (IS_IPHONE_5) {
         YOffset = 10;
+        frameY = TOTAL_HEIGHT()*HEIGHT_RATE_IP5;
     }else{
         YOffset = 5;
+        frameY = TOTAL_HEIGHT()*HEIGHT_RATE;
     }
-    self.controlView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_HEIGHT()*HEIGHT_RATE)];
+    
+    self.controlView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, TOTAL_WIDTH, frameY)];
     
     self.aboutUSButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.aboutUSButton setFrame:CGRectMake(X_OFFSET, YOffset, B_WIDTH, B_HEIGHT)];
