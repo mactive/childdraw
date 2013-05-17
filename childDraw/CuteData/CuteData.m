@@ -250,8 +250,6 @@ NSString* XFoxAgentVersion = @"0.1";
         }
     }
     
-    NSLog(@"%@",xfoxDict);
-    
     return [[self sInstance] JSONParse:xfoxDict];
     
 }

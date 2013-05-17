@@ -19,7 +19,8 @@
 #define EVENT_READING_TIMER             @"E_step_reading_timer"
 #define EVENT_READING_FINISH_TIMER      @"E_step_finish_timer"
 #define EVENT_PHOTO                     @"E_photo_picture"
-#define EVENT_SHARE                     @"E_share_weixin"
+#define EVENT_SHARE_WECHAT              @"E_share_weixin"
+#define EVENT_SHARE_WEIBO               @"E_share_weibo"
 
 //define reading time and read click
 #define EVENT_CHANNEL_TIMER     @"E_reading_timer"

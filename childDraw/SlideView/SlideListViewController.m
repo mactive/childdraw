@@ -253,7 +253,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 //    [self.navigationController popToRootViewControllerAnimated:NO];
     
     Zipfile *theZipfile = [self.sourceData objectAtIndex:self.scrollView.page];
-    NSLog(@"sender.buttonIndex %d %@",self.scrollView.page,theZipfile.fileName);
+    DDLogVerbose(@"sender.buttonIndex %d %@",self.scrollView.page,theZipfile.fileName);
 
     [self appDelegate].mainViewController.planetString = theZipfile.fileName;
     [self appDelegate].mainViewController.titleString = theZipfile.title;
@@ -373,7 +373,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         if (index >= self.startInt) {
             
             Zipfile *theFile = (Zipfile *)[self.sourceData objectAtIndex:index];
-            NSLog(@"self.sourceData: %@",theFile.fileName);
+            DDLogVerbose(@"self.sourceData: %@",theFile.fileName);
             
             ListItemView *view = [[ListItemView alloc]initWithFrame:frame];
             [view setAvatar:theFile.fileName];
@@ -387,7 +387,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 -(void)passStringValue:(NSString *)value andIndex:(NSUInteger )index
 {
-    NSLog(@"********* %@",value);
+    DDLogVerbose(@"********* %@",value);
 //    if ([value isEqualToString:self.fileName]) {
 //        [self setAvatar:self.fileName];
 //    }

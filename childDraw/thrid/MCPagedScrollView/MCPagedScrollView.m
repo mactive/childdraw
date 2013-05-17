@@ -43,7 +43,7 @@ const CGFloat MCPagedScrollViewPageControlHeight = 36.0;
         self.showsHorizontalScrollIndicator = NO;
         self.scrollsToTop = NO;
         
-        NSLog(@"%f %f %f %f",frame.origin.x, frame.origin.y,frame.size.width,frame.size.height);
+//        NSLog(@"%f %f %f %f",frame.origin.x, frame.origin.y,frame.size.width,frame.size.height);
         
         StyledPageControl *aPageControl = [[StyledPageControl alloc]initWithFrame:CGRectZero];
         [aPageControl setFrame:CGRectMake(20,(self.frame.size.height-20)/2,self.frame.size.width-40,20)];

@@ -260,8 +260,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     Status *status = [Status statusWithJsonDictionary:result];
     DDLogVerbose(@"status id: %lld", status.statusId);
-    [self dismissModalViewControllerAnimated:YES];
     
+    [XFox logEvent:EVENT_SHARE_WEIBO];
+
     MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     HUD.removeFromSuperViewOnHide = YES;
     HUD.labelText = T(@"分享成功");
@@ -427,7 +428,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         self.albumIndex = 0;
     }else if (last){
         self.albumIndex = count;
-        [XFox logEvent:EVENT_SHARE];
+        [XFox logEvent:EVENT_SHARE_WECHAT];
         self.shareView.noticeLabel.text = T(@"谢谢您的分享.您可以再次拍照");
     }
 }
