@@ -96,11 +96,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     return self;
 }
 
-- (void)setView:(UIView *)view
-{
-    
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -117,17 +112,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }else{
         self.offsetViewY = (TOTAL_HEIGHT() - TOTAL_WIDTH) / 3 ;
     }
-    CGRect fullRect = CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_HEIGHT());
     
-//    self.view = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_HEIGHT())];
+    self.view = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_HEIGHT())];
 
-    UIScrollView *ttView = [[UIScrollView alloc]initWithFrame:fullRect];
-    [ttView setContentSize:CGSizeMake(320, 300)];
-    [ttView setAlwaysBounceHorizontal:NO];
-    [ttView setAlwaysBounceVertical:YES];
-    self.view  = ttView;
-
-    //    [self.view setFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_HEIGHT())];
+//    [self.view setFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_HEIGHT())];
 
     UIImageView *bgView = [[UIImageView alloc]initWithFrame:self.view.frame];
     
