@@ -131,12 +131,11 @@
 {
     [super viewWillAppear:animated];
     if ([[WeiboAccounts shared]currentAccount]) {
-        NSString *name = [[WeiboAccounts shared]currentAccount].screenName;
+        NSString *name = [NSString stringWithFormat:@"%@(取消绑定)",[[WeiboAccounts shared]currentAccount].screenName];
         [self.weiboButton setTitle:name forState:UIControlStateNormal];
         
         [self.weiboButton removeTarget:self action:@selector(weiboAction) forControlEvents:UIControlEventTouchUpInside];
-        [self.weiboButton removeTarget:self action:@selector(unbindAlert)
-                      forControlEvents:UIControlEventTouchUpInside];
+        [self.weiboButton addTarget:self action:@selector(unbindAlert) forControlEvents:UIControlEventTouchUpInside];
         
 
     }
@@ -150,6 +149,7 @@
                                            cancelButtonTitle:T(@"取消")
                                            otherButtonTitles:T(@"确认"), nil];
     [self.unbindAlertView show];
+
 }
 
 
@@ -157,6 +157,7 @@
 {
     WeiboAccount *account = [[WeiboAccounts shared]currentAccount];
     [[WeiboAccounts shared] removeWeiboAccount:account];
+    [self.weiboButton removeTarget:self action:@selector(unbindAlert) forControlEvents:UIControlEventTouchUpInside];
     [self.weiboButton addTarget:self action:@selector(weiboAction) forControlEvents:UIControlEventTouchUpInside];
     [self.weiboButton setTitle:T(@"绑定微博") forState:UIControlStateNormal];
 }
