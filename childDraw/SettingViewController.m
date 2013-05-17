@@ -288,6 +288,8 @@
 
         if ([bind isEqualToString:@"YES"]) {
             [self.weiboButton setTitle:T(@"绑定成功") forState:UIControlStateNormal];
+            [self.weiboButton removeTarget:self action:@selector(weiboAction) forControlEvents:UIControlEventTouchUpInside];
+            [self.weiboButton addTarget:self action:@selector(unbindAlert) forControlEvents:UIControlEventTouchUpInside];
         }
         
         NSLog(@"Success to auth: %@", auth.userId);
