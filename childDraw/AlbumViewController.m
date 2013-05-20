@@ -34,6 +34,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @property(nonatomic, strong)UIImage *photoImage;
 @property(nonatomic, strong)UISwipeGestureRecognizer *leftSwipe;
 @property(nonatomic, strong)GCPagedScrollView *scrollView;
+@property(nonatomic, strong)MBProgressHUD *weiboHUD;
 @end
 
 @implementation AlbumViewController
@@ -49,6 +50,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize photoImage;
 @synthesize leftSwipe;
 @synthesize scrollView;
+@synthesize weiboHUD;
 
 
 #define kCameraSource       UIImagePickerControllerSourceTypeCamera
@@ -248,6 +250,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 - (void)request:(WeiboRequest *)request didFailWithError:(NSError *)error {
     DDLogVerbose(@"Failed to post: %@", error);
+    
+    [self.weiboHUD setHidden:YES];
+    
     MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     HUD.removeFromSuperViewOnHide = YES;
     HUD.mode = MBProgressHUDModeCustomView;
@@ -262,7 +267,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     DDLogVerbose(@"status id: %lld", status.statusId);
     
     [XFox logEvent:EVENT_SHARE_WEIBO];
-
+    
+    [self.weiboHUD setHidden:YES];
+    
     MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     HUD.removeFromSuperViewOnHide = YES;
     HUD.labelText = T(@"分享成功");
@@ -322,13 +329,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     else if ([value isEqualToString:SHAREWECHAT] || [value isEqualToString:SHAREWECHATFRIEND]) {
-        [self sendWechatImageContent:self.photoImage withOption:index];
+//        [self sendWechatImageContent:self.photoImage withOption:index];
+        [self shareButtonPressed];
     }
     
     else if ([value isEqualToString:SHAREWEIBO]) {
-        //        self.photoImage = [UIImage imageNamed:@"about_team.png"];
+
         if ([[WeiboAccounts shared]currentAccount]) {
             [self postNewStatus];
+            
+            self.weiboHUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            self.weiboHUD.removeFromSuperViewOnHide = YES;
+            self.weiboHUD.labelText = T(@"正在分享到微博");
         }else{
             MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             HUD.removeFromSuperViewOnHide = YES;
@@ -338,6 +350,18 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         }
     }
     
+}
+
+-(void)shareButtonPressed {
+    
+    NSLog(@"shareButton pressed");
+    
+    NSString *texttoshare = @"iOS6 分享测试"; //this is your text string to share
+    UIImage *imagetoshare = self.photoImage; //this is your image to share
+    NSArray *activityItems = @[texttoshare, imagetoshare];
+    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+    activityVC.excludedActivityTypes = @[UIActivityTypeSaveToCameraRoll,UIActivityTypeMessage,UIActivityTypePostToFacebook,UIActivityTypePrint,UIActivityTypeCopyToPasteboard,UIActivityTypeAssignToContact] ;
+    [self presentViewController:activityVC animated:TRUE completion:nil];
 }
 
 
