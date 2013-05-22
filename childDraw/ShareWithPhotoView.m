@@ -48,7 +48,7 @@
         
         self.noticeLabel = [[UILabel alloc]initWithFrame:CGRectMake(40, 200, 240, 40)];
         self.noticeLabel.backgroundColor = [UIColor clearColor];
-//        self.noticeLabel.text= T(@"快拍下孩子的创意吧，分享出去。");
+        self.noticeLabel.text= T(@"快拍下宝宝的精彩瞬间吧！");
         self.noticeLabel.textAlignment = UITextAlignmentCenter;
         self.noticeLabel.font = [UIFont systemFontOfSize:14.0f];
         self.noticeLabel.numberOfLines = 0;
@@ -74,6 +74,7 @@
         self.sButton_1 = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.sButton_1 setFrame:CGRectMake(66, 240, 60, 60)];
         [self.sButton_1 setBackgroundImage:[UIImage imageNamed:@"button_share_1.png"] forState:UIControlStateNormal];
+        [self.sButton_1 setBackgroundImage:[UIImage imageNamed:@"button_share_1_highlight.png"] forState:UIControlStateHighlighted];
         [self.sButton_1 addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.sButton_1 setHidden:YES];
         self.sButton_1.tag = 1;
@@ -82,6 +83,7 @@
         self.sButton_2 = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.sButton_2 setFrame:CGRectMake(130, 200, 60, 60)];
         [self.sButton_2 setBackgroundImage:[UIImage imageNamed:@"button_share_2.png"] forState:UIControlStateNormal];
+        [self.sButton_1 setBackgroundImage:[UIImage imageNamed:@"button_share_2_highlight.png"] forState:UIControlStateHighlighted];
         [self.sButton_2 addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.sButton_2 setHidden:YES];
         self.sButton_2.tag = 2;
@@ -90,6 +92,7 @@
         self.sButton_3 = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.sButton_3 setFrame:CGRectMake(193, 240, 60, 60)];
         [self.sButton_3 setBackgroundImage:[UIImage imageNamed:@"button_share_3.png"] forState:UIControlStateNormal];
+        [self.sButton_1 setBackgroundImage:[UIImage imageNamed:@"button_share_3_highlight.png"] forState:UIControlStateHighlighted];
         [self.sButton_3 addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.sButton_3 setHidden:YES];
         self.sButton_3.tag = 3;
@@ -171,8 +174,7 @@
 
 - (void)photoSuccess:(UIImage *)image
 {
-//    [self.cricleView setFrame:CGRectMake(104, 63, 120, 120)];
-//    self.noticeLabel.text = T(@"你可以分享拉");
+    self.noticeLabel.text = T(@"分享是一种美德。");
 
     [self.frameView setHidden:NO];
     [self.photoImage setImage:image];

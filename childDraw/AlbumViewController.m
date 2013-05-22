@@ -329,8 +329,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     }
     
     else if ([value isEqualToString:SHAREWECHAT] || [value isEqualToString:SHAREWECHATFRIEND]) {
-//        [self sendWechatImageContent:self.photoImage withOption:index];
-        [self shareButtonPressed];
+        [self sendWechatImageContent:self.photoImage withOption:index];
     }
     
     else if ([value isEqualToString:SHAREWEIBO]) {
@@ -352,17 +351,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
 }
 
--(void)shareButtonPressed {
-    
-    NSLog(@"shareButton pressed");
-    
-    NSString *texttoshare = @"iOS6 分享测试"; //this is your text string to share
-    UIImage *imagetoshare = self.photoImage; //this is your image to share
-    NSArray *activityItems = @[texttoshare, imagetoshare];
-    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
-    activityVC.excludedActivityTypes = @[UIActivityTypeSaveToCameraRoll,UIActivityTypeMessage,UIActivityTypePostToFacebook,UIActivityTypePrint,UIActivityTypeCopyToPasteboard,UIActivityTypeAssignToContact] ;
-    [self presentViewController:activityVC animated:TRUE completion:nil];
-}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
