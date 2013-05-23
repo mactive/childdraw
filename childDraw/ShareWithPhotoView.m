@@ -13,6 +13,8 @@
 @property(strong, nonatomic)UIButton *shareButton;
 @property(strong, nonatomic)UIImageView *frameView;
 @property(strong, nonatomic)UIImageView *photoImage;
+@property(strong, nonatomic)UIImageView *tipImage;
+@property(strong, nonatomic)UILabel *tipLabel;
 
 @property(strong, nonatomic)UIButton *sButton_1;
 @property(strong, nonatomic)UIButton *sButton_2;
@@ -27,6 +29,8 @@
 @synthesize shareButton;
 @synthesize sButton_1,sButton_2,sButton_3;
 @synthesize isOpen;
+@synthesize tipImage;
+@synthesize tipLabel;
 
 #define PHOTO_WIDTH 128
 
@@ -96,7 +100,15 @@
         [self.sButton_3 addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.sButton_3 setHidden:YES];
         self.sButton_3.tag = 3;
-
+        
+        self.tipImage = [[UIImageView alloc]initWithFrame:CGRectMake((TOTAL_WIDTH - 220) /2 , 55, 220, 120)];
+        [self.tipImage setImage:[UIImage imageNamed:@"notication_bg.png"]];
+        
+        self.tipLabel = [[UILabel alloc]initWithFrame:CGRectMake(20, 10, 180, 100)];
+        self.tipLabel.numberOfLines = 0;
+        self.tipLabel.backgroundColor = [UIColor clearColor];
+        self.tipLabel.font = [UIFont systemFontOfSize:16.0];
+        [self.tipImage addSubview:self.tipLabel];
         
         
         [self addSubview:self.photoButton];
@@ -108,8 +120,10 @@
         [self addSubview:self.sButton_1];
         [self addSubview:self.sButton_2];
         [self addSubview:self.sButton_3];
+        [self addSubview:self.tipImage];
 
         [self.frameView setHidden:YES];
+        [self.tipImage setHidden:YES];
         
         self.isOpen = NO;
             
@@ -123,6 +137,13 @@
 }
 
 
+- (void)showTip:(NSString *)notication
+{
+    [self.tipImage setHidden:NO];
+    self.tipLabel.text = notication;
+    [self.tipImage setAlpha:0];
+    [self moveYOffest:-10 andDelay:0   andAlpha:1 withView:self.tipImage];
+}
 
 
 ////////////////////////////////////////////////////////////////

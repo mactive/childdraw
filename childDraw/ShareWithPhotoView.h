@@ -17,4 +17,5 @@
 
 - (void)photoSuccess:(UIImage *)image;
 - (void)removePhoto;
+- (void)showTip:(NSString *)notication;
 @end
