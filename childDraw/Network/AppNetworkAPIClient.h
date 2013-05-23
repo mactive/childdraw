@@ -14,6 +14,7 @@
 #define GET_THUMBNAIL_PATH      @"/base/querythumbnails/"
 #define POST_DEVICE_PATH        @"/base/devicetoken/"
 #define POST_FEEDBACK_PATH      @"/base/feedback/"
+#define GET_NOTICE_PATH         @"/base/notication/"
 
 #define DATA_SERVER_PATH        @"/data/"
 
@@ -39,7 +40,11 @@
 // get thumbnails default 20
 - (void)getThumbnailsStartPosition:(NSUInteger)startPosition withBlock:(void(^)(id, NSString *, NSError *))block;
 
-
+// upload log data
 - (void)uploadLog:(NSData *)log withBlock:(void (^)(id responseObject, NSError *error))block;
+
+// get notication
+- (void)getNoticationWithBlock:(void(^)(id, NSString *, NSError *))block;
+
 
 @end
