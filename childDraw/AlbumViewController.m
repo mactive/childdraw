@@ -143,7 +143,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             [XFox endTimedEvent:EVENT_READING_FINISH_TIMER withParameters:nil];
             // 没有图才显示tip
             DDLogVerbose(@"%@",self.photoImage);
-            if (self.photoImage == nil) {
+            if (self.shareView.photoImage.image == nil) {
                 NSString *noticationString = [[NSUserDefaults standardUserDefaults]objectForKey:@"notication"];
                 [self.shareView showTip:noticationString];
             }
@@ -368,8 +368,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.scrollView setPage:count];
     
     
-//    self.photoImage = [self appDelegate].photoImage;
-//    [self finishPhoto:self.photoImage];
+    self.photoImage = [self appDelegate].photoImage;
 
     
     if (error) {

@@ -12,7 +12,6 @@
 @interface ShareWithPhotoView()
 @property(strong, nonatomic)UIButton *shareButton;
 @property(strong, nonatomic)UIImageView *frameView;
-@property(strong, nonatomic)UIImageView *photoImage;
 @property(strong, nonatomic)UIImageView *tipImage;
 @property(strong, nonatomic)UILabel *tipLabel;
 

@@ -207,7 +207,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     HUD.removeFromSuperViewOnHide = YES;
     HUD.mode = MBProgressHUDModeCustomView;
     HUD.labelText = T(@"分享失败");
-    HUD.detailsLabelText = T(@"您可以在设置中重新绑定微博");
+    HUD.detailsLabelText = T(@"请重新绑定微博或稍后再发");
     [HUD hide:YES afterDelay:2];
     
     [self.delegate finishedPostWithStatus:@"error" andError:error];

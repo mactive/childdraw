@@ -14,6 +14,7 @@
 @property(nonatomic,assign) NSObject<PassValueDelegate> *delegate;
 @property(strong, nonatomic)UILabel *noticeLabel;
 @property(strong, nonatomic)UIButton *photoButton;
+@property(strong, nonatomic)UIImageView *photoImage;
 
 - (void)photoSuccess:(UIImage *)image;
 - (void)removePhoto;
