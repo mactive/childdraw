@@ -202,12 +202,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 #pragma mark - share weibo
 /////////////////////////////////////////////////////////////////////////////
 
-- (void)finishedPostWithStatus:(NSString *)auth error:(NSError *)error
+- (void)finishedPostWithStatus:(NSString *)auth andError:(NSError *)error
 {
     NSUInteger count = [self.albumArray count];
-    if (self.scrollView.page != count) {
-        [self.scrollView setPage:count];
-    }
+    [self.scrollView setPage:count];
     
     DDLogVerbose(@"auth %@ %@",auth,error);
 }
@@ -307,11 +305,11 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     if ([value isEqualToString:PHOTOACTION] && index == 1) {
         
-//        [self takePhotoFromCamera];
+        [self takePhotoFromCamera];
         
+//        self.photoImage = [UIImage imageNamed:@"Default.png"];
+//        [self finishPhoto:self.photoImage];
         
-        self.photoImage = [UIImage imageNamed:@"Default.png"];
-        [self finishPhoto:self.photoImage];
         [self.shareView hideTip];
         
         self.albumIndex = [self.albumArray count];

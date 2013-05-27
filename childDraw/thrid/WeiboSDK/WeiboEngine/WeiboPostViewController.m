@@ -52,10 +52,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
 	// Do any additional setup after loading the view.
     self.textView = [[UITextView alloc]initWithFrame:CGRectMake(110, TOP_HEIGHT+20, TOTAL_WIDTH-120, 140)];
-    [self.textView setFont:[UIFont systemFontOfSize:12.0]];
+    [self.textView setFont:[UIFont systemFontOfSize:13.0]];
     
     self.textView.keyboardType = UIKeyboardTypeDefault;
-    self.textView.returnKeyType = UIReturnKeyGo;
+    self.textView.returnKeyType = UIReturnKeyDone;
     self.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.textView.autocorrectionType = UITextAutocorrectionTypeNo;
     [self.textView setContentInset:UIEdgeInsetsMake(10, 0, 10, 0)];
@@ -125,15 +125,15 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [closeButton setTitleColor:GRAYCOLOR forState:UIControlStateNormal];
     [closeButton setFrame:CGRectMake(10, 7, 51, 29)];
     [closeButton setBackgroundImage:[UIImage imageNamed:@"top_button.png"] forState:UIControlStateNormal];
-    [closeButton addTarget:self action:@selector(closeAction) forControlEvents:UIControlEventTouchUpInside];
+    [closeButton addTarget:self action:@selector(closeActionWithClose) forControlEvents:UIControlEventTouchUpInside];
     closeButton.titleLabel.font = [UIFont systemFontOfSize:12.0f];
     
     UIButton *postButton = [UIButton buttonWithType:UIButtonTypeCustom];
     postButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [postButton setTitle:T(@"发布") forState:UIControlStateNormal];
-    [postButton setTitleColor:GRAYCOLOR forState:UIControlStateNormal];
-    [postButton setFrame:CGRectMake(260, 7, 51, 29)];
-    [postButton setBackgroundImage:[UIImage imageNamed:@"top_button.png"] forState:UIControlStateNormal];
+    [postButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [postButton setFrame:CGRectMake(260, 7, 50, 29)];
+    [postButton setBackgroundImage:[UIImage imageNamed:@"top_button_blue.png"] forState:UIControlStateNormal];
     [postButton addTarget:self action:@selector(postNewStatus) forControlEvents:UIControlEventTouchUpInside];
     postButton.titleLabel.font = [UIFont systemFontOfSize:12.0f];
     
@@ -146,6 +146,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 -(void)closeAction
 {
     [self dismissModalViewControllerAnimated:YES];
+}
+
+-(void)closeActionWithClose
+{
+    [self closeAction];
+    [self.delegate finishedPostWithStatus:@"close" andError:nil];
 }
 
 - (BOOL)textView:(UITextView *)theTextView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
@@ -204,13 +210,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     HUD.detailsLabelText = T(@"您可以在设置中重新绑定微博");
     [HUD hide:YES afterDelay:2];
     
-    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:2
-                                                      target:self
-                                                    selector:@selector(closeAction)
-                                                    userInfo:nil
-                                                     repeats:NO];
-    
-    [self.delegate finishedPostWithStatus:@"error" error:error];
+    [self.delegate finishedPostWithStatus:@"error" andError:error];
 }
 
 - (void)request:(WeiboRequest *)request didLoad:(id)result
@@ -218,22 +218,24 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     Status *status = [Status statusWithJsonDictionary:result];
     DDLogVerbose(@"status id: %lld", status.statusId);
     [self.weiboHUD setHidden:YES];
-
-    MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    
+    MBProgressHUD* HUD = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:HUD];
+    HUD.mode = MBProgressHUDModeText;
     HUD.removeFromSuperViewOnHide = YES;
     HUD.labelText = T(@"分享成功");
-    HUD.mode = MBProgressHUDModeText;
-        
-    [HUD hide:YES afterDelay:1];
     
-    [self.delegate finishedPostWithStatus:@"success" error:nil];
+    [HUD showAnimated:YES whileExecutingBlock:^{
+        sleep(1);
+        [HUD hide:YES];
+    } completionBlock:^{
+        [self closeAction];
+        [self.delegate finishedPostWithStatus:@"success" andError:nil];
+    }];
     
-    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:2
-                                                      target:self
-                                                    selector:@selector(closeAction)
-                                                    userInfo:nil
-                                                     repeats:NO];
     
+
     
 //    [timer invalidate];
 }

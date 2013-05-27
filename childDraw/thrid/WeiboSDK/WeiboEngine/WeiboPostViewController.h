@@ -11,7 +11,7 @@
 
 @protocol WeiboPostDelegate
 
-- (void)finishedPostWithStatus:(NSString *)auth error:(NSError *)error;
+- (void)finishedPostWithStatus:(NSString *)auth andError:(NSError *)error;
 
 @end
 
