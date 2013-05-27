@@ -13,6 +13,7 @@
 #import "MBProgressHUD.h"
 #import "WXApi.h"
 #import "AppDelegate.h"
+#import "WeiboPostViewController.h"
 
 #import "DDLog.h"
 // Log levels: off, error, warn, info, verbose
@@ -24,7 +25,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 
-@interface AlbumViewController ()<UIScrollViewAccessibilityDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate,WXApiDelegate,WeiboRequestDelegate,WeiboSignInDelegate>
+@interface AlbumViewController ()<UIScrollViewAccessibilityDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate,WXApiDelegate,WeiboPostDelegate,WeiboSignInDelegate>
 {
     WeiboSignIn *_weiboSignIn;
 }
@@ -178,7 +179,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.scrollView removeAllContentSubviews];
 //    self.targetArray = [[NSMutableArray alloc]init];
     
-    DDLogVerbose(@"self.albumArray: %@",self.albumArray);
+//    DDLogVerbose(@"self.albumArray: %@",self.albumArray);
 //    self.photoImage = nil;
 
     for (NSUInteger index = 0; index < [self.albumArray count]; index ++) {
@@ -201,7 +202,17 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 #pragma mark - share weibo
 /////////////////////////////////////////////////////////////////////////////
 
+- (void)finishedPostWithStatus:(NSString *)auth error:(NSError *)error
+{
+    NSUInteger count = [self.albumArray count];
+    if (self.scrollView.page != count) {
+        [self.scrollView setPage:count];
+    }
+    
+    DDLogVerbose(@"auth %@ %@",auth,error);
+}
 
+/*
 - (void)postNewStatus
 {
     WeiboRequest *request = [[WeiboRequest alloc] initWithDelegate:self];
@@ -250,6 +261,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 }
 
+*/
 
 /////////////////////////////////////////////////////////////////////////////
 #pragma mark - share weichat
@@ -313,11 +325,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     else if ([value isEqualToString:SHAREWEIBO]) {
 
         if ([[WeiboAccounts shared]currentAccount]) {
-            [self postNewStatus];
             
-            self.weiboHUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-            self.weiboHUD.removeFromSuperViewOnHide = YES;
-            self.weiboHUD.labelText = T(@"正在分享到微博");
+            WeiboPostViewController *controller = [[WeiboPostViewController alloc]initWithNibName:nil bundle:nil];
+            controller.photoImage = self.photoImage;
+            controller.textString = DEFAULT_WEIBO;
+            controller.delegate = (id)self;
+            [self.navigationController presentModalViewController:controller animated:YES];
+//            [self postNewStatus];
+//            
+//            self.weiboHUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//            self.weiboHUD.removeFromSuperViewOnHide = YES;
+//            self.weiboHUD.labelText = T(@"正在分享到微博");
+            
+            
         }else{
             
             [self weiboAction];
