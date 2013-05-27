@@ -20,6 +20,7 @@
 @property (strong, nonatomic) NSString *THUMBNAILPATH;
 @property (strong, nonatomic) NSString *CACHEILPATH;
 @property (assign, nonatomic) NSUInteger scrollIndex;
+@property (assign, nonatomic) UIImage *photoImage;
 
 - (void)downloadLastFiles:(NSInteger)count;
 

@@ -44,7 +44,7 @@
         // Initialization code
         
         self.photoButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.photoButton setFrame:CGRectMake(100, 60, PHOTO_WIDTH, PHOTO_WIDTH)];
+        [self.photoButton setFrame:CGRectMake(96, 130, PHOTO_WIDTH, PHOTO_WIDTH)];
         [self.photoButton setBackgroundImage:[UIImage imageNamed:@"camera_button.png"] forState:UIControlStateNormal];
         [self.photoButton setBackgroundImage:[UIImage imageNamed:@"camera_clicked.png"] forState:UIControlStateHighlighted];
         [self.photoButton addTarget:self action:@selector(photoAction) forControlEvents:UIControlEventTouchUpInside];
@@ -87,7 +87,7 @@
         self.sButton_2 = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.sButton_2 setFrame:CGRectMake(130, 200, 60, 60)];
         [self.sButton_2 setBackgroundImage:[UIImage imageNamed:@"button_share_2.png"] forState:UIControlStateNormal];
-        [self.sButton_1 setBackgroundImage:[UIImage imageNamed:@"button_share_2_highlight.png"] forState:UIControlStateHighlighted];
+        [self.sButton_2 setBackgroundImage:[UIImage imageNamed:@"button_share_2_highlight.png"] forState:UIControlStateHighlighted];
         [self.sButton_2 addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.sButton_2 setHidden:YES];
         self.sButton_2.tag = 2;
@@ -96,23 +96,25 @@
         self.sButton_3 = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.sButton_3 setFrame:CGRectMake(193, 240, 60, 60)];
         [self.sButton_3 setBackgroundImage:[UIImage imageNamed:@"button_share_3.png"] forState:UIControlStateNormal];
-        [self.sButton_1 setBackgroundImage:[UIImage imageNamed:@"button_share_3_highlight.png"] forState:UIControlStateHighlighted];
+        [self.sButton_3 setBackgroundImage:[UIImage imageNamed:@"button_share_3_highlight.png"] forState:UIControlStateHighlighted];
         [self.sButton_3 addTarget:self action:@selector(shareAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.sButton_3 setHidden:YES];
         self.sButton_3.tag = 3;
         
-        self.tipImage = [[UIImageView alloc]initWithFrame:CGRectMake((TOTAL_WIDTH - 220) /2 , 55, 220, 120)];
+        self.tipImage = [[UIImageView alloc]initWithFrame:CGRectMake((TOTAL_WIDTH - 220) /2 , 20, 220, 120)];
         [self.tipImage setImage:[UIImage imageNamed:@"notication_bg.png"]];
         
         self.tipLabel = [[UILabel alloc]initWithFrame:CGRectMake(20, 10, 180, 100)];
         self.tipLabel.numberOfLines = 0;
+        self.tipLabel.textColor = [UIColor whiteColor];
         self.tipLabel.backgroundColor = [UIColor clearColor];
-        self.tipLabel.font = [UIFont systemFontOfSize:16.0];
+        self.tipLabel.textAlignment = NSTextAlignmentCenter;
+        self.tipLabel.font = [UIFont systemFontOfSize:14.0];
         [self.tipImage addSubview:self.tipLabel];
         
         
         [self addSubview:self.photoButton];
-        [self addSubview:self.noticeLabel];
+//        [self addSubview:self.noticeLabel];
         
         [self addSubview:self.frameView];
         [self addSubview:self.shareButton];
@@ -136,15 +138,20 @@
     [self.delegate passStringValue:PHOTOACTION andIndex:1];
 }
 
-
+// show and hide tip
 - (void)showTip:(NSString *)notication
 {
+    [self.tipImage setFrame:CGRectMake((TOTAL_WIDTH - 220) /2 , 20, 220, 120)];
     [self.tipImage setHidden:NO];
     self.tipLabel.text = notication;
-    [self.tipImage setAlpha:0];
+    [self.tipImage setAlpha:0.2];
     [self moveYOffest:-10 andDelay:0   andAlpha:1 withView:self.tipImage];
 }
 
+- (void)hideTip
+{
+    [self moveYOffest:10 andDelay:0   andAlpha:0 withView:self.tipImage];
+}
 
 ////////////////////////////////////////////////////////////////
 #pragma mark - share button action
@@ -195,13 +202,16 @@
 
 - (void)photoSuccess:(UIImage *)image
 {
-    self.noticeLabel.text = T(@"分享是一种美德。");
+//    self.noticeLabel.text = T(@"分享是一种美德。");
 
     [self.frameView setHidden:NO];
     [self.photoImage setImage:image];
     
     [self.shareButton setAlpha:1.0];
     [self.shareButton setEnabled:YES];
+    
+    self.isOpen = NO;
+    [self shareButtonAnimation];
 }
 
 - (void)removePhoto

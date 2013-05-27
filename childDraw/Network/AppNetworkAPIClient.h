@@ -44,7 +44,7 @@
 - (void)uploadLog:(NSData *)log withBlock:(void (^)(id responseObject, NSError *error))block;
 
 // get notication
-- (void)getNoticationWithBlock:(void(^)(id, NSString *, NSError *))block;
+- (void)getNoticationWithBlock:(void(^)(id, NSError *))block;
 
 
 @end

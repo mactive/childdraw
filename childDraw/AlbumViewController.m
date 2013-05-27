@@ -12,6 +12,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "MBProgressHUD.h"
 #import "WXApi.h"
+#import "AppDelegate.h"
 
 #import "DDLog.h"
 // Log levels: off, error, warn, info, verbose
@@ -23,7 +24,10 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 
-@interface AlbumViewController ()<UIScrollViewAccessibilityDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate,WXApiDelegate>
+@interface AlbumViewController ()<UIScrollViewAccessibilityDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate,WXApiDelegate,WeiboRequestDelegate,WeiboSignInDelegate>
+{
+    WeiboSignIn *_weiboSignIn;
+}
 
 - (UIView*) createViewForObj:(id)obj;
 @property(strong, nonatomic)UIView *targetView;
@@ -94,6 +98,9 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self.view addSubview:bgView];
     [self.view addSubview:self.scrollView];
     [self.view addSubview:backImage];
+    
+    _weiboSignIn = [[WeiboSignIn alloc] init];
+    _weiboSignIn.delegate = self;
 
 }
 
@@ -133,6 +140,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
         NSUInteger count = [self.albumArray count];
         if (self.scrollView.page == count) {
             [XFox endTimedEvent:EVENT_READING_FINISH_TIMER withParameters:nil];
+            // 没有图才显示tip
+            DDLogVerbose(@"%@",self.photoImage);
+            if (self.photoImage == nil) {
+                NSString *noticationString = [[NSUserDefaults standardUserDefaults]objectForKey:@"notication"];
+                [self.shareView showTip:noticationString];
+            }
+
         }
     }
 }
@@ -165,7 +179,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 //    self.targetArray = [[NSMutableArray alloc]init];
     
     DDLogVerbose(@"self.albumArray: %@",self.albumArray);
-    
+//    self.photoImage = nil;
+
     for (NSUInteger index = 0; index < [self.albumArray count]; index ++) {
         //You add your content views here
         id obj = [self.albumArray objectAtIndex:index];
@@ -185,52 +200,6 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 /////////////////////////////////////////////////////////////////////////////
 #pragma mark - share weibo
 /////////////////////////////////////////////////////////////////////////////
-/*
-- (void)ssoButtonPressed
-{
-    NSString *bind = [[NSUserDefaults standardUserDefaults]objectForKey:@"bind_weibo_success"];
-    if ([bind isEqualToString:@"YES"]) {
-        //成功绑定过
-        [self sendWebContent:self.photoImage];
-    }else{
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"请在设置页面绑定微博"
-                                                       message:@"谢谢"
-                                                      delegate:self
-                                             cancelButtonTitle:T(@"确定")
-                                             otherButtonTitles:nil];
-        [alert show];
-    }
-}
-
-
-- (void)sendWebContent:(UIImage *)sendImage
-{
-
-    WBMessageObject *message = [[WBMessageObject alloc] init];
-    WBImageObject *image = [WBImageObject object];
-    message.text = @"我拍了张孩子画画的照片 @宝宝来画画";
-    
-    image.imageData = UIImageJPEGRepresentation(sendImage , JPEG_QUALITY);
-//    imageObject.imageData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"about_team" ofType:@"png"]];
-    
-//    WBWebpageObject *pageObject = [WBWebpageObject object];
-//    UIImage *sendImage = [photoImage imageByScalingToSize:CGSizeMake(120, 180)];
-//    pageObject.objectID = @"identifier1";
-//    pageObject.thumbnailData = UIImageJPEGRepresentation(sendImage , JPEG_QUALITY);
-//    pageObject.title = @"分享宝宝的画";
-//    pageObject.description = @"宝宝来画画,一起够了世界吧";
-//    pageObject.webpageUrl = @"http://www.wingedstone.com/childcraw/";
-    
-//    message.mediaObject = pageObject;
-    
-    message.imageObject = image;
-    
-    WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:message];
-    [WeiboSDK sendRequest:request];
-    
-    
-}
-*/
 
 
 - (void)postNewStatus
@@ -252,7 +221,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     DDLogVerbose(@"Failed to post: %@", error);
     
     [self.weiboHUD setHidden:YES];
-    
+    [self.shareView shareButtonAnimation];
+
     MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     HUD.removeFromSuperViewOnHide = YES;
     HUD.mode = MBProgressHUDModeCustomView;
@@ -269,6 +239,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [XFox logEvent:EVENT_SHARE_WEIBO];
     
     [self.weiboHUD setHidden:YES];
+    
+    [self.shareView shareButtonAnimation];
     
     MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     HUD.removeFromSuperViewOnHide = YES;
@@ -323,7 +295,13 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 {
     if ([value isEqualToString:PHOTOACTION] && index == 1) {
         
-        [self takePhotoFromCamera];
+//        [self takePhotoFromCamera];
+        
+        
+        self.photoImage = [UIImage imageNamed:@"Default.png"];
+        [self finishPhoto:self.photoImage];
+        [self.shareView hideTip];
+        
         self.albumIndex = [self.albumArray count];
         [XFox logEvent:EVENT_PHOTO];
     }
@@ -341,15 +319,61 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             self.weiboHUD.removeFromSuperViewOnHide = YES;
             self.weiboHUD.labelText = T(@"正在分享到微博");
         }else{
+            
+            [self weiboAction];
+            
+            
             MBProgressHUD* HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             HUD.removeFromSuperViewOnHide = YES;
-            HUD.labelText = T(@"请去设置中重新绑定微博");
+            HUD.labelText = T(@"请去设置中绑定微博");
             HUD.mode = MBProgressHUDModeText;
             [HUD hide:YES afterDelay:1];
         }
     }
     
 }
+
+/////////////////////////////////////////////////////////////////////////////////
+// weibo bind
+/////////////////////////////////////////////////////////////////////////////////
+
+- (void)weiboAction
+{
+    [self appDelegate].photoImage = self.photoImage;
+    [_weiboSignIn signInOnViewController:self];
+}
+
+- (void)finishedWithAuth:(WeiboAuthentication *)auth error:(NSError *)error {
+    
+    // ddlog verbose
+    NSUInteger count = [self.albumArray count];
+    [self.scrollView setPage:count];
+    
+    
+//    self.photoImage = [self appDelegate].photoImage;
+//    [self finishPhoto:self.photoImage];
+
+    
+    if (error) {
+        NSLog(@"failed to auth: %@", error);
+    }
+    else {
+        [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"bind_weibo_success"];
+        NSString *bind = [[NSUserDefaults standardUserDefaults]objectForKey:@"bind_weibo_success"];
+        
+        if ([bind isEqualToString:@"YES"]) {
+//            [self.weiboButton setTitle:T(@"绑定成功") forState:UIControlStateNormal];
+//            [self.weiboButton removeTarget:self action:@selector(weiboAction) forControlEvents:UIControlEventTouchUpInside];
+//            [self.weiboButton addTarget:self action:@selector(unbindAlert) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
+        NSLog(@"Success to auth: %@", auth.userId);
+        
+        [[WeiboAccounts shared]addAccountWithAuthentication:auth];
+
+    }
+}
+
 
 
 
@@ -453,11 +477,14 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [self.shareView removePhoto];
+//    [self.shareView removePhoto];
     [XFox endTimedEvent:EVENT_READING_TIMER withParameters:nil];
 }
 
-
+- (AppDelegate *)appDelegate
+{
+	return (AppDelegate *)[[UIApplication sharedApplication] delegate];
+}
 
 
 /*
@@ -536,6 +563,53 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
  
  NSLog(@"title:%@ %@",title,message);
  }
+ }
+ */
+
+/*
+ - (void)ssoButtonPressed
+ {
+ NSString *bind = [[NSUserDefaults standardUserDefaults]objectForKey:@"bind_weibo_success"];
+ if ([bind isEqualToString:@"YES"]) {
+ //成功绑定过
+ [self sendWebContent:self.photoImage];
+ }else{
+ UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"请在设置页面绑定微博"
+ message:@"谢谢"
+ delegate:self
+ cancelButtonTitle:T(@"确定")
+ otherButtonTitles:nil];
+ [alert show];
+ }
+ }
+ 
+ 
+ - (void)sendWebContent:(UIImage *)sendImage
+ {
+ 
+ WBMessageObject *message = [[WBMessageObject alloc] init];
+ WBImageObject *image = [WBImageObject object];
+ message.text = @"我拍了张孩子画画的照片 @宝宝来画画";
+ 
+ image.imageData = UIImageJPEGRepresentation(sendImage , JPEG_QUALITY);
+ //    imageObject.imageData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"about_team" ofType:@"png"]];
+ 
+ //    WBWebpageObject *pageObject = [WBWebpageObject object];
+ //    UIImage *sendImage = [photoImage imageByScalingToSize:CGSizeMake(120, 180)];
+ //    pageObject.objectID = @"identifier1";
+ //    pageObject.thumbnailData = UIImageJPEGRepresentation(sendImage , JPEG_QUALITY);
+ //    pageObject.title = @"分享宝宝的画";
+ //    pageObject.description = @"宝宝来画画,一起够了世界吧";
+ //    pageObject.webpageUrl = @"http://www.wingedstone.com/childcraw/";
+ 
+ //    message.mediaObject = pageObject;
+ 
+ message.imageObject = image;
+ 
+ WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:message];
+ [WeiboSDK sendRequest:request];
+ 
+ 
  }
  */
 

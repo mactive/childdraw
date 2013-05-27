@@ -13,7 +13,7 @@
 #import "ShareWithPhotoView.h"
 #import "WeiboSDK.h"
 
-@interface AlbumViewController : BBCustomBackButtonViewController<PassValueDelegate,WeiboRequestDelegate>
+@interface AlbumViewController : BBCustomBackButtonViewController<PassValueDelegate>
 
 @property (nonatomic, readonly) GCPagedScrollView* scrollView;
 @property (nonatomic, strong) NSArray *albumArray;

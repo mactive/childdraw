@@ -99,6 +99,7 @@ static const int kGeneralErrorCode = 10000;
 	NSError *parseError = nil;
     
     JSONDecoder *parser = [JSONDecoder decoder];
+
     id result = [parser mutableObjectWithData:data error:&parseError];
     
 	if (parseError)
@@ -231,7 +232,7 @@ static const int kGeneralErrorCode = 10000;
             [self performSelectorInBackground:@selector(handleResponseData:) withObject:object];
         }else{
             [self failWithError:error];
-            [self performSelectorInBackground:@selector(handleResponseData:) withObject:object];
+//            [self performSelectorInBackground:@selector(handleResponseData:) withObject:error];
         }
     }];
     

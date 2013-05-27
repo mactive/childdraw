@@ -58,6 +58,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 @synthesize lastPlanetTitle;
 @synthesize isShareSucceed;
 @synthesize scrollIndex;
+@synthesize photoImage;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -119,6 +120,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self getConfig];
     
     [self startMainSession];
+    [self getNotication];
     
     [WXApi registerApp:WXAPPID];
     
@@ -189,6 +191,19 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 	return navigationController;
 }
 
+- (void)getNotication{
+    [[AppNetworkAPIClient sharedClient]getNoticationWithBlock:^(id responseObject, NSError *error) {
+        //
+        if (responseObject != nil) {
+            
+            [[NSUserDefaults standardUserDefaults] setObject:responseObject forKey:@"notication"];
+            [[NSUserDefaults standardUserDefaults] setObject:@"快拍下宝宝的精彩瞬间吧！\n把他分享出去吧." forKey:@"notication"];
+        }else{
+            DDLogVerbose(@"%@",error);
+        }
+    }];
+}
+
 -(void)getTheLastPlanet:(NSArray *)data
 {
     NSArray* sorted = [data sortedArrayUsingComparator:(NSComparator)^(NSDictionary *item1, NSDictionary *item2) {
@@ -205,7 +220,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 - (void)downloadLastFiles:(NSInteger)count
 {
 
-    NSManagedObjectContext *moc = _managedObjectContext;
+//    NSManagedObjectContext *moc = _managedObjectContext;
     
     self.downArray = [[NSMutableArray alloc]init];
     
