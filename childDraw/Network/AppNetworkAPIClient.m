@@ -8,6 +8,8 @@
 
 #import "AppNetworkAPIClient.h"
 #import "AFJSONRequestOperation.h"
+#import "UpYun.h"
+
 #import "DDLog.h"
 // Log levels: off, error, warn, info, verbose
 #if DEBUG
@@ -23,19 +25,22 @@ static NSString * const kAppNetworkAPIBaseURLString = @"http://c.wingedstone.com
 static NSString * const kAppDataLogServerURLString  = @"http://218.61.10.155:9015/";
 //static NSString * const kAppDataLogServerURLString  = @"http://192.168.1.104:9015/";
 
-@interface AppNetworkAPIClient ()
+@interface AppNetworkAPIClient ()<UpYunDelegate>
 {
     NSLock *_imageQueueLock;
     NSLock *_queuedOperationLock;
+    NSLock *_upYunLock;
 }
 
-@property (nonatomic, strong) NSMutableArray *queuedOperations;
-
+@property (nonatomic, strong) NSMutableDictionary *upYunRequests;
+- (void)networkChangeReceived:(NSNotification *)notification;
+- (void)upYun:(UpYun *)upYun requestDidFailWithError:(NSError *)error;
+- (void)upYun:(UpYun *)upYun requestDidSucceedWithResult:(id)result;
 @end
 
 @implementation AppNetworkAPIClient
 @synthesize kNetworkStatus;
-@synthesize queuedOperations;
+@synthesize upYunRequests;
 
 + (AppNetworkAPIClient *)sharedClient {
     static AppNetworkAPIClient *_sharedClient = nil;
@@ -47,6 +52,122 @@ static NSString * const kAppDataLogServerURLString  = @"http://218.61.10.155:901
     
     return _sharedClient;
 }
+
+- (id)initWithBaseURL:(NSURL *)url {
+    self = [super initWithBaseURL:url];
+    if (!self) {
+        return nil;
+    }
+    
+    _upYunLock = [[NSLock alloc] init];
+    _imageQueueLock = [[NSLock alloc] init];
+    _queuedOperationLock = [[NSLock alloc] init];
+    
+    self.upYunRequests = [[NSMutableDictionary alloc] initWithCapacity:5];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(networkChangeReceived:)
+                                                 name:AFNetworkingReachabilityDidChangeNotification object:nil];
+
+    
+    [self registerHTTPOperationClass:[AFJSONRequestOperation class]];
+    // Accept HTTP Header; see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.1
+	[self setDefaultHeader:@"Accept" value:@"application/json"];
+    
+    return self;
+}
+
+
+- (void)storeMessageImage:(UIImage *)image thumbnail:(UIImage *)thumbnail withBlock:(void (^)(id responseObject, NSError *error))block
+{
+    
+    UpYun *uy = [[UpYun alloc] init];
+    uy.delegate = self;
+    uy.expiresIn = 100;
+    uy.bucket = @"babydrawuser";
+    uy.passcode = @"wgZAU957S5qJYfTM7seKHWnTl6E=";
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+//    [params setObject:@"0,1000" forKey:@"content-length-range"];
+//    [params setObject:@"png" forKey:@"allow-file-type"];
+    uy.params = params;
+    
+    NSString *saveKey = nil;
+    //[XFox sInstance].guid
+    
+    NSString *prefix = [[XFox sInstance].guid stringByReplacingOccurrencesOfString:@":" withString:@"_"];
+
+    saveKey = [NSString stringWithFormat:@"/%@_%.0f.jpg",prefix, [[NSDate date] timeIntervalSince1970]];
+    
+    uy.name = saveKey;
+    
+    [uy uploadImageData:UIImageJPEGRepresentation(image, JPEG_QUALITY) savekey:saveKey];
+    
+    NSString *from = @"message";
+    
+    //void (^handlerCopy)(id, NSError *) ;
+    //handlerCopy = Block_copy(block);
+    NSDictionary* results = [NSDictionary dictionaryWithObjectsAndKeys:image, @"image", thumbnail, @"thumbnail", saveKey, @"pathname", [block copy], @"block", from, @"from", nil];
+    //Block_release(handlerCopy); // dict will -retain/-release, this balances the copy.
+    
+    [_upYunLock lock];
+    [self.upYunRequests setObject:results forKey:uy.name];
+    [_upYunLock unlock];
+    
+    return;
+    
+}
+
+- (void)upYun:(UpYun *)upYun requestDidFailWithError:(NSError *)error
+{
+    DDLogError(@"upload image failed: %@", error);
+    
+    [_upYunLock lock];
+    NSDictionary *savedObjects = [self.upYunRequests objectForKey:upYun.name];
+    [_upYunLock unlock];
+    
+    void (^block)(id, NSError *) ;
+    block = [savedObjects objectForKey:@"block"];
+    if (block) {
+        block(nil, error);
+    }
+}
+
+- (void)upYun:(UpYun *)upYun requestDidSucceedWithResult:(id)result
+{
+    DDLogInfo(@"upload image succeeded: %@", result);
+    
+    [_upYunLock lock];
+    NSDictionary *savedObjects = [self.upYunRequests objectForKey:upYun.name];
+    [_upYunLock unlock];
+    
+    NSString *from = [savedObjects objectForKey:@"from"];
+    
+    if ([from isEqualToString:@"message"]) {
+        
+        void (^block)(id, NSError *) ;
+        block = [savedObjects objectForKey:@"block"];
+        
+        UIImage *image = [savedObjects objectForKey:@"image"];
+        UIImage *thumbnail = [savedObjects objectForKey:@"thumbnail"];
+        
+        NSString *url = [NSString stringWithFormat:@"http://babydrawuser.b0.upaiyun.com%@", upYun.name];
+        NSString *thumbnailURL = [NSString stringWithFormat:@"http://babydrawuser.b0.upaiyun.com%@!tm", upYun.name];
+        //upyun 自定义版本名称 tm 间隔表示符 !tm
+        
+        NSMutableDictionary *resultDict = [[NSMutableDictionary alloc]initWithDictionary:result];
+        [resultDict setObject:thumbnail forKey:@"thumbnail"];
+        [resultDict setObject:url forKey:@"url"];
+        [resultDict setObject:thumbnailURL forKey:@"thumbnailURL"];
+        
+        if (block) {
+            block(resultDict, nil);
+        }
+        
+    }
+
+}
+
 
 // getConfig
 - (void)getConfigWithBlock:(void (^)(id, NSError *))block
@@ -342,6 +463,11 @@ static NSString * const kAppDataLogServerURLString  = @"http://218.61.10.155:901
     }];
     
     [dataLogClient enqueueHTTPRequestOperation:operation];
+}
+
+- (void)networkChangeReceived:(NSNotification *)notification
+{
+    self.kNetworkStatus = (NSNumber *)[notification.userInfo valueForKey:AFNetworkingReachabilityNotificationStatusItem];
 }
 
 @end

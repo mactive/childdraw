@@ -35,7 +35,6 @@ NSString* XFoxAgentVersion = @"0.1";
 @property (nonatomic, strong) NSMutableArray *delegateArray;
 @property (nonatomic) NSTimeInterval currentSessionStartDateInTimeInterval;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
-@property (nonatomic, strong) NSString *guid;
 
 - (NSString *)JSONParse:(id)object;
 @end

@@ -48,6 +48,8 @@
 
 + (void)setAppVersion:(NSString *)version;
 + (void)setGUID:(NSString *)guid;
++ (XFox *)sInstance;
+@property (nonatomic, strong) NSString *guid;
 
 /*!
  *  @brief Retrieves the XFox Agent Build Version.
@@ -610,5 +612,4 @@
 //+ (void)setEventLoggingEnabled:(BOOL)value;
 
 //@}
-
 @end

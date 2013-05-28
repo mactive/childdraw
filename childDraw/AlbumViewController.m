@@ -13,6 +13,7 @@
 #import "MBProgressHUD.h"
 #import "WXApi.h"
 #import "AppDelegate.h"
+#import "AppNetworkAPIClient.h"
 #import "WeiboPostViewController.h"
 
 #import "DDLog.h"
@@ -261,6 +262,26 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 */
 
+#define MESSAGE_THUMBNAIL_WIDTH 120
+#define MESSAGE_THUMBNAIL_HEIGHT 90
+
+- (void)uploadImageToUpyun:(UIImage *)image
+{
+    UIImage *thumbnail = [image imageByScalingToSize:CGSizeMake(MESSAGE_THUMBNAIL_WIDTH, MESSAGE_THUMBNAIL_HEIGHT)];
+
+    //    上传到upai
+    [[AppNetworkAPIClient sharedClient] storeMessageImage:image thumbnail:thumbnail withBlock:^(id responseObject, NSError *error) {
+        
+        if ((responseObject != nil) && error == nil) {
+            
+            DDLogVerbose(@"storeMessageImage %@", responseObject);
+        } else {
+            DDLogVerbose (@"NSError received during store avatar: %@", error);
+        }
+        
+    }];
+}
+
 /////////////////////////////////////////////////////////////////////////////
 #pragma mark - share weichat
 /////////////////////////////////////////////////////////////////////////////
@@ -474,6 +495,8 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 //    self.targetView = [self.targetArray objectAtIndex:count];
     [self.shareView photoSuccess:image];
     [self.shareView.photoButton setEnabled:NO];
+    
+    [self uploadImageToUpyun:self.photoImage];
 }
 
 

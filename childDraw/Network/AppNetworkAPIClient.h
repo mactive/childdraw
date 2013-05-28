@@ -47,5 +47,7 @@
 // NotificationWithBlock
 - (void)getNotificationWithBlock:(void(^)(id, NSError *))block;
 
+// upload to upyun
+- (void)storeMessageImage:(UIImage *)image thumbnail:(UIImage *)thumbnail withBlock:(void (^)(id responseObject, NSError *error))block;
 
 @end

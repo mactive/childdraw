@@ -26,6 +26,9 @@
 		2627BBB917533EF000B22C19 /* WeiboPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2627BBB817533EF000B22C19 /* WeiboPostViewController.m */; };
 		2627BBBB1753613900B22C19 /* top_button_blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2627BBBA1753613900B22C19 /* top_button_blue@2x.png */; };
 		2627BBBD1754864B00B22C19 /* notification_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2627BBBC1754864B00B22C19 /* notification_bg@2x.png */; };
+		2627BBC917549D2900B22C19 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 2627BBC217549D2900B22C19 /* GTMBase64.m */; };
+		2627BBCA17549D2900B22C19 /* UpYun.m in Sources */ = {isa = PBXBuildFile; fileRef = 2627BBC517549D2900B22C19 /* UpYun.m */; };
+		2627BBCB17549D2900B22C19 /* WBUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 2627BBC817549D2900B22C19 /* WBUtil.m */; };
 		264AE57B174099290005AA44 /* button_highlight_share@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 264AE57A174099290005AA44 /* button_highlight_share@2x.png */; };
 		264AE57D1740A1D90005AA44 /* about_team@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 264AE57C1740A1D90005AA44 /* about_team@2x.png */; };
 		264AE57F1740DB5D0005AA44 /* button_list@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 264AE57E1740DB5D0005AA44 /* button_list@2x.png */; };
@@ -190,6 +193,13 @@
 		2627BBB817533EF000B22C19 /* WeiboPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeiboPostViewController.m; sourceTree = "<group>"; };
 		2627BBBA1753613900B22C19 /* top_button_blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "top_button_blue@2x.png"; sourceTree = "<group>"; };
 		2627BBBC1754864B00B22C19 /* notification_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notification_bg@2x.png"; sourceTree = "<group>"; };
+		2627BBC117549D2900B22C19 /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
+		2627BBC217549D2900B22C19 /* GTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMBase64.m; sourceTree = "<group>"; };
+		2627BBC317549D2900B22C19 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
+		2627BBC417549D2900B22C19 /* UpYun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpYun.h; sourceTree = "<group>"; };
+		2627BBC517549D2900B22C19 /* UpYun.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpYun.m; sourceTree = "<group>"; };
+		2627BBC717549D2900B22C19 /* WBUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBUtil.h; sourceTree = "<group>"; };
+		2627BBC817549D2900B22C19 /* WBUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBUtil.m; sourceTree = "<group>"; };
 		264AE57A174099290005AA44 /* button_highlight_share@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_highlight_share@2x.png"; sourceTree = "<group>"; };
 		264AE57C1740A1D90005AA44 /* about_team@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "about_team@2x.png"; sourceTree = "<group>"; };
 		264AE57E1740DB5D0005AA44 /* button_list@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_list@2x.png"; sourceTree = "<group>"; };
@@ -436,6 +446,36 @@
 				2627403C173CE1CC00556581 /* MBPullDownController.m */,
 			);
 			path = MBPullDownController;
+			sourceTree = "<group>";
+		};
+		2627BBBF17549D2900B22C19 /* UpYunSDK */ = {
+			isa = PBXGroup;
+			children = (
+				2627BBC017549D2900B22C19 /* CTMBase64 */,
+				2627BBC417549D2900B22C19 /* UpYun.h */,
+				2627BBC517549D2900B22C19 /* UpYun.m */,
+				2627BBC617549D2900B22C19 /* Utils */,
+			);
+			path = UpYunSDK;
+			sourceTree = "<group>";
+		};
+		2627BBC017549D2900B22C19 /* CTMBase64 */ = {
+			isa = PBXGroup;
+			children = (
+				2627BBC117549D2900B22C19 /* GTMBase64.h */,
+				2627BBC217549D2900B22C19 /* GTMBase64.m */,
+				2627BBC317549D2900B22C19 /* GTMDefines.h */,
+			);
+			path = CTMBase64;
+			sourceTree = "<group>";
+		};
+		2627BBC617549D2900B22C19 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				2627BBC717549D2900B22C19 /* WBUtil.h */,
+				2627BBC817549D2900B22C19 /* WBUtil.m */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		26502E4B17156FC1005BFD7B /* StypePagecontrol */ = {
@@ -847,6 +887,7 @@
 		26F39F7416FC45CB001A6EF9 /* thrid */ = {
 			isa = PBXGroup;
 			children = (
+				2627BBBF17549D2900B22C19 /* UpYunSDK */,
 				2673B3821744C53E0084F792 /* Godzippa */,
 				2673B3381743A81E0084F792 /* WeiboSDK */,
 				2673B2BC1743A7ED0084F792 /* ASIHTTPRequest */,
@@ -1088,6 +1129,9 @@
 				2673B3781743A81E0084F792 /* WeiboSignInViewController.m in Sources */,
 				2673B3851744C53E0084F792 /* NSData+Godzippa.m in Sources */,
 				2627BBB917533EF000B22C19 /* WeiboPostViewController.m in Sources */,
+				2627BBC917549D2900B22C19 /* GTMBase64.m in Sources */,
+				2627BBCA17549D2900B22C19 /* UpYun.m in Sources */,
+				2627BBCB17549D2900B22C19 /* WBUtil.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
