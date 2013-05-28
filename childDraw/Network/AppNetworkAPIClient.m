@@ -254,9 +254,6 @@ static NSString * const kAppDataLogServerURLString  = @"http://218.61.10.155:901
     [dataLogClient setDefaultHeader:@"Content-Type" value:@"multipart/form-data"];
 
     
-    NSString* csrfToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"csrfmiddlewaretoken"];
-    NSDictionary *paramDict = [NSDictionary dictionaryWithObjectsAndKeys: csrfToken, @"csrfmiddlewaretoken", nil];
-    
     NSMutableURLRequest *postRequest = [dataLogClient multipartFormRequestWithMethod:@"POST" path:url parameters:postData constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         //
         NSData* imageData = UIImagePNGRepresentation((UIImage*)[postData objectForKey:@"pic"]);
@@ -283,6 +280,24 @@ static NSString * const kAppDataLogServerURLString  = @"http://218.61.10.155:901
     [dataLogClient enqueueHTTPRequestOperation:operation];
 
 }
+
+- (void)followWeibo:(NSDictionary *)postData andURL:(NSString *)url withBlock:(void(^)(id, NSError *))block
+{
+    
+    [[AppNetworkAPIClient sharedClient] postPath:url parameters:postData success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        DDLogInfo(@"follow success: %@", responseObject);
+        if (block ) {
+            block(responseObject, nil);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        DDLogError(@"follow failed: %@", error);
+        if (block) {
+            block(nil, error);
+        }
+    }];
+    
+}
+
 
 
 #pragma mark - common post path

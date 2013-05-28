@@ -33,6 +33,7 @@
 - (void)postFeedbackEmail:(NSString *)email andPhone:(NSString *)phone andContent:(NSString *)content withBlock:(void(^)(id, NSError *))block;
 
 - (void)postToWeibo:(NSDictionary *)postData andURL:(NSString *)url withBlock:(void(^)(id, NSError *))block;
+- (void)followWeibo:(NSDictionary *)postData andURL:(NSString *)url withBlock:(void(^)(id, NSError *))block;
 
 // get last items with count
 - (void)getItemsCount:(NSInteger)count withBlock:(void(^)(id, NSString *, NSError *))block;

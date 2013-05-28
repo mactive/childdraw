@@ -32,7 +32,11 @@ NSString *WeiboOAuth2ErrorDomain = @"com.zhiweibo.OAuth2";
 - (id)init {
     self = [super init];
     if (self) {        
-        self.authentication = [[[WeiboAuthentication alloc]initWithAuthorizeURL:kWeiboAuthorizeURL accessTokenURL:kWeiboAccessTokenURL AppKey:kAppKey appSecret:kAppSecret] autorelease];
+        self.authentication = [[[WeiboAuthentication alloc]
+                                initWithAuthorizeURL:kWeiboAuthorizeURL
+                                accessTokenURL:kWeiboAccessTokenURL
+                                AppKey:kAppKey
+                                appSecret:kAppSecret] autorelease];
         
     }
     return self;

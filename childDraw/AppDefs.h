@@ -70,6 +70,8 @@ alpha:(a)]
 #define SHAREWECHAT @"ShareForWechat"
 #define SHAREWECHATFRIEND @"ShareForWechatFirend"
 
+#define DEFAULT_WEIBO_UID @"3317165494"
+#define DEFAULT_WEIBO_UNAME @"宝宝来画画"
 #define DEFAULT_WEIBO @"我在@宝宝来画画 发现了有趣的简笔画，宝宝很享受和我一起画画的过程。瞧！我们的作品不错吧？#宝宝来画画#"
 
 // font

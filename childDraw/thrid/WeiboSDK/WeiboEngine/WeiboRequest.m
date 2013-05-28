@@ -216,14 +216,35 @@ static const int kGeneralErrorCode = 10000;
 - (void)postToPath:(NSString *)apiPath
             params:(NSMutableDictionary *)params {
     NSString * fullURL = [kWeiboAPIBaseUrl stringByAppendingString:apiPath];
-    return [self postToUrl:fullURL params:params];
+    
+    NSRange followRange = [apiPath rangeOfString:@"friendships"];
+
+    if (followRange.length > 0 ) {
+        return [self followToUrl:fullURL params:params];
+    }else{
+        return [self postToUrl:fullURL params:params];
+    }
+}
+
+- (void)followToUrl:(NSString *)url
+           params:(NSMutableDictionary *)params {
+    [self processParams:params];
+    
+    [[AppNetworkAPIClient sharedClient]followWeibo:params andURL:url withBlock:^(id object, NSError *error) {
+        //
+        if (error == nil) {
+            NSLog(@"object object %@",object);
+//            [self performSelectorInBackground:@selector(handleResponseData:) withObject:object];
+        }else{
+            [self failWithError:error];
+        }
+    }];
 }
 
 - (void)postToUrl:(NSString *)url
            params:(NSMutableDictionary *)params {
     [self processParams:params];
     
-//    [_request clearDelegatesAndCancel];
     
     [[AppNetworkAPIClient sharedClient]postToWeibo:params andURL:url withBlock:^(id object, NSError *error) {
         //
@@ -232,41 +253,8 @@ static const int kGeneralErrorCode = 10000;
             [self performSelectorInBackground:@selector(handleResponseData:) withObject:object];
         }else{
             [self failWithError:error];
-//            [self performSelectorInBackground:@selector(handleResponseData:) withObject:error];
         }
     }];
-    
-    /*
-    
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url]];
-    [request setDelegate:self];
-    [request setValidatesSecureCertificate:NO];
-    [request addRequestHeader:@"User-Agent" value:kUserAgent];
-    
-    for (NSString* key in [params keyEnumerator]) {
-        id val = [params objectForKey:key];
-        if ([val isKindOfClass:[NSData class]]) {
-            NSString *contentType = [self contentTypeForImageData:val];
-            if (contentType) {
-                [request addData:val withFileName:[contentType stringByReplacingOccurrencesOfString:@"/" withString:@" from zhiweibo."] andContentType:contentType forKey:key];
-            }
-            else {
-                [request addData:val forKey:key];
-            }            
-        }
-        else if ([val isKindOfClass:[UIImage class]]) {
-            NSData* imageData = UIImagePNGRepresentation((UIImage*)val);
-            [request addData:imageData withFileName:@"image from zhiweibo.png" andContentType:@"image/png" forKey:key];
-        }
-        else {
-            [request addPostValue:val forKey:key];
-        }
-    }
-    
-    [request startAsynchronous];
-    
-    _request = request;
-    */
 }
 
 

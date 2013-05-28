@@ -25,7 +25,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 
 
 
-@interface AlbumViewController ()<UIScrollViewAccessibilityDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate,WXApiDelegate,WeiboPostDelegate,WeiboSignInDelegate>
+@interface AlbumViewController ()<UIScrollViewAccessibilityDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate,WXApiDelegate,WeiboPostDelegate,WeiboSignInDelegate,WeiboRequestDelegate>
 {
     WeiboSignIn *_weiboSignIn;
 }
@@ -367,28 +367,32 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     NSUInteger count = [self.albumArray count];
     [self.scrollView setPage:count];
     
-    
     self.photoImage = [self appDelegate].photoImage;
 
-    
     if (error) {
         NSLog(@"failed to auth: %@", error);
     }
     else {
-        [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"bind_weibo_success"];
-        NSString *bind = [[NSUserDefaults standardUserDefaults]objectForKey:@"bind_weibo_success"];
-        
-        if ([bind isEqualToString:@"YES"]) {
-//            [self.weiboButton setTitle:T(@"绑定成功") forState:UIControlStateNormal];
-//            [self.weiboButton removeTarget:self action:@selector(weiboAction) forControlEvents:UIControlEventTouchUpInside];
-//            [self.weiboButton addTarget:self action:@selector(unbindAlert) forControlEvents:UIControlEventTouchUpInside];
-        }
-        
         NSLog(@"Success to auth: %@", auth.userId);
         
         [[WeiboAccounts shared]addAccountWithAuthentication:auth];
-
+        [self followChildDraw:auth];
     }
+}
+
+- (void)followChildDraw:(WeiboAuthentication *)auth
+{
+    WeiboRequest *request = [[WeiboRequest alloc] initWithDelegate:self];
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    NSString *postPath = @"friendships/create.json";
+    
+    [params setObject:auth.accessToken forKey:@"access_token"];
+    [params setObject:DEFAULT_WEIBO_UID forKey:@"uid"];
+    [params setObject:DEFAULT_WEIBO_UNAME forKey:@"screen_name"];
+    
+    [request postToPath:postPath params:params];
+    
 }
 
 
