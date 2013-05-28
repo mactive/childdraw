@@ -14,7 +14,7 @@
 #define GET_THUMBNAIL_PATH      @"/base/querythumbnails/"
 #define POST_DEVICE_PATH        @"/base/devicetoken/"
 #define POST_FEEDBACK_PATH      @"/base/feedback/"
-#define GET_NOTICE_PATH         @"/base/notication/"
+#define GET_NOTICE_PATH         @"/static/n.json"
 
 #define DATA_SERVER_PATH        @"/data/"
 
@@ -44,8 +44,8 @@
 // upload log data
 - (void)uploadLog:(NSData *)log withBlock:(void (^)(id responseObject, NSError *error))block;
 
-// get notication
-- (void)getNoticationWithBlock:(void(^)(id, NSError *))block;
+// NotificationWithBlock
+- (void)getNotificationWithBlock:(void(^)(id, NSError *))block;
 
 
 @end

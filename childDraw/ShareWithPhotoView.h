@@ -18,7 +18,7 @@
 
 - (void)photoSuccess:(UIImage *)image;
 - (void)removePhoto;
-- (void)showTip:(NSString *)notication;
+- (void)showTip:(NSString *)notification;
 - (void)hideTip;
 - (void)shareButtonAnimation;
 @end

@@ -101,7 +101,7 @@
         self.sButton_3.tag = 3;
         
         self.tipImage = [[UIImageView alloc]initWithFrame:CGRectMake((TOTAL_WIDTH - 220) /2 , 20, 220, 120)];
-        [self.tipImage setImage:[UIImage imageNamed:@"notication_bg.png"]];
+        [self.tipImage setImage:[UIImage imageNamed:@"notification_bg.png"]];
         
         self.tipLabel = [[UILabel alloc]initWithFrame:CGRectMake(20, 10, 180, 100)];
         self.tipLabel.numberOfLines = 0;
@@ -138,11 +138,11 @@
 }
 
 // show and hide tip
-- (void)showTip:(NSString *)notication
+- (void)showTip:(NSString *)notification
 {
     [self.tipImage setFrame:CGRectMake((TOTAL_WIDTH - 220) /2 , 20, 220, 120)];
     [self.tipImage setHidden:NO];
-    self.tipLabel.text = notication;
+    self.tipLabel.text = notification;
     [self.tipImage setAlpha:0.2];
     [self moveYOffest:-10 andDelay:0   andAlpha:1 withView:self.tipImage];
 }

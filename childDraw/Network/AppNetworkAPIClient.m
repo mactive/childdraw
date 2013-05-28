@@ -72,21 +72,25 @@ static NSString * const kAppDataLogServerURLString  = @"http://218.61.10.155:901
     [[AppNetworkAPIClient sharedClient] enqueueHTTPRequestOperation:loginOperation];
 }
 
-// get notication
-- (void)getNoticationWithBlock:(void(^)(id, NSError *))block{
+// get notification
+- (void)getNotificationWithBlock:(void(^)(id, NSError *))block{
     
-    NSMutableURLRequest *request = [[AppNetworkAPIClient sharedClient] requestWithMethod:@"GET" path:GET_CONFIG_PATH parameters:nil];
+    NSMutableURLRequest *request = [[AppNetworkAPIClient sharedClient] requestWithMethod:@"GET" path:GET_NOTICE_PATH parameters:nil];
     AFJSONRequestOperation * loginOperation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
         //
-        DDLogVerbose(@"get config JSON received: %@", JSON);
-        [[NSUserDefaults standardUserDefaults] setObject:[JSON valueForKey:@"notication"] forKey:@"notication"];
+        DDLogVerbose(@"get notification JSON received: %@", JSON);
+        
+        NSString *notificationString = [JSON objectForKey:@"notification"];
+        if (!StringHasValue(notificationString)) {
+            notificationString = DEFAULT_NOTIFICATION;
+        }
         if (block) {
-            block(JSON, nil);
+            block(notificationString, nil);
         }
         
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
         //
-        DDLogVerbose(@"get config failed: %@", error);
+        DDLogVerbose(@"get notification failed: %@", error);
         if (block) {
             block(nil, error);
         }

@@ -120,7 +120,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     [self getConfig];
     
     [self startMainSession];
-    [self getNotication];
+    [self getNotification];
     
     [WXApi registerApp:WXAPPID];
     
@@ -191,13 +191,12 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
 	return navigationController;
 }
 
-- (void)getNotication{
-    [[AppNetworkAPIClient sharedClient]getNoticationWithBlock:^(id responseObject, NSError *error) {
+- (void)getNotification{
+
+    [[AppNetworkAPIClient sharedClient]getNotificationWithBlock:^(id responseObject, NSError *error) {
         //
         if (responseObject != nil) {
-            
-            [[NSUserDefaults standardUserDefaults] setObject:responseObject forKey:@"notication"];
-            [[NSUserDefaults standardUserDefaults] setObject:@"快拍下宝宝的精彩瞬间吧！\n把他分享出去吧." forKey:@"notication"];
+            [[NSUserDefaults standardUserDefaults] setObject:responseObject forKey:@"notification"];
         }else{
             DDLogVerbose(@"%@",error);
         }

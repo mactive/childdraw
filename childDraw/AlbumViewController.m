@@ -144,8 +144,8 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
             // 没有图才显示tip
             DDLogVerbose(@"%@",self.photoImage);
             if (self.shareView.photoImage.image == nil) {
-                NSString *noticationString = [[NSUserDefaults standardUserDefaults]objectForKey:@"notication"];
-                [self.shareView showTip:noticationString];
+                NSString *notificationString = [[NSUserDefaults standardUserDefaults]objectForKey:@"notification"];
+                [self.shareView showTip:notificationString];
             }
 
         }
