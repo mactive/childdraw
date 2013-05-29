@@ -234,7 +234,6 @@ static const int kGeneralErrorCode = 10000;
         //
         if (error == nil) {
             NSLog(@"object object %@",object);
-//            [self performSelectorInBackground:@selector(handleResponseData:) withObject:object];
         }else{
             [self failWithError:error];
         }
@@ -250,7 +249,9 @@ static const int kGeneralErrorCode = 10000;
         //
         if (error == nil) {
 //            NSLog(@"%@",object);
-            [self performSelectorInBackground:@selector(handleResponseData:) withObject:object];
+            [self performSelectorOnMainThread:@selector(loadSuccess:) withObject:object waitUntilDone:YES];
+
+//            [self performSelectorInBackground:@selector(handleResponseData:) withObject:object];
         }else{
             [self failWithError:error];
         }

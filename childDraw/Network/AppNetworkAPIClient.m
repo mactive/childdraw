@@ -391,9 +391,7 @@ static NSString * const kAppDataLogServerURLString  = @"http://218.61.10.155:901
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (block) {
             block(responseObject, nil);
-            if (responseObject) {
-                
-            }
+
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (block) {
