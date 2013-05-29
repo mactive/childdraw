@@ -115,7 +115,7 @@ static const int ddLogLevel = LOG_LEVEL_OFF;
     
     self.view = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_HEIGHT())];
 
-//    [self.view setFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_HEIGHT())];
+    //    [self.view setFrame:CGRectMake(0, 0, TOTAL_WIDTH, TOTAL_HEIGHT())];
 
     UIImageView *bgView = [[UIImageView alloc]initWithFrame:self.view.frame];
     
